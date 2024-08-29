@@ -49,7 +49,9 @@ pipeline {
                 script {
                     sh "docker stop ${DOCKER_IMAGE_NAME} || true"
                     sh "docker rm ${DOCKER_IMAGE_NAME} || true"
-                    sh "docker rmi ${DOCKER_IMAGE_NAME} || true"
+                    sh """
+                        docker images --filter=reference='${DOCKER_IMAGE_NAME}' -q | xargs -r docker rmi || true
+                    """
                 }
             }
         }

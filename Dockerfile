@@ -1,7 +1,6 @@
 # Use PHP 8.3 image with FPM
 FROM php:8.3-fpm
 
-# Install necessary dependencies, including PostgreSQL extension, zip extension, and unzip
 RUN apt-get update && \
     apt-get install -y \
     libpq-dev \
@@ -9,7 +8,7 @@ RUN apt-get update && \
     unzip \
     nano \
     python3-pip && \
-    docker-php-ext-install pgsql pdo_pgsql zip && \
+    docker-php-ext-install pdo_mysql zip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
