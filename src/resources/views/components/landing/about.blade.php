@@ -15,10 +15,10 @@
                     </div>
                     <div class="aboutarea__2__text">
                         <div class="aboutarea__counter">
-                            <span class="counter">25</span> +
+                            <span class="counter">10</span> +
                         </div>
 
-                        <p>YEARS EXPERIENCE JUST ACHIVED</p>
+                        <p>TAHUN PENGALAMAN BARU SAJA DICAPAI </p>
 
 
                     </div>
@@ -31,16 +31,15 @@
                         <div class="default__small__button">About Us</div>
                     </div>
                     <div class="aboutarea__headding heading__underline">
-                        <h2>Welcome to another best <span>University</span> in the world.</h2>
+                        <h2>Selamat datang di <span>PKBM Swastika</span> tempat belajar terbaik untuk anda.</h2>
                     </div>
                     <div class="aboutarea__para aboutarea__para__2">
-                        <p>25+Contrary to popular belief, Lorem Ipsum is not simply random text roots in a piece
-                            of classical Latin literature from 45 BC</p>
+                        <p>Telah diakui oleh pemerintah dan terakrediasi Baik</p>
                     </div>
                     <div class="aboutarea__list__2">
                         <ul>
                             <li>
-                                <i class="icofont-check"></i> Lorem Ipsum is simply dummy
+                                <i class="icofont-check"></i>
                             </li>
 
                             <li>

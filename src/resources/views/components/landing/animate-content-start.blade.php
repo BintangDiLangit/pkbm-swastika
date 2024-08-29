@@ -2,53 +2,28 @@
     <div class="container-fluid full__width__padding">
         <div class="animate__content__wrap">
             <div class="animate__content__single">
-                <span><a href="#">Education Center</a></span>
+                <span><a href="#">Pendidikat Kesetaraan SD (Paket A)</a></span>
             </div>
             <div class="animate__content__single animate__content__single--2">
-                <span> <a href="#">Best Collection</a></span>
+                <span> <a href="#">Pendidikan Kesetaraan SMP (Paket B)</a></span>
             </div>
             <div class="animate__content__single">
-                <span><a href="#">Online Course</a></span>
+                <span><a href="#">Pendidikan Kesetaraan SMA (Paket C)</a></span>
             </div>
             <div class="animate__content__single animate__content__single--2">
-                <span> <a href="#">Offline Course</a></span>
+                <span> <a href="#">Keaksaraan Fungsional (KF)</a></span>
             </div>
             <div class="animate__content__single">
-                <span> Online Course</span>
+                <span><a href="#">Kecakapan Hidup (Life Skill)</a></span>
             </div>
             <div class="animate__content__single animate__content__single--2">
-                <span> Hot Deal</span>
+                <span> <a href="#">Taman Bacaan Masyarakat (TBM)</a></span>
             </div>
             <div class="animate__content__single">
-                <span>Book Libary</span>
+                <span><a href="#">Play Group</a></span>
             </div>
             <div class="animate__content__single animate__content__single--2">
-                <span>Hot Deal</span>
-            </div>
-            <div class="animate__content__single">
-                <span> University Area</span>
-            </div>
-            <div class="animate__content__single animate__content__single--2">
-                <span> Teacher Development</span>
-            </div>
-            <div class="animate__content__single">
-                <span> Student</span>
-            </div>
-            <div class="animate__content__single animate__content__single--2">
-                <span> New Arrival</span>
-            </div>
-            <div class="animate__content__single">
-                <span>Best Collection</span>
-            </div>
-            <div class="animate__content__single animate__content__single--2">
-                <span>Hot Deal</span>
-            </div>
-
-            <div class="animate__content__single">
-                <span>Book Libary</span>
-            </div>
-            <div class="animate__content__single animate__content__single--2">
-                <span>Hot Deal</span>
+                <span> <a href="#">PAUD</span></span>
             </div>
         </div>
     </div>
