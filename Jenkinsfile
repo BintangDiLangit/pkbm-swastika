@@ -11,7 +11,7 @@ pipeline {
         stage('Prepare') {
             steps {
                 script {
-                    env.BRANCH_NAME == 'master';
+                    env.BRANCH_NAME = 'master'
                     DOCKER_IMAGE_NAME = "pkbm-swastika"
                     DEPLOY_PORT = "8005"
                     ENV_FILE = 'ENV_PKBM_SWASTIKA'
