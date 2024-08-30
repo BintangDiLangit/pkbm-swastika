@@ -57,9 +57,9 @@ pipeline {
                 script {
                     sh "docker stop ${DOCKER_IMAGE_NAME} || true"
                     sh "docker rm ${DOCKER_IMAGE_NAME} || true"
-                    sh '''
-                        docker images --filter=reference='${DOCKER_IMAGE_NAME}' --format '{{.ID}} {{.Repository}}:{{.Tag}}' | grep -v '${DOCKER_IMAGE_NAME}:${BUILD_ID}' | awk '{print $1}' | xargs -r docker rmi || true
-                    '''
+                    sh """#!/bin/bash
+                        docker images --filter=reference='${DOCKER_IMAGE_NAME}' --format '{{.ID}} {{.Repository}}:{{.Tag}}' | grep -v '${DOCKER_IMAGE_NAME}:${env.BUILD_ID}' | awk '{print \$1}' | xargs -r docker rmi || true
+                    """
                 }
             }
         }
