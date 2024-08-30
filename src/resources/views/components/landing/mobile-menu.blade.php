@@ -28,7 +28,7 @@
                                 </li>
                                 <li class="menu-item-has-children"><a href="#">Sumber Belajar</a>
                                     <ul class="dropdown">
-                                        <li><a href="https://elearning-pkbm-swastika.sch.id">E-Learning</a></li>
+                                        <li><a href="https://elearning.pkbmswastika.sch.id">E-Learning</a></li>
                                     </ul>
                                 </li>
 

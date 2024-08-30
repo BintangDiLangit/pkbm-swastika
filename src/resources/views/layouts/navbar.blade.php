@@ -43,7 +43,7 @@
                                             <div class="col-3 mega__menu__single__wrap">
                                                 <h4 class="mega__menu__title"><a href="#">Sumber Belajar</a></h4>
                                                 <ul class="mega__menu__item">
-                                                    <li><a href="https://elearning-pkbm-swastika.sch.id">E-Learning</a>
+                                                    <li><a href="https://elearning.pkbmswastika.sch.id">E-Learning</a>
                                                     </li>
                                                 </ul>
                                             </div>
