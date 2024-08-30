@@ -16,7 +16,3 @@
  <script src="{{ asset('assets/js/plugins.js') }}"></script>
  <script src="{{ asset('assets/js/swiper-bundle.min.js') }}"></script>
  <script src="{{ asset('assets/js/main.js') }}"></script>
-
- <script>
-     document.getElementById("light--to-dark-button")?.classList.remove("dark--mode");
- </script>
