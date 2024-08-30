@@ -26,8 +26,8 @@
                                                 <h4 class="mega__menu__title"><a href="#">Penerimaan
                                                     </a></h4>
                                                 <ul class="mega__menu__item">
-                                                    <li><a href="course-details.html">Info Pendaftaran</a></li>
-                                                    <li><a href="course-details.html">Biaya Pendidikan</a></li>
+                                                    <li><a href="#">Info Pendaftaran</a></li>
+                                                    <li><a href="#">Biaya Pendidikan</a></li>
                                                     {{-- <li><a href="#">Grid <span class="mega__menu__label">All
                                                                 Courses</span></a></li> --}}
 
