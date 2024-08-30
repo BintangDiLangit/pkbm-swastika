@@ -16,8 +16,8 @@
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 grid-item column__custom__class swiper-slide">
                         <div class="gridarea__wraper">
                             <div class="gridarea__img">
-                                <a href="course-details.html"><img loading="lazy" src="img/grid/grid_7.png"
-                                        alt="grid"></a>
+                                <a href="course-details.html"><img loading="lazy"
+                                        src="{{ asset('assets/img/grid/grid_7.png') }}" alt="grid"></a>
                                 <div class="gridarea__small__button gridarea__small__button__1">
                                     <div class="grid__badge">Data & Tech</div>
                                 </div>
@@ -42,7 +42,7 @@
                                             about softwere</a></h3>
                                 </div>
                                 <div class="gridarea__price">
-                                    $32.00 <del>/ $67.00</del>
+                                    {{-- $32.00 <del>/ $67.00</del> --}}
                                     <span> <del class="del__2">Free</del></span>
 
                                 </div>
@@ -50,7 +50,8 @@
 
                                     <a href="instructor-details.html">
                                         <div class="gridarea__small__img">
-                                            <img loading="lazy" src="img/grid/grid_small_1.jpg" alt="grid">
+                                            <img loading="lazy" src="{{ asset('assets/img/grid/grid_small_1.jpg') }}"
+                                                alt="grid">
                                             <div class="gridarea__small__content">
                                                 <h6>Micle Jhon</h6>
                                             </div>
@@ -73,8 +74,8 @@
                         class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 grid-item column__custom__class swiper-slide">
                         <div class="gridarea__wraper">
                             <div class="gridarea__img">
-                                <a href="course-details.html"><img loading="lazy" src="img/grid/grid_8.png"
-                                        alt="grid"></a>
+                                <a href="course-details.html"><img loading="lazy"
+                                        src="{{ asset('assets/img/grid/grid_8.png') }}" alt="grid"></a>
                                 <div class="gridarea__small__button">
                                     <div class="grid__badge">Data & Tech</div>
                                 </div>
@@ -99,7 +100,7 @@
                                             about softwere</a></h3>
                                 </div>
                                 <div class="gridarea__price">
-                                    $32.00 <del>/ $67.00</del>
+                                    {{-- $32.00 <del>/ $67.00</del> --}}
                                     <span> <del class="del__2">Free</del></span>
 
                                 </div>
@@ -107,7 +108,8 @@
 
                                     <a href="instructor-details.html">
                                         <div class="gridarea__small__img">
-                                            <img loading="lazy" src="img/grid/grid_small_1.jpg" alt="grid">
+                                            <img loading="lazy" src="{{ asset('assets/img/grid/grid_small_1.jpg') }}"
+                                                alt="grid">
                                             <div class="gridarea__small__content">
                                                 <h6>Micle Jhon</h6>
                                             </div>
@@ -130,8 +132,8 @@
                         class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 grid-item column__custom__class swiper-slide">
                         <div class="gridarea__wraper">
                             <div class="gridarea__img">
-                                <a href="course-details.html"><img loading="lazy" src="img/grid/grid_9.png"
-                                        alt="grid"></a>
+                                <a href="course-details.html"><img loading="lazy"
+                                        src="{{ asset('assets/img/grid/grid_9.png') }}" alt="grid"></a>
                                 <div class="gridarea__small__button">
                                     <div class="grid__badge">Data & Tech</div>
                                 </div>
@@ -156,7 +158,7 @@
                                             about softwere</a></h3>
                                 </div>
                                 <div class="gridarea__price">
-                                    $32.00 <del>/ $67.00</del>
+                                    {{-- $32.00 <del>/ $67.00</del> --}}
                                     <span> <del class="del__2">Free</del></span>
 
                                 </div>
@@ -164,7 +166,8 @@
 
                                     <a href="instructor-details.html">
                                         <div class="gridarea__small__img">
-                                            <img loading="lazy" src="img/grid/grid_small_1.jpg" alt="grid">
+                                            <img loading="lazy" src="{{ asset('assets/img/grid/grid_small_1.jpg') }}"
+                                                alt="grid">
                                             <div class="gridarea__small__content">
                                                 <h6>Micle Jhon</h6>
                                             </div>
@@ -187,8 +190,8 @@
                         class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 grid-item column__custom__class swiper-slide">
                         <div class="gridarea__wraper">
                             <div class="gridarea__img">
-                                <a href="course-details.html"><img loading="lazy" src="img/grid/grid_7.png"
-                                        alt="grid"></a>
+                                <a href="course-details.html"><img loading="lazy"
+                                        src="{{ asset('assets/img/grid/grid_7.png') }}" alt="grid"></a>
                                 <div class="gridarea__small__button gridarea__small__button__1">
                                     <div class="grid__badge">Data & Tech</div>
                                 </div>
@@ -213,7 +216,7 @@
                                             about softwere</a></h3>
                                 </div>
                                 <div class="gridarea__price">
-                                    $32.00 <del>/ $67.00</del>
+                                    {{-- $32.00 <del>/ $67.00</del> --}}
                                     <span> <del class="del__2">Free</del></span>
 
                                 </div>
@@ -221,7 +224,8 @@
 
                                     <a href="instructor-details.html">
                                         <div class="gridarea__small__img">
-                                            <img loading="lazy" src="img/grid/grid_small_1.jpg" alt="grid">
+                                            <img loading="lazy" src="{{ asset('assets/img/grid/grid_small_1.jpg') }}"
+                                                alt="grid">
                                             <div class="gridarea__small__content">
                                                 <h6>Micle Jhon</h6>
                                             </div>
@@ -244,8 +248,8 @@
                         class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 grid-item column__custom__class swiper-slide">
                         <div class="gridarea__wraper">
                             <div class="gridarea__img">
-                                <a href="course-details.html"><img loading="lazy" src="img/grid/grid_8.png"
-                                        alt="grid"></a>
+                                <a href="course-details.html"><img loading="lazy"
+                                        src="{{ asset('assets/img/grid/grid_8.png') }}" alt="grid"></a>
                                 <div class="gridarea__small__button gridarea__small__button__1">
                                     <div class="grid__badge">Data & Tech</div>
                                 </div>
@@ -270,7 +274,7 @@
                                             about softwere</a></h3>
                                 </div>
                                 <div class="gridarea__price">
-                                    $32.00 <del>/ $67.00</del>
+                                    {{-- $32.00 <del>/ $67.00</del> --}}
                                     <span> <del class="del__2">Free</del></span>
 
                                 </div>
@@ -278,7 +282,8 @@
 
                                     <a href="instructor-details.html">
                                         <div class="gridarea__small__img">
-                                            <img loading="lazy" src="img/grid/grid_small_1.jpg" alt="grid">
+                                            <img loading="lazy" src="{{ asset('assets/img/grid/grid_small_1.jpg') }}"
+                                                alt="grid">
                                             <div class="gridarea__small__content">
                                                 <h6>Micle Jhon</h6>
                                             </div>
@@ -302,8 +307,8 @@
                         class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 grid-item column__custom__class swiper-slide">
                         <div class="gridarea__wraper">
                             <div class="gridarea__img">
-                                <a href="course-details.html"><img loading="lazy" src="img/grid/grid_9.png"
-                                        alt="grid"></a>
+                                <a href="course-details.html"><img loading="lazy"
+                                        src="{{ asset('assets/img/grid/grid_9.png') }}" alt="grid"></a>
                                 <div class="gridarea__small__button gridarea__small__button__1">
                                     <div class="grid__badge">Data & Tech</div>
                                 </div>
@@ -328,7 +333,7 @@
                                             about softwere</a></h3>
                                 </div>
                                 <div class="gridarea__price">
-                                    $32.00 <del>/ $67.00</del>
+                                    {{-- $32.00 <del>/ $67.00</del> --}}
                                     <span> <del class="del__2">Free</del></span>
 
                                 </div>
@@ -336,7 +341,8 @@
 
                                     <a href="instructor-details.html">
                                         <div class="gridarea__small__img">
-                                            <img loading="lazy" src="img/grid/grid_small_1.jpg" alt="grid">
+                                            <img loading="lazy" src="{{ asset('assets/img/grid/grid_small_1.jpg') }}"
+                                                alt="grid">
                                             <div class="gridarea__small__content">
                                                 <h6>Micle Jhon</h6>
                                             </div>

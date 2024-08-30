@@ -1,4 +1,4 @@
-<div class="abouttabarea sp_bottom_70">
+<div class="abouttabarea sp_bottom_70" style="margin-top: 10vh;">
     <div class="container">
         <div class="row">
             <div class="section__title text-center" data-aos="fade-up">
@@ -6,8 +6,8 @@
                     <div class="default__small__button">Overview</div>
                 </div>
                 <div class="section__title__heading heading__underline">
-                    <h2>Perfect University <span>Overview</span>
-                        <br> For Your Carrer
+                    <h2>PKBM Swastika <span>Overview</span>
+                        <br> Untuk Karirmu
                     </h2>
                 </div>
             </div>
@@ -17,19 +17,19 @@
                 <ul class="nav  about__button__wrap justify-content-center" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="single__tab__link active" data-bs-toggle="tab" data-bs-target="#projects__one"
-                            type="button">About</button>
+                            type="button">Tentang</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__two"
-                            type="button">Our Mission</button>
+                            type="button">Misi</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__three"
-                            type="button">Our Vision</button>
+                            type="button">Visi</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__four"
-                            type="button">Award</button>
+                            type="button">Penghargaan</button>
                     </li>
 
 

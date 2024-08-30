@@ -28,7 +28,7 @@
 
                 <div class="aboutarea__content__wraper">
                     <div class="aboutarea__button">
-                        <div class="default__small__button">About Us</div>
+                        <div class="default__small__button">Tentang Kami</div>
                     </div>
                     <div class="aboutarea__headding heading__underline">
                         <h2>Selamat datang di <span>PKBM Swastika</span> tempat belajar terbaik untuk anda.</h2>
@@ -39,15 +39,15 @@
                     <div class="aboutarea__list__2">
                         <ul>
                             <li>
-                                <i class="icofont-check"></i>
+                                <i class="icofont-check"></i> Pengajar yang profesional
                             </li>
 
                             <li>
-                                <i class="icofont-check"></i> Explore a variety of fresh educational teach
+                                <i class="icofont-check"></i> Berbagai variasi metode mengajar
                             </li>
 
                             <li>
-                                <i class="icofont-check"></i> Lorem Ipsum is simply dummy text of
+                                <i class="icofont-check"></i> Platform pembelajaran interaktif dan modern
                             </li>
                         </ul>
                     </div>

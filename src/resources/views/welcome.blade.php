@@ -19,24 +19,26 @@
 
                                     <div class="herobannerarea__title">
                                         <div class="herobannerarea__small__title">
-                                            <span class="text-white">PKBM</span>
+                                            <span>PKBM</span>
                                         </div>
                                         <div class="herobannerarea__title__heading__2 herobannerarea__title__heading__3">
-                                            <h2> <span class="text-primary">SWASTIKA</span>
-                                            </h2>
+                                            <h2>SWASTIKA</h2>
                                         </div>
                                     </div>
 
 
                                     <div class="herobannerarea__text herobannerarea__text__2">
-                                        <p>Pusat Kegiatan Belajar Masyarakat Swastika - Kota Batu</p>
+                                        <p>Pusat Kegiatan Belajar Masyarakat
+                                            Swastika
+                                            - Kota Batu
+                                        </p>
                                     </div>
                                     <div class="hreobannerarea__button__2">
                                         <a class="default__button" href="#">Lebih lanjut tentang Swastika</a>
                                     </div>
 
                                     <div class="footerarea__icon footerarea__icon__2">
-                                        <p>Followed by :</p>
+                                        <p>Media Sosial :</p>
                                         <ul>
                                             <li><a href="http://facebook.com/"><i class="icofont-facebook"></i></a></li>
                                             <li><a href="http://twitter.com/"><i class="icofont-twitter"></i></a>
@@ -63,24 +65,18 @@
 
                                     <div class="herobannerarea__title">
                                         <div class="herobannerarea__small__title">
-                                            <span>Career Solution</span>
+                                            <span>Solusi Pendidikan</span>
                                         </div>
                                         <div class="herobannerarea__title__heading__2 herobannerarea__title__heading__3">
-                                            <!-- <h2>World <span>Ranking</span> best University place.</h2> -->
-                                            <h2>Degree that’s right for your Bright future</h2>
+                                            <h2>Pilihan yang tepat untuk masa depan cerah Anda</h2>
                                         </div>
                                     </div>
-
-
-                                    <!-- <div class="herobannerarea__text herobannerarea__text__2">
-                                                                                                                                                        <p>Lorem Ipsum is simply dummy text of the printing typesetting.</p>
-                                                                                                                                                    </div> -->
                                     <div class="hreobannerarea__button__2">
-                                        <a class="default__button" href="#">More about university</a>
+                                        <a class="default__button" href="#">Lebih lanjut tentang Swastika</a>
                                     </div>
 
                                     <div class="footerarea__icon footerarea__icon__2">
-                                        <p>Followed by :</p>
+                                        <p>Media Sosial :</p>
                                         <ul>
                                             <li><a href="http://facebook.com/"><i class="icofont-facebook"></i></a></li>
                                             <li><a href="http://twitter.com/"><i class="icofont-twitter"></i></a>
@@ -107,23 +103,19 @@
 
                                     <div class="herobannerarea__title">
                                         <div class="herobannerarea__small__title">
-                                            <span>Certificate Solution</span>
+                                            <span>Solusi Bersertifikasi</span>
                                         </div>
                                         <div class="herobannerarea__title__heading__2 herobannerarea__title__heading__3">
-                                            <h2>Let’s build your awesome Degree with Edurock</h2>
+                                            <h2>Ayo bangun Gelar luar biasa Anda dengan Swastika</h2>
                                         </div>
                                     </div>
 
-
-                                    <!-- <div class="herobannerarea__text herobannerarea__text__2">
-                                                                                                                                                        <p>Lorem Ipsum is simply dummy text of the printing typesetting.</p>
-                                                                                                                                                    </div> -->
                                     <div class="hreobannerarea__button__2">
-                                        <a class="default__button" href="#">More about university</a>
+                                        <a class="default__button" href="#">Lebih lanjut tentang Swastika</a>
                                     </div>
 
                                     <div class="footerarea__icon footerarea__icon__2">
-                                        <p>Followed by :</p>
+                                        <p>Media Sosial :</p>
                                         <ul>
                                             <li><a href="http://facebook.com/"><i class="icofont-facebook"></i></a></li>
                                             <li><a href="http://twitter.com/"><i class="icofont-twitter"></i></a>
@@ -191,7 +183,7 @@
 
 
 
-    @include('components.landing.best-categories')
+    {{-- @include('components.landing.best-categories') --}}
 
 
 

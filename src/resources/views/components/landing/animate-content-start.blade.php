@@ -25,6 +25,9 @@
             <div class="animate__content__single animate__content__single--2">
                 <span> <a href="#">PAUD</span></span>
             </div>
+            <div class="animate__content__single">
+                <span><a href="#">Pendidikat Kesetaraan SD (Paket A)</a></span>
+            </div>
         </div>
     </div>
 </div>
