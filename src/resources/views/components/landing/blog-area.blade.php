@@ -16,7 +16,7 @@
             <div class="col-xl-8 col-lg-8" data-aos="fade-up">
                 <div class="blogarea__content__wraper">
                     <div class="blogarea__img">
-                        <img loading="lazy" src="img/blog/blog_26.jpg" alt="blog">
+                        <img loading="lazy" src="{{ asset('assets/img/blog/blog_26.jpg') }}" alt="blog">
                         <div class="blogarea__date">
                             20
                             <span>Oct</span>
@@ -37,7 +37,7 @@
                         <div class="blogarea__icon">
                             <div class="blogarea__person">
                                 <div class="blogarea__img">
-                                    <img loading="lazy" src="img/blog/blog_2.png" alt="">
+                                    <img loading="lazy" src="{{ asset('assets/img/blog/blog_2.png') }}" alt="">
                                 </div>
                                 <div class="blogarea__name">
                                     <span> By</span>: Mirnsdo Jons
@@ -68,7 +68,7 @@
             <div class="col-xl-4 col-lg-4" data-aos="fade-up">
                 <div class="blogarea__content__wraper">
                     <div class="blogarea__img">
-                        <img loading="lazy" src="img/blog/blog_27.jpg" alt="blog">
+                        <img loading="lazy" src="{{ asset('assets/img/blog/blog_27.jpg') }}" alt="blog">
                         <div class="blogarea__date small__date">
                             20
                             <span>Oct</span>
@@ -83,7 +83,7 @@
 
                 <div class="blogarea__content__wraper">
                     <div class="blogarea__img">
-                        <img loading="lazy" src="img/blog/blog_28.jpg" alt="blog">
+                        <img loading="lazy" src="{{ asset('assets/img/blog/blog_28.jpg') }}" alt="blog">
                         <div class="blogarea__date small__date">
                             20
                             <span>Oct</span>

@@ -31,7 +31,7 @@
                             <h3>About us</h3>
                         </div>
                         <div class="footerarea__content">
-                            <p>orporate clients and leisure travelers has been relying on Groundlink for
+                            <p>Corporate clients and leisure travelers has been relying on Groundlink for
                                 dependable safe, and professional chauffeured car end service in major cities
                                 across World.</p>
                         </div>
@@ -115,7 +115,8 @@
                                 <li>
                                     <a href="#">
                                         <div class="footerarea__right__img">
-                                            <img loading="lazy" src="img/footer/footer__1.png" alt="footerphoto">
+                                            <img loading="lazy" src="{{ asset('assets/img/footer/footer__1.png') }}"
+                                                alt="footerphoto">
                                         </div>
                                         <div class="footerarea__right__content">
                                             <span>02 Apr 2024 </span>
@@ -127,7 +128,8 @@
                                 <li>
                                     <a href="#">
                                         <div class="footerarea__right__img">
-                                            <img loading="lazy" src="img/footer/footer__2.png" alt="footerphoto">
+                                            <img loading="lazy" src="{{ asset('assets/img/footer/footer__2.png') }}"
+                                                alt="footerphoto">
                                         </div>
                                         <div class="footerarea__right__content">
                                             <span>02 Apr 2024 </span>
@@ -139,7 +141,8 @@
                                 <li>
                                     <a href="#">
                                         <div class="footerarea__right__img">
-                                            <img loading="lazy" src="img/footer/footer__3.png" alt="footerphoto">
+                                            <img loading="lazy" src="{{ asset('assets/img/footer/footer__3.png') }}"
+                                                alt="footerphoto">
                                         </div>
                                         <div class="footerarea__right__content">
                                             <span>02 Apr 2024 </span>
@@ -157,13 +160,13 @@
             <div class="row">
                 <div class="col-xl-3 col-lg-3">
                     <div class="copyright__logo">
-                        <a href="https://html.themewin.com/"><img loading="lazy" src="img/logo/logo_2.png"
-                                alt="logo"></a>
+                        <a href="#"><img loading="lazy" style="max-height: 10vh;"
+                                src="{{ asset('assets/img/logo/logo_swastika.png') }}" alt="logo"></a>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-6">
                     <div class="footerarea__copyright__content footerarea__copyright__content__2">
-                        <p>Copyright © <span>2024</span> by edurock. All Rights Reserved.</p>
+                        <p>Copyright © <span>2024</span> by bintangmfhd. All Rights Reserved.</p>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-3">

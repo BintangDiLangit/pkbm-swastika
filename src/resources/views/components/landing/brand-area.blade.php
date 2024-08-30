@@ -15,33 +15,12 @@
         </div>
         <div class="row">
             <div class="brandarea__wraper" data-aos="fade-up">
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_1.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_2.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_3.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_4.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_5.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_6.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_7.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_8.png" alt="brand"></a>
-                </div>
-                <div class="brandarea__img">
-                    <a href="#"><img loading="lazy" src="img/brand/brand_9.png" alt="brand"></a>
-                </div>
+                @for ($i = 1; $i <= 9; $i++)
+                    <div class="brandarea__img">
+                        <a href="#"><img loading="lazy" src="{{ asset('assets/img/brand/brand_' . $i . '.png') }}"
+                                alt="brand"></a>
+                    </div>
+                @endfor
             </div>
         </div>
 

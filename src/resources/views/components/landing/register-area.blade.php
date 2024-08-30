@@ -75,7 +75,7 @@
                     var whatsappMessage =
                         `Nama Lengkap: ${namaLengkap}\nEmail: ${email}\nNomor WA: ${nomorWA}\nAlamat: ${alamat}\nPesan: ${pesan}`;
                     var whatsappUrl =
-                        `https://api.whatsapp.com/send?phone=6287881377842&text=${encodeURIComponent(whatsappMessage)}`;
+                        `https://api.whatsapp.com/send?phone=6281333019903&text=${encodeURIComponent(whatsappMessage)}`;
 
                     window.open(whatsappUrl, '_blank');
 

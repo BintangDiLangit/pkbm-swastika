@@ -7,7 +7,7 @@
                         <div class="default__small__button">Updated</div>
                     </div>
                     <div class="section__title__heading">
-                        <h2>University Tuition & Fees</h2>
+                        <h2>School Tuition & Fees</h2>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                                 <div class="scc__wrap">
                                     <div class="scc__info">
                                         <i class="icofont-read-book"></i>
-                                        <h5> <span>Semister 1 :</span> This is the second item's</h5>
+                                        <h5> <span>Semester 1 :</span> This is the second item's</h5>
                                     </div>
                                     <div class="scc__meta">
                                         <span class="time"><i class="icofont-dollar"></i> 350.00</span>
@@ -44,7 +44,7 @@
                                 <div class="scc__wrap">
                                     <div class="scc__info">
                                         <i class="icofont-video-alt"></i>
-                                        <h5> <span>Semister 2 :</span> Lorem ipsum dolor sit amet.</h5>
+                                        <h5> <span>Semester 2 :</span> Lorem ipsum dolor sit amet.</h5>
                                     </div>
                                     <div class="scc__meta">
                                         <span class="time"> <i class="icofont-dollar"></i> 280.00</span>
@@ -53,7 +53,7 @@
                                 <div class="scc__wrap">
                                     <div class="scc__info">
                                         <i class="icofont-audio"></i>
-                                        <h5> <span>Semister 3 :</span> Lorem ipsum dolor sit amet.</h5>
+                                        <h5> <span>Semester 3 :</span> Lorem ipsum dolor sit amet.</h5>
                                     </div>
                                     <div class="scc__meta">
                                         <span class="time"> <i class="icofont-dollar"></i> 300.00</span>
@@ -62,7 +62,7 @@
                                 <div class="scc__wrap">
                                     <div class="scc__info">
                                         <i class="icofont-certificate"></i>
-                                        <h5> <span>Semister 4 :</span> This is most Important</h5>
+                                        <h5> <span>Semester 4 :</span> This is most Important</h5>
                                     </div>
                                     <div class="scc__meta">
                                         <span class="time"> <i class="icofont-dollar"></i> 350.00</span>
