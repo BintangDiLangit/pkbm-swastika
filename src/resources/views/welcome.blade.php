@@ -197,7 +197,6 @@
 
 
     <!-- .about__tap__section__end -->
-    @include('components.landing.course-area')
 
 
     <!-- register__section__start-->
@@ -214,19 +213,16 @@
 
 
     <!-- eventlistarea__section__start  -->
-    @include('components.landing.event-area')
     <!-- eventlistarea__section__end  -->
 
 
     <!-- team__section__start -->
-    {{-- @include('components.landing.team') --}}
 
     <!-- testmonialarea__section__atart -->
     @include('components.landing.testimonial')
     <!-- testmonialarea__section__end-->
 
     <!-- brand__section__start -->
-    @include('components.landing.brand-area')
     <!-- brand__section__end -->
 
     <!-- blog__section__start -->

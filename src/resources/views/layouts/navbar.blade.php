@@ -16,6 +16,10 @@
                     <div class="headerarea__main__menu">
                         <nav>
                             <ul>
+
+                                <li class="mega__menu position-static">
+                                    <a class="" href="#">Beranda </a>
+                                </li>
                                 <li class="mega__menu position-static">
                                     <a class="headerarea__has__dropdown" href="#">Akademik<i
                                             class="icofont-rounded-down"></i> </a>
@@ -59,18 +63,14 @@
 
                                 </li>
                                 <li class="mega__menu position-static">
-                                    <a class="" href="#">Riset dan Inovasi </a>
+                                    <a class="" href="#about">Tentang </a>
                                 </li>
                                 <li class="mega__menu position-static">
-                                    <a class="" href="#">People </a>
+                                    <a class="" href="#news">Berita dan Pengumuman </a>
                                 </li>
                                 <li class="mega__menu position-static">
-                                    <a class="" href="#">Berita dan Pengumuman </a>
+                                    <a class="" href="#gallery">Galeri </a>
                                 </li>
-                                <li class="mega__menu position-static">
-                                    <a class="" href="#">Tentang PKBM Swastika </a>
-                                </li>
-
                             </ul>
                         </nav>
                     </div>

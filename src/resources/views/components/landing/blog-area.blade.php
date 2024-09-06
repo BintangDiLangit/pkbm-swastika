@@ -1,13 +1,13 @@
-<div class="blogarea sp_bottom_70 sp_top_100">
+<div class="blogarea sp_bottom_70 sp_top_100" id="news">
     <div class="container">
         <div class="row" data-aos="fade-up">
             <div class="col-xl-12">
                 <div class="section__title text-center">
                     <div class="section__title__button">
-                        <div class="default__small__button">News & Blogs</div>
+                        <div class="default__small__button">Berita & Pengumuman</div>
                     </div>
                     <div class="section__title__heading heading__underline">
-                        <h2>Our Latest <span>Research</span></h2>
+                        <h2><span>Berita & Pengumuman</span> Terbaru</h2>
                     </div>
                 </div>
             </div>

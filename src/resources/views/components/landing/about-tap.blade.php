@@ -21,15 +21,15 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__two"
-                            type="button">Misi</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__three"
                             type="button">Visi</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__three"
+                            type="button">Misi</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__four"
-                            type="button">Penghargaan</button>
+                            type="button">Tujuan</button>
                     </li>
 
 
@@ -44,17 +44,11 @@
                     aria-labelledby="projects__one">
                     <div class="col-xl-12">
                         <div class="aboutarea__content__tap__wraper">
-                            <p class="paragraph__1">There are many variations of passages of Lorem Ipsum
-                                available, but the majority have suffered alteration in some form, by injected
-                                humour, or randomised words look even slightly believable. If you are going to
-                                use
-                                a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing
-                                hidden in the middle of text. Ipsum generators on the Internet tend to repeat
-                                predefined chunks as necessary, making this the first
-                                true generator on the Internet. It uses a dictionary of over 200 combined with a
-                                handful of model sentence structures, to generate Lorem Ipsum which looks
-                                reasonable. The generated Lorem Ipsum is therefore always
-                                free from characteristic words etc.</p>
+                            <p class="paragraph__1">PKBM Swastika adalah lembaga pendidikan non-formal yang berlokasi di
+                                Kecamatan Karangploso, yang bertujuan untuk menyediakan akses pendidikan yang setara
+                                bagi semua lapisan masyarakat. Lembaga ini dirancang untuk membantu individu yang tidak
+                                memiliki akses ke pendidikan formal agar dapat memperoleh pendidikan yang setara melalui
+                                program Kejar Paket A, B, dan C.</p>
                             <img loading="lazy" src="{{ asset('assets/img/about/overview.jpg') }}" alt="">
                         </div>
 
@@ -65,14 +59,9 @@
 
                     <div class="col-xl-12">
                         <div class="aboutarea__content__tap__wraper">
-                            <p class="paragraph__1">There are many variations of passages of Lorem Ipsum
-                                available, but the majority have suffered alteration in some form, by injected
-                                humour, or randomised words look even slightly believable. If you are going to
-                                use
-                                a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing
-                                hidden in the middle of text. Ipsum generators on the Internet tend to repeat
-                                predefined chunks as necessary.</p>
-                            <div class="aboutarea__tap__heading">
+                            <p class="paragraph__1">Menciptakan Warga Belajar / Masyarakat Belajar Yang Berbudi Pekerti
+                                Luhur, Kompetitif, Mandiri dan Berwawasan Global.</p>
+                            {{-- <div class="aboutarea__tap__heading">
                                 <h5>World best education site</h5>
                                 <p>There are many variations of passages of Lorem Ipsum available, but the
                                     majority have suffered alteration in some form, by injected humour, or
@@ -86,8 +75,8 @@
                                     majority have suffered alteration in some form, by injected humour, or
                                     randomised words which dont look even slightly believable. If you are
                                     going to useery</p>
-                            </div>
-                            <img loading="lazy" src="{{ asset('assets/img/about/mission.jpg') }}" alt="Mission">
+                            </div> --}}
+                            <img loading="lazy" src="{{ asset('assets/img/about/vision.jpg') }}" alt="Vision">
                         </div>
 
                     </div>
@@ -97,63 +86,59 @@
                 <div class="tab-pane fade" id="projects__three" role="tabpanel" aria-labelledby="projects__three">
                     <div class="col-xl-12">
                         <div class="aboutarea__content__tap__wraper">
-                            <p class="paragraph__1">There are many variations of passages of Lorem Ipsum
-                                available, but the majority have suffered alteration in some form, by injected
-                                humour, or randomised words look even slightly believable. If you are going to
-                                use a passage of Lorem Ipsum, you need to be sure there isn't anything
-                                embarrassing hidden in the middle of text. Ipsum generators on the Internet tend
-                                to repeat predefined chunks as necessary. Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Possimus quae rerum dolore itaque tenetur. Natus illum
-                                nostrum, deleniti ipsa animi accusantium quos placeat eaque. </p>
+                            <p class="paragraph__1"></p>
                             <div class="aboutarea__list__2">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <ul>
                                             <li>
-                                                <i class="icofont-check"></i> Lorem Ipsum is simply dummy
+                                                <i class="icofont-check"></i> Membekali pengetahuan dan pembiasaan Budi
+                                                Pekerti Luhur untuk warga belajar.
                                             </li>
 
                                             <li>
-                                                <i class="icofont-check"></i> Explore a variety of fresh
-                                                educational teach
+                                                <i class="icofont-check"></i> Menyelenggarakan pendidikan dan
+                                                pendampingan yang prima, berdaya saing dan terupdate.
                                             </li>
 
                                             <li>
-                                                <i class="icofont-check"></i> Lorem Ipsum is simply dummy text
-                                                of
+                                                <i class="icofont-check"></i> Memberikan layanan pendidikan yang
+                                                mengembangkan kemampuan inovasi, kreatif dan berbasis IT.
                                             </li>
 
                                             <li>
-                                                <i class="icofont-check"></i> Lorem Ipsum is simply dummy text
-                                                of
+                                                <i class="icofont-check"></i> Mengembangkan strategi pendidikan yang
+                                                berkelanjutan, mandiri, dan berdaya saing.
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-6">
                                         <ul>
                                             <li>
-                                                <i class="icofont-check"></i> Lorem Ipsum is simply dummy
+                                                <i class="icofont-check"></i> Mengembangkan, memfasilitasi, dan
+                                                memobilisasi kegiatan yang bersifat pengembangan diri, pemberdayaan, dan
+                                                kewirausahaan secara dinamis.
                                             </li>
 
                                             <li>
-                                                <i class="icofont-check"></i> Explore a variety of fresh
-                                                educational teach
+                                                <i class="icofont-check"></i> Menjalin hubungan lintas sektoral untuk
+                                                kemajuan warga belajar.
                                             </li>
 
                                             <li>
+                                                <i class="icofont-check"></i> Menerapkan manajemen partisipatif dengan
+                                                melibatkan seluruh peserta didik dalam setiap kegiatan yang dilakukan.
+                                            </li>
+
+                                            {{-- <li>
                                                 <i class="icofont-check"></i> Lorem Ipsum is simply dummy text
                                                 of
-                                            </li>
-
-                                            <li>
-                                                <i class="icofont-check"></i> Lorem Ipsum is simply dummy text
-                                                of
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            <img loading="lazy" src="{{ asset('assets/img/about/vision.jpg') }}" alt="Mission">
+                            <img loading="lazy" src="{{ asset('assets/img/about/mission.jpg') }}" alt="Mission">
                         </div>
 
                     </div>
@@ -163,7 +148,7 @@
                     <div class="col-xl-12">
                         <div class="aboutarea__content__tap__wraper">
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-lg-6 col-md-12 col-sm-12 col-12">
                                     <div class="single__event__wraper single__award" data-aos="fade-up">
                                         <div class="eventarea__img">
@@ -270,6 +255,68 @@
                                                         class="icofont-simple-right"></i></a>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="aboutarea__list__2">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <ul>
+                                            <li>
+                                                <i class="icofont-check"></i> Membentuk dan menguatkan budi dan pekerti
+                                                warga belajar menjadi budi pekerti yang luhur yaitu yang menjunjung
+                                                nilai-nilai norma, aturan dan mengedepankan kesadaran sebagai insan
+                                                manusia yang berakal pada segala aspek kehidupan mereka.
+                                            </li>
+
+                                            <li>
+                                                <i class="icofont-check"></i> Mengembangkan kemampuan akademis, jiwa
+                                                kompetitif, kemandirian warga belajar agar dapat menghadapi dinamika
+                                                kehidupan.
+                                            </li>
+
+                                            <li>
+                                                <i class="icofont-check"></i> Memberikan dan menguatkan skill maupun
+                                                soft skills warga belajar.
+                                            </li>
+
+                                            <li>
+                                                <i class="icofont-check"></i> Meningkatan pengetahuan yang berwawasan
+                                                global.
+                                            </li>
+
+                                            <li>
+                                                <i class="icofont-check"></i> Mandiri, dan kreatif dalam memanfaatkan
+                                                potensi diri, potensi sumber daya yang dimiliki.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <ul>
+                                            <li>
+                                                <i class="icofont-check"></i> Mampu Menjadikan peserta didik penggerak
+                                                pemberdayaan individual dan kolektif di lingkungan tempat tinggalnya
+                                                sesuai kemampuannya.
+                                            </li>
+
+                                            <li>
+                                                <i class="icofont-check"></i> Meningkatkan motivasi dan kemampuan
+                                                peserta didik untuk melanjutkan pendidikan ke jenjang yang lebih tinggi.
+                                            </li>
+
+                                            <li>
+                                                <i class="icofont-check"></i> Meningkatkan kemampuan peserta didik
+                                                dalam pemanfaatan teknologi informasi.
+                                            </li>
+                                            <li>
+                                                <i class="icofont-check"></i> Menyiapkan peserta didik mampu mengikuti
+                                                jenjang pendidikan lebih lanjut.
+                                            </li>
+                                            <li>
+                                                <i class="icofont-check"></i> Meningkatkan keterampilan lanjutan vokasi
+                                                melalui keterampilan, pemberdayaan dan Kewirausahaan.
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>

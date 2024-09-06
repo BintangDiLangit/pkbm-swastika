@@ -13,6 +13,7 @@
 
                 <nav>
                     <ul class="mobile-menu">
+                        <li class="menu-item "><a href="#">Beranda</a></li>
                         <li class="menu-item-has-children"><a href="#">Akademik</a>
                             <ul class="dropdown">
                                 <li class="menu-item-has-children"><a href="#">Penerimaan</a>
@@ -34,10 +35,9 @@
 
                             </ul>
                         </li>
-                        <li class="menu-item "><a href="#">Riset dan Inovasi</a></li>
-                        <li class="menu-item "><a href="#">People</a></li>
-                        <li class="menu-item "><a href="#">Berita dan Pengumuman</a></li>
-                        <li class="menu-item "><a href="#">Tentang PKBM Swastika</a></li>
+                        <li class="menu-item "><a href="#about">Tentang</a></li>
+                        <li class="menu-item "><a href="#news">Berita dan Pengumuman</a></li>
+                        <li class="menu-item "><a href="#gallery">Galeri</a></li>
                     </ul>
                 </nav>
 

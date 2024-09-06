@@ -1,4 +1,4 @@
-<div class="gallery">
+<div class="gallery" id="gallery">
     <div class="container-fluid full__width__padding">
         <div class="blogsidebar__content__wraper__2">
 
