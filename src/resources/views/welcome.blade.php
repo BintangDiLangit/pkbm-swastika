@@ -30,7 +30,7 @@
                                     <div class="herobannerarea__text herobannerarea__text__2">
                                         <p>Pusat Kegiatan Belajar Masyarakat
                                             Swastika
-                                            - Kota Batu
+                                            - Kec. Karangploso, Kab. Malang
                                         </p>
                                     </div>
                                     <div class="hreobannerarea__button__2">
