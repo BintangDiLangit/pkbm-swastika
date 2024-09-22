@@ -10,7 +10,10 @@
             <div class="herobannerarea__slider__wrap swiper-wrapper">
 
                 <div class="swiper-slide herobannerarea__single__slider"
-                    style="background: url({{ asset('assets/img/herobanner/university_1.jpg') }});">
+                    style="background: url({{ asset('assets/img/herobanner/teachers_bg.jpeg') }}); 
+                       background-size: cover; 
+                       background-repeat: no-repeat; 
+                       background-position: center;">
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 col-12" data-aos="fade-up">
