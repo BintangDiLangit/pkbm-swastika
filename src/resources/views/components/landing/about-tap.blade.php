@@ -43,12 +43,14 @@
                 <div class="tab-pane fade active show" id="projects__one" role="tabpanel"
                     aria-labelledby="projects__one">
                     <div class="col-xl-12">
-                        <div class="aboutarea__content__tap__wraper">
-                            <p class="paragraph__1">PKBM Swastika adalah lembaga pendidikan non-formal yang berlokasi di
-                                Kecamatan Karangploso, yang bertujuan untuk menyediakan akses pendidikan yang setara
-                                bagi semua lapisan masyarakat. Lembaga ini dirancang untuk membantu individu yang tidak
-                                memiliki akses ke pendidikan formal agar dapat memperoleh pendidikan yang setara melalui
-                                program Kejar Paket A, B, dan C.</p>
+                            <div class="aboutarea__content__tap__wraper">
+                                <p class="paragraph__1">PKBM Swastika (Pusat Kegiatan Belajar Masyarakat Swastika)
+                                    adalah lembaga pendidikan non-formal yang menjadi wadah bagi masyarakat untuk terus
+                                    belajar sepanjang hayat. Kami menyelenggarakan program pendidikan kesetaraan Paket A,
+                                    B, dan C (setara SD, SMP, SMA) serta kursus keterampilan seperti komputer, tata boga,
+                                    tata rias, dan pelatihan wirausaha. Selain layanan pendidikan resmi, kami aktif dalam
+                                    program literasi, pengembangan minat bakat, dan kegiatan sosial untuk memberdayakan
+                                    masyarakat.</p>
                             <img loading="lazy" src="{{ asset('assets/img/about/overview.jpg') }}" alt="">
                         </div>
 

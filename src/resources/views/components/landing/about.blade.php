@@ -31,23 +31,26 @@
                         <div class="default__small__button">Tentang Kami</div>
                     </div>
                     <div class="aboutarea__headding heading__underline">
-                        <h2>Selamat datang di <span>PKBM Swastika</span> tempat belajar terbaik untuk anda.</h2>
+                        <h2>PKBM <span>Swastika</span> — Pendidikan non-formal untuk semua</h2>
                     </div>
                     <div class="aboutarea__para aboutarea__para__2">
-                        <p>Telah diakui oleh pemerintah dan terakrediasi Baik</p>
+                        <p>PKBM Swastika adalah pusat kegiatan belajar masyarakat yang menyediakan pendidikan
+                        kesetaraan (Paket A, B, C) setara SD/SMP/SMA serta kursus keterampilan seperti
+                        komputer, tata boga, tata rias, dan pelatihan wirausaha. Kami menggabungkan akses
+                        pendidikan formal yang diakui negara dengan program pemberdayaan masyarakat.</p>
                     </div>
                     <div class="aboutarea__list__2">
                         <ul>
                             <li>
-                                <i class="icofont-check"></i> Pengajar yang profesional
+                                <i class="icofont-check"></i> Program kesetaraan Paket A/B/C yang terakreditasi
                             </li>
 
                             <li>
-                                <i class="icofont-check"></i> Berbagai variasi metode mengajar
+                                <i class="icofont-check"></i> Kursus keterampilan vokasi dan pelatihan wirausaha
                             </li>
 
                             <li>
-                                <i class="icofont-check"></i> Platform pembelajaran interaktif dan modern
+                                <i class="icofont-check"></i> Kegiatan literasi, pengembangan minat bakat, dan sosial
                             </li>
                         </ul>
                     </div>

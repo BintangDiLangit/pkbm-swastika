@@ -1,20 +1,22 @@
 <div class="footerarea">
     <div class="container">
+        <!-- Newsletter / Support -->
         <div class="footerarea__newsletter__wraper">
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" data-aos="fade-up">
                     <div class="footerarea__text">
-                        <h3>Still You Need Our <span>Support</span> ?</h3>
-                        <p>Don’t wait make a smart & logical quote here. Its pretty easy.</p>
+                        <h3>Butuh <span>Informasi</span> Lebih Lanjut?</h3>
+                        <p>Hubungi kami untuk konsultasi program kesetaraan maupun kursus keterampilan di PKBM Swastika.
+                        </p>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" data-aos="fade-up">
                     <div class="footerarea__newsletter">
                         <div class="footerarea__newsletter__input">
                             <form action="#">
-                                <input type="text" placeholder="Enter your email here">
+                                <input type="text" placeholder="Masukkan email Anda">
                                 <div class="footerarea__newsletter__button">
-                                    <button type="submit" class="subscribe__btn">Subscribe Now</button>
+                                    <button type="submit" class="subscribe__btn">Daftar Newsletter</button>
                                 </div>
                             </form>
                         </div>
@@ -23,92 +25,74 @@
             </div>
         </div>
 
+        <!-- Main Footer -->
         <div class="footerarea__wrapper footerarea__wrapper__2">
             <div class="row">
+                <!-- About -->
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" data-aos="fade-up">
                     <div class="footerarea__inner footerarea__about__us">
                         <div class="footerarea__heading">
-                            <h3>About us</h3>
+                            <h3>Tentang Kami</h3>
                         </div>
                         <div class="footerarea__content">
-                            <p>Corporate clients and leisure travelers has been relying on Groundlink for
-                                dependable safe, and professional chauffeured car end service in major cities
-                                across World.</p>
+                            <p>PKBM Swastika adalah lembaga pendidikan non-formal yang menyelenggarakan program
+                                kesetaraan
+                                (Paket A, B, C) serta kursus keterampilan untuk mendukung masyarakat yang ingin terus
+                                belajar sepanjang hayat.</p>
                         </div>
                         <div class="foter__bottom__text">
                             <div class="footer__bottom__icon">
                                 <i class="icofont-clock-time"></i>
                             </div>
                             <div class="footer__bottom__content">
-                                <h6>Opening Houres</h6>
-                                <span>Mon - Sat(8.00 - 6.00)</span>
-                                <span>Sunday - Closed</span>
+                                <h6>Jam Layanan</h6>
+                                <span>Setiap Hari (08.00 - 17.00 WIB)</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
-                <div class="col-xl-2 col-lg-2  col-md-6 col-sm-6" data-aos="fade-up">
+
+                <!-- Useful Links -->
+                <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6" data-aos="fade-up">
                     <div class="footerarea__inner">
                         <div class="footerarea__heading">
-                            <h3>Usefull Links</h3>
+                            <h3>Link Cepat</h3>
                         </div>
                         <div class="footerarea__list">
                             <ul>
-                                <li>
-                                    <a href="#">About Us</a>
-                                </li>
-                                <li>
-                                    <a href="#">Teachers</a>
-                                </li>
-                                <li>
-                                    <a href="#">Partner</a>
-                                </li>
-                                <li>
-                                    <a href="#">Room-Details</a>
-                                </li>
-                                <li>
-                                    <a href="#">Gallery</a>
-                                </li>
+                                <li><a href="#">Tentang Kami</a></li>
+                                <li><a href="#">Program Kesetaraan</a></li>
+                                <li><a href="#">Kursus Digital</a></li>
+                                <li><a href="#">Berita & Pengumuman</a></li>
+                                <li><a href="#">Kontak</a></li>
                             </ul>
                         </div>
-
-
                     </div>
                 </div>
+
+                <!-- Course -->
                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6" data-aos="fade-up">
                     <div class="footerarea__inner footerarea__padding__left">
                         <div class="footerarea__heading">
-                            <h3>Course</h3>
+                            <h3>Program</h3>
                         </div>
                         <div class="footerarea__list">
                             <ul>
-                                <li>
-                                    <a href="#">Ui Ux Design</a>
-                                </li>
-                                <li>
-                                    <a href="#">Web Development</a>
-                                </li>
-                                <li>
-                                    <a href="#">Business Strategy</a>
-                                </li>
-                                <li>
-                                    <a href="#">Softwere Development</a>
-                                </li>
-                                <li>
-                                    <a href="#">Business English</a>
-                                </li>
+                                <li><a href="#">Paket A (Setara SD)</a></li>
+                                <li><a href="#">Paket B (Setara SMP)</a></li>
+                                <li><a href="#">Paket C (Setara SMA)</a></li>
+                                <li><a href="#">Kursus Keterampilan Digital</a></li>
+                                <li><a href="#">Program Literasi</a></li>
                             </ul>
                         </div>
-
-
                     </div>
                 </div>
 
+                <!-- Recent Post -->
                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12" data-aos="fade-up">
                     <div class="footerarea__right__wraper footerarea__inner">
                         <div class="footerarea__heading">
-                            <h3>Recent Post</h3>
+                            <h3>Pengumuman Terbaru</h3>
                         </div>
                         <div class="footerarea__right__list">
                             <ul>
@@ -119,8 +103,8 @@
                                                 alt="footerphoto">
                                         </div>
                                         <div class="footerarea__right__content">
-                                            <span>02 Apr 2024 </span>
-                                            <h6>Best Your Business</h6>
+                                            <span>27 Sep 2025 </span>
+                                            <h6>Pendaftaran Paket C Gelombang 2 Dibuka</h6>
                                         </div>
                                     </a>
                                 </li>
@@ -132,8 +116,8 @@
                                                 alt="footerphoto">
                                         </div>
                                         <div class="footerarea__right__content">
-                                            <span>02 Apr 2024 </span>
-                                            <h6>Keep Your Business</h6>
+                                            <span>05 Okt 2025 </span>
+                                            <h6>Kelas Keterampilan Digital untuk UMKM</h6>
                                         </div>
                                     </a>
                                 </li>
@@ -145,8 +129,8 @@
                                                 alt="footerphoto">
                                         </div>
                                         <div class="footerarea__right__content">
-                                            <span>02 Apr 2024 </span>
-                                            <h6>Nice Your Business</h6>
+                                            <span>12 Okt 2025 </span>
+                                            <h6>Pengumuman Ujian Penempatan Semester Gasal</h6>
                                         </div>
                                     </a>
                                 </li>
@@ -154,8 +138,11 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
+
+        <!-- Copyright -->
         <div class="footerarea__copyright__wrapper footerarea__copyright__wrapper__2">
             <div class="row">
                 <div class="col-xl-3 col-lg-3">
@@ -166,17 +153,17 @@
                 </div>
                 <div class="col-xl-6 col-lg-6">
                     <div class="footerarea__copyright__content footerarea__copyright__content__2">
-                        <p>Copyright © <span>2024</span> by bintangmfhd. All Rights Reserved.</p>
+                        <p>Copyright © <span>2025</span> PKBM Swastika. All Rights Reserved.</p>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-3">
                     <div class="footerarea__icon footerarea__icon__2">
                         <ul>
-                            <li><a href="http://facebook.com/"><i class="icofont-facebook"></i></a></li>
-                            <li><a href="http://twitter.com/"><i class="icofont-twitter"></i></a></li>
-                            <li><a href="http://vimeo.com/"><i class="icofont-vimeo"></i></a></li>
-                            <li><a href="http://linkedin.com/"><i class="icofont-linkedin"></i></a></li>
-                            <li><a href="http://skype.com/"><i class="icofont-skype"></i></a></li>
+                            <li><a href="#"><i class="icofont-facebook"></i></a></li>
+                            <li><a href="#"><i class="icofont-instagram"></i></a></li>
+                            <li><a href="#"><i class="icofont-youtube-play"></i></a></li>
+                            <li><a href="#"><i class="icofont-whatsapp"></i></a></li>
+                            <li><a href="#"><i class="icofont-envelope"></i></a></li>
                         </ul>
                     </div>
                 </div>
