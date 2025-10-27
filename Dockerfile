@@ -1,41 +1,51 @@
-# Use PHP 8.3 image with FPM
-FROM php:8.3-fpm
+# Multi-stage build for Next.js
 
-RUN apt-get update && \
-    apt-get install -y \
-    libpq-dev \
-    libzip-dev \
-    unzip \
-    nano \
-    python3-pip && \
-    docker-php-ext-install pdo_mysql zip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
+WORKDIR /app
 
-# Install the PHP zip extension
-RUN docker-php-ext-install zip
+# Copy package files
+COPY package.json package-lock.json* ./
 
-# Copy your web files
-COPY src /var/www/html
-# COPY src/.env.example /var/www/html/.env
+# Install dependencies
+RUN npm ci
 
-# Set working directory
-WORKDIR /var/www/html
+# Stage 2: Builder
+FROM node:20-alpine AS builder
+WORKDIR /app
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 
-# Install Laravel dependencies
-RUN composer install
+# Build Next.js application
+RUN npm run build
 
-RUN php artisan key:generate
+# Stage 3: Runner
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-# Ensure correct permissions
-# RUN chown -R www-data:www-data /var/www/html \
-#     && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
+ENV NODE_ENV production
 
-# Expose ports
-EXPOSE 80
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-CMD ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html/public"]
+# Copy necessary files from builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Set correct permissions
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+
+# Expose port
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+# Start Next.js
+CMD ["node", "server.js"]

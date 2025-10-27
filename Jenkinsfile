@@ -34,12 +34,13 @@ pipeline {
                 script {
                     sh """ls -la"""
                     sh """pwd"""
-                    withCredentials([
-                        string(credentialsId: ENV_FILE,
-                        variable: 'ENV_FILE_PATH')
-                    ]) {
-                        sh 'echo $ENV_FILE_PATH > src/.env'
-                    }
+                    // Optional: Uncomment if you need to inject environment variables
+                    // withCredentials([
+                    //     string(credentialsId: ENV_FILE,
+                    //     variable: 'ENV_FILE_PATH')
+                    // ]) {
+                    //     sh 'echo $ENV_FILE_PATH > .env.local'
+                    // }
                 }
             }
         }
@@ -69,14 +70,11 @@ pipeline {
                 script {
                     sh """
                     docker run -d --name ${DOCKER_IMAGE_NAME} \
-                    -p ${DEPLOY_PORT}:80 \
+                    -p ${DEPLOY_PORT}:3000 \
                     ${DOCKER_IMAGE_NAME}:${env.BUILD_ID}
                     """
 
-                    sh """docker exec -i ${DOCKER_IMAGE_NAME} bash"""
-                    sh """ls src"""
-                    sh """pwd"""
-
+                    echo "Next.js application deployed successfully on port ${DEPLOY_PORT}"
                 }
             }
         }
