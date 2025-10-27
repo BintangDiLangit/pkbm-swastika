@@ -7,6 +7,10 @@ pipeline {
         ENV_FILE = ""
     }
 
+    triggers {
+        githubPush()
+    }
+
     stages {
         stage('Prepare') {
             steps {
