@@ -24,10 +24,10 @@ export default function KontakPage() {
               </div>
               <h3 className="font-bold text-lg mb-2">Alamat</h3>
               <p className="text-gray-700 text-sm">
-                Jl. Pendidikan No. 123<br />
-                Kelurahan Sukun, Kec. Sukun<br />
-                Kota Malang, Jawa Timur<br />
-                65148
+                Perum Argo Griyatama Regency B5<br />
+                Boro, Tawangargo, Kec. Karang Ploso<br />
+                Kabupaten Malang, Jawa Timur<br />
+                65152
               </p>
             </div>
 
@@ -129,7 +129,7 @@ export default function KontakPage() {
             </div>
             <div className="mt-6 text-center">
               <a
-                href="https://maps.google.com/?q=PKBM+SWASTIKA+Malang"
+                href="https://maps.google.com/?q=Perum+Argo+Griyayama+Regency+B5+Boro+Tawangargo+Karang+Ploso+Malang"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg transition-all transform hover:scale-105"

@@ -75,7 +75,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start space-x-2">
                 <FaMapMarkerAlt className="mt-1 flex-shrink-0" />
-                <span className="text-sm">Jl. Pendidikan No. 123, Malang, Jawa Timur</span>
+                <span className="text-sm">Perum Argo Griyatama Regency B5, Boro, Tawangargo, Kec. Karang Ploso, Kabupaten Malang, Jawa Timur 65152</span>
               </li>
               <li className="flex items-center space-x-2">
                 <FaPhone className="flex-shrink-0" />
