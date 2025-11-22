@@ -320,7 +320,7 @@ export default function PendaftaranPage() {
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Butuh Bantuan Pendaftaran?</h2>
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <a
-              href="https://wa.me/628123456789"
+              href="https://wa.me/6285104755189"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 hover:bg-green-600 text-white p-6 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center justify-center"
@@ -328,7 +328,7 @@ export default function PendaftaranPage() {
               <FaWhatsapp size={32} className="mr-3" />
               <div>
                 <p className="font-bold text-lg">WhatsApp Admin</p>
-                <p className="text-sm">+62 812-3456-7890</p>
+                <p className="text-sm">+62 851-0475-5189</p>
               </div>
             </a>
             <a

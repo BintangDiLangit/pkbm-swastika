@@ -83,8 +83,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <FaWhatsapp className="flex-shrink-0" />
-                <a href="https://wa.me/628123456789" className="text-sm hover:text-primary transition-colors">
-                  +62 812-3456-7890
+                <a href="https://wa.me/6285104755189" className="text-sm hover:text-primary transition-colors">
+                  +62 851-0475-5189
                 </a>
               </li>
               <li className="flex items-center space-x-2">

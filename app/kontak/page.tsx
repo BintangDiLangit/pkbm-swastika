@@ -53,12 +53,12 @@ export default function KontakPage() {
               </div>
               <h3 className="font-bold text-lg mb-2">WhatsApp</h3>
               <a
-                href="https://wa.me/628123456789"
+                href="https://wa.me/6285104755189"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-700 hover:text-green-600 transition-colors"
               >
-                +62 812-3456-7890
+                +62 851-0475-5189
               </a>
               <p className="text-xs text-gray-500 mt-2">Chat langsung dengan admin</p>
             </div>
@@ -194,7 +194,7 @@ export default function KontakPage() {
               Daftar Sekarang
             </a>
             <a
-              href="https://wa.me/628123456789"
+              href="https://wa.me/6285104755189"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-lg transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center"
