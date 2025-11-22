@@ -6,19 +6,20 @@ import { FaTimes } from "react-icons/fa";
 
 // Sample gallery data
 const galleryItems = [
-  { id: 1, title: "Kegiatan Belajar Paket C", category: "belajar", image: "/images/diskusi.jpg" },
-  { id: 2, title: "Pelatihan Komputer", category: "pelatihan", image: "/images/jamu.jpeg" },
-  { id: 3, title: "Ujian Nasional 2024", category: "ujian", image: "/images/pondok.jpg" },
-  { id: 4, title: "Workshop Kewirausahaan", category: "pelatihan", image: "/images/rapat.jpg" },
-  { id: 5, title: "Kelas Paket A", category: "belajar", image: "/images/salad.jpg" },
-  { id: 6, title: "Akreditasi Lembaga", category: "akreditasi", image: "/images/senam.jpg" },
-  { id: 7, title: "Kegiatan Tata Boga", category: "juara", image: "/images/juara.jpg" },
-  { id: 8, title: "Wisuda Peserta Didik", category: "acara", image: "/images/kelas.jpeg" },
-  { id: 9, title: "Pembelajaran IPA", category: "belajar", image: "/images/workshop.jpg" },
-  { id: 10, title: "Pelatihan Kerajinan", category: "pelatihan", image: "/images/upk.jpg" },
-  { id: 11, title: "Kunjungan Dinas Pendidikan", category: "acara", image: "/images/upk2.jpg" },
-  { id: 12, title: "Lab Komputer", category: "fasilitas", image: "/images/ujian.jpg" },
+  { id: 1, title: "Diskusi Kegiatan Belajar Paket C", category: "belajar", image: "/images/diskusi.jpg"},
+  { id: 2, title: "Pelatihan Pembuatan Jamu Tradisional", category: "pelatihan", image: "/images/jamu.jpeg" },
+  { id: 3, title: "Kegiatan di Pondok Belajar", category: "ujian", image: "/images/pondok.jpg" },
+  { id: 4, title: "Rapat dan Workshop Kewirausahaan", category: "pelatihan", image: "/images/rapat.jpg" },
+  { id: 5, title: "Pembuatan Salad pada Kelas Tata Boga", category: "belajar", image: "/images/salad.jpg" },
+  { id: 6, title: "Senam Pagi dalam Kegiatan Akreditasi", category: "akreditasi", image: "/images/senam.jpg" },
+  { id: 7, title: "Penerimaan Penghargaan Juara Lomba Tata Boga", category: "juara", image: "/images/juara.jpg" },
+  { id: 8, title: "Wisuda Peserta Didik dan Kelas Akhir", category: "acara", image: "/images/kelas.jpeg" },
+  { id: 9, title: "Workshop Pembelajaran IPA", category: "belajar", image: "/images/workshop.jpg" },
+  { id: 10, title: "Pelatihan Pembuatan Kerajinan Tangan", category: "pelatihan", image: "/images/upk.jpg" },
+  { id: 11, title: "Kunjungan Dinas Pendidikan ke UPK", category: "acara", image: "/images/upk2.jpg" },
+  { id: 12, title: "Fasilitas Lab Komputer untuk Ujian", category: "fasilitas", image: "/images/ujian.jpg" },
 ];
+
 
 const categories = [
   { name: "Semua", value: "all" },
