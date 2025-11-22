@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaTimes } from "react-icons/fa";
 
@@ -33,6 +33,11 @@ const categories = [
 export default function GaleriPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const filteredItems = selectedCategory === "all" 
     ? galleryItems 
@@ -117,7 +122,7 @@ export default function GaleriPage() {
       </section>
 
       {/* Modal */}
-      {selectedImage && selectedItem && (
+      {isClient && selectedImage && selectedItem && (
         <div
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           onClick={handleCloseModal}
