@@ -11,7 +11,7 @@ const galleryItems = [
   { id: 3, title: "Kegiatan di Pondok Belajar", category: "ujian", image: "/images/pondok.jpg" },
   { id: 4, title: "Rapat dan Workshop Kewirausahaan", category: "pelatihan", image: "/images/rapat.jpg" },
   { id: 5, title: "Pembuatan Salad pada Kelas Tata Boga", category: "belajar", image: "/images/visit.jpg" },
-  { id: 6, title: "Senam Pagi dalam Kegiatan Akreditasi", category: "akreditasi", image: "/images/salad.jpg" },
+  { id: 6, title: "Senam Pagi dalam Kegiatan Akreditasi", category: "akreditasi", image: "/images/coba.jpg" },
   { id: 7, title: "Penerimaan Penghargaan Juara Lomba Tata Boga", category: "juara", image: "/images/juara.jpg" },
   { id: 8, title: "Wisuda Peserta Didik dan Kelas Akhir", category: "acara", image: "/images/kelas.jpeg" },
   { id: 9, title: "Workshop Pembelajaran IPA", category: "belajar", image: "/images/workshop.jpg" },
