@@ -1,5 +1,16 @@
 import { FaBook, FaLaptop, FaTools, FaUtensils, FaPaintBrush, FaClock, FaCheckCircle } from "react-icons/fa";
 
+export const metadata = {
+  title: "Program Pendidikan PKBM SWASTIKA - Paket A, B, C & Kursus Keterampilan",
+  description: "Jelajahi program pendidikan nonformal PKBM SWASTIKA: Paket A (setara SD), Paket B (setara SMP), Paket C (setara SMA), plus kursus keterampilan seperti TIK dan kewirausahaan di Malang.",
+  keywords: "program PKBM SWASTIKA, Paket A SD, Paket B SMP, Paket C SMA, kursus keterampilan, pendidikan nonformal Malang, kursus komputer, kewirausahaan",
+  openGraph: {
+    title: "Program Pendidikan PKBM SWASTIKA - Paket A, B, C & Kursus",
+    description: "Program lengkap pendidikan nonformal di PKBM SWASTIKA Malang: Paket A, B, C dan berbagai kursus keterampilan untuk semua usia.",
+    type: "website",
+  },
+};
+
 export default function ProgramPage() {
   return (
     <div>

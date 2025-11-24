@@ -1,5 +1,16 @@
 import { FaMapMarkerAlt, FaPhone, FaWhatsapp, FaEnvelope, FaFacebook, FaInstagram, FaYoutube, FaClock } from "react-icons/fa";
 
+export const metadata = {
+  title: "Kontak PKBM SWASTIKA - Alamat, Telepon & WhatsApp di Malang",
+  description: "Hubungi PKBM SWASTIKA di Malang. Alamat: Perum Argo Griyatama Regency B5. Telepon: (0341) 123-4567. WhatsApp: +62 851-0475-5189. Informasi lengkap kontak dan lokasi.",
+  keywords: "kontak PKBM SWASTIKA, alamat PKBM Malang, telepon PKBM SWASTIKA, WhatsApp PKBM, lokasi PKBM Malang, hubungi PKBM",
+  openGraph: {
+    title: "Kontak PKBM SWASTIKA - Alamat & Telepon di Malang",
+    description: "Informasi lengkap kontak PKBM SWASTIKA: alamat, telepon, WhatsApp, email, dan lokasi di Malang.",
+    type: "website",
+  },
+};
+
 export default function KontakPage() {
   return (
     <div>

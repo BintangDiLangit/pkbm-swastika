@@ -7,6 +7,17 @@ import {
   FaChalkboardTeacher,
 } from "react-icons/fa";
 
+export const metadata = {
+  title: "Tentang PKBM SWASTIKA - Profil, Visi, Misi & Struktur Organisasi",
+  description: "Pelajari profil lengkap PKBM SWASTIKA, lembaga pendidikan nonformal terpercaya di Malang. Visi menciptakan masyarakat belajar yang kompetitif dan mandiri, dengan akreditasi B dan layanan pendidikan setara SD/SMP/SMA.",
+  keywords: "tentang PKBM SWASTIKA, profil lembaga, visi misi PKBM Malang, struktur organisasi, akreditasi pendidikan nonformal, pendidikan alternatif Malang",
+  openGraph: {
+    title: "Tentang PKBM SWASTIKA - Profil & Visi Misi",
+    description: "PKBM SWASTIKA: Pusat Kegiatan Belajar Masyarakat di Malang dengan pendidikan nonformal berkualitas, akreditasi B, dan komitmen untuk pendidikan merata.",
+    type: "website",
+  },
+};
+
 export default function TentangPage() {
   return (
     <div>

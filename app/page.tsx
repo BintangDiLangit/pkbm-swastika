@@ -218,6 +218,103 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+            Pertanyaan yang Sering Diajukan (FAQ)
+          </h2>
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3">Apa itu PKBM SWASTIKA?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                PKBM SWASTIKA adalah Pusat Kegiatan Belajar Masyarakat yang berlokasi di Kabupaten Malang, 
+                menyediakan pendidikan nonformal setara SD (Paket A), SMP (Paket B), dan SMA (Paket C) untuk semua kalangan masyarakat.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3">Apa saja program pendidikan yang ditawarkan?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Kami menawarkan tiga program utama: Paket A (setara SD/MI), Paket B (setara SMP/MTs), dan Paket C (setara SMA/MA). 
+                Setiap program dirancang untuk memberikan pendidikan berkualitas dan fleksibel.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3">Bagaimana cara mendaftar di PKBM SWASTIKA?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Pendaftaran dapat dilakukan secara online melalui halaman pendaftaran di situs web kami atau datang langsung ke lokasi. 
+                Persyaratan umum meliputi fotokopi KTP, ijazah terakhir, dan formulir pendaftaran yang telah diisi.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3">Berapa biaya pendidikan di PKBM SWASTIKA?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Biaya pendidikan bervariasi tergantung program dan kebutuhan individu. Kami menawarkan opsi pembayaran yang terjangkau 
+                dan fleksibel. Untuk informasi detail, silakan hubungi kami atau kunjungi halaman pendaftaran.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3">Di mana lokasi PKBM SWASTIKA?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Lokasi kami berada di Perum Argo Griyatama Regency B5, Boro, Tawangargo, Kec. Karang Ploso, Kabupaten Malang, Jawa Timur 65152. 
+                Kami mudah diakses dan menyediakan fasilitas yang nyaman untuk belajar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* JSON-LD Structured Data for FAQ */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Apa itu PKBM SWASTIKA?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "PKBM SWASTIKA adalah Pusat Kegiatan Belajar Masyarakat yang berlokasi di Kabupaten Malang, menyediakan pendidikan nonformal setara SD (Paket A), SMP (Paket B), dan SMA (Paket C) untuk semua kalangan masyarakat."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Apa saja program pendidikan yang ditawarkan?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Kami menawarkan tiga program utama: Paket A (setara SD/MI), Paket B (setara SMP/MTs), dan Paket C (setara SMA/MA). Setiap program dirancang untuk memberikan pendidikan berkualitas dan fleksibel."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Bagaimana cara mendaftar di PKBM SWASTIKA?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Pendaftaran dapat dilakukan secara online melalui halaman pendaftaran di situs web kami atau datang langsung ke lokasi. Persyaratan umum meliputi fotokopi KTP, ijazah terakhir, dan formulir pendaftaran yang telah diisi."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Berapa biaya pendidikan di PKBM SWASTIKA?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Biaya pendidikan bervariasi tergantung program dan kebutuhan individu. Kami menawarkan opsi pembayaran yang terjangkau dan fleksibel. Untuk informasi detail, silakan hubungi kami atau kunjungi halaman pendaftaran."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Di mana lokasi PKBM SWASTIKA?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Lokasi kami berada di Perum Argo Griyatama Regency B5, Boro, Tawangargo, Kec. Karang Ploso, Kabupaten Malang, Jawa Timur 65152. Kami mudah diakses dan menyediakan fasilitas yang nyaman untuk belajar."
+                }
+              }
+            ]
+          })
+        }}
+      />
     </div>
-  );
-}
