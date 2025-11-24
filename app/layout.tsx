@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://pkbmswastika.com"),
   title: "PKBM SWASTIKA - Pusat Kegiatan Belajar Masyarakat Malang",
   description: "PKBM SWASTIKA menyelenggarakan pendidikan nonformal setara SD (Paket A), SMP (Paket B), dan SMA (Paket C) di Malang. Daftar sekarang dan wujudkan kesempatan belajar untuk semua.",
   keywords: "PKBM, Paket A, Paket B, Paket C, Pendidikan Nonformal, Malang, SWASTIKA, Sekolah Dewasa, Pendidikan Kesetaraan",
