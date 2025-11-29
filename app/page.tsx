@@ -16,12 +16,12 @@ export default function Home() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-purple-600/80 to-blue-600/90"></div>
+          <div className="absolute inset-0 bg-blue-600/90"></div>
         </div>
 
         {/* Decorative Elements */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl"></div>
         
         {/* Content */}
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -56,7 +56,7 @@ export default function Home() {
       <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden">
         {/* Decorative Background */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full opacity-30 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-100 rounded-full opacity-30 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full opacity-30 blur-3xl"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
@@ -72,7 +72,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
             {/* Image with Decorative Frame */}
             <div className="relative">
-              <div className="absolute -top-6 -left-6 w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 rounded-3xl"></div>
+              <div className="absolute -top-6 -left-6 w-full h-full bg-blue-200 rounded-3xl"></div>
               <div className="relative h-[450px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                 <Image
                   src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&q=80"
