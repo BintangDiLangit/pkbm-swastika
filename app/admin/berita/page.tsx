@@ -137,6 +137,8 @@ export default function AdminBeritaPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    console.log("File selected:", file.name, file.type, file.size);
+
     // Validate file type
     if (!file.type.startsWith("image/")) {
       alert("Hanya file gambar yang diperbolehkan!");
@@ -155,21 +157,27 @@ export default function AdminBeritaPage() {
       const formData = new FormData();
       formData.append("file", file);
 
+      console.log("Uploading to /api/upload...");
+
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
       const data = await response.json();
+      console.log("Upload response:", data);
 
       if (data.success) {
+        console.log("Image URL:", data.url);
         setUploadedImage(data.url);
         setFormData((prev) => ({ ...prev, image: data.url }));
-        alert("Gambar berhasil diupload!");
+        // Alert removed - preview akan langsung muncul
       } else {
+        console.error("Upload failed:", data.message);
         alert(data.message || "Gagal upload gambar");
       }
     } catch (error) {
+      console.error("Upload error:", error);
       alert("Gagal upload gambar");
     } finally {
       setUploading(false);
@@ -444,15 +452,13 @@ export default function AdminBeritaPage() {
                     <p className="text-sm text-green-700 mb-2 font-semibold">
                       ✅ Preview Gambar:
                     </p>
-                    <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                    <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                       <img
                         src={formData.image}
                         alt="Preview"
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          target.parentElement!.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500"><span>❌ Gambar tidak dapat dimuat</span></div>';
+                          e.currentTarget.style.display = 'none';
                         }}
                       />
                     </div>
