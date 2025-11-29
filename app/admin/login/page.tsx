@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
       const data = await response.json();
 
       if (data.success) {
-        router.push("/admin/berita");
+        router.push("/admin");
       } else {
         setError(data.message);
       }

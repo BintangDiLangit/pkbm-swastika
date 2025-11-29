@@ -4,9 +4,9 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const isLoggedIn = request.cookies.get("admin_logged_in");
 
-  // Protect admin routes
-  if (request.nextUrl.pathname.startsWith("/admin/berita") || 
-      request.nextUrl.pathname.startsWith("/admin/galeri")) {
+  // Protect admin routes (except login page)
+  if (request.nextUrl.pathname.startsWith("/admin") && 
+      request.nextUrl.pathname !== "/admin/login") {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
 
   // If logged in and trying to access login page, redirect to dashboard
   if (request.nextUrl.pathname === "/admin/login" && isLoggedIn) {
-    return NextResponse.redirect(new URL("/admin/berita", request.url));
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   return NextResponse.next();

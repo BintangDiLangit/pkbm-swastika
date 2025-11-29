@@ -196,17 +196,23 @@ export default function AdminGaleriPage() {
       <header className="bg-white shadow-md sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <FaImages className="text-blue-600 text-2xl" />
+            <FaImages className="text-purple-600 text-2xl" />
             <h1 className="text-2xl font-bold text-gray-800">
               Admin Dashboard - Galeri
             </h1>
           </div>
           <div className="flex items-center space-x-4">
             <a
-              href="/admin/berita"
-              className="text-blue-600 hover:text-blue-700 font-semibold"
+              href="/admin"
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
             >
-              Kelola Berita
+              🏠 Dashboard
+            </a>
+            <a
+              href="/admin/berita"
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            >
+              📰 Kelola Berita
             </a>
             <button
               onClick={handleLogout}
