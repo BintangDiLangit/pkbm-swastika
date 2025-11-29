@@ -4,21 +4,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaTimes } from "react-icons/fa";
 
-// Sample gallery data
-const galleryItems = [
-  { id: 1, title: "Diskusi Kegiatan Belajar Paket C", category: "belajar", image: "/images/diskusi.jpg"},
-  { id: 2, title: "Pelatihan Pembuatan Jamu Tradisional", category: "pelatihan", image: "/images/jamu.jpeg" },
-  { id: 3, title: "Kegiatan di Pondok Belajar", category: "belajar", image: "/images/pondok.jpg" },
-  { id: 4, title: "Rapat dan Workshop Kewirausahaan", category: "pelatihan", image: "/images/rapat.jpg" },
-  { id: 5, title: "Pembuatan Salad pada Kelas Tata Boga", category: "belajar", image: "/images/visit.jpg" },
-  { id: 6, title: "Senam Pagi dalam Kegiatan Akreditasi", category: "acara", image: "/images/coba.jpg" },
-  { id: 7, title: "Penerimaan Penghargaan Juara Lomba", category: "juara", image: "/images/juara.jpg" },
-  { id: 8, title: "Wisuda Peserta Didik", category: "acara", image: "/images/kelas.jpeg" },
-  { id: 9, title: "Workshop Pembelajaran", category: "pelatihan", image: "/images/workshop.jpg" },
-  { id: 10, title: "Pelatihan Kerajinan Tangan", category: "pelatihan", image: "/images/upk.jpg" },
-  { id: 11, title: "Kunjungan Dinas Pendidikan", category: "acara", image: "/images/upk2.jpg" },
-  { id: 12, title: "Fasilitas Lab Komputer untuk Ujian", category: "fasilitas", image: "/images/ujian.jpg" }
-];
+interface GaleriItem {
+  id: string;
+  title: string;
+  category: string;
+  image: string;
+}
 
 const categories = [
   { id: "all", name: "Semua", icon: "📸" },
@@ -30,13 +21,28 @@ const categories = [
 ];
 
 export default function GalleryClient() {
+  const [galleryItems, setGalleryItems] = useState<GaleriItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedImage, setSelectedImage] = useState<number | null>(null);
-  const [isClient, setIsClient] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setIsClient(true);
+    fetchGaleri();
   }, []);
+
+  const fetchGaleri = async () => {
+    try {
+      const response = await fetch("/api/galeri");
+      const data = await response.json();
+      if (data.success) {
+        setGalleryItems(data.data);
+      }
+    } catch (error) {
+      console.error("Gagal mengambil data galeri:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredItems = selectedCategory === "all"
     ? galleryItems
@@ -44,13 +50,29 @@ export default function GalleryClient() {
 
   const selectedItem = selectedImage !== null ? galleryItems.find(item => item.id === selectedImage) : null;
 
-  if (!isClient) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
             <p className="mt-4 text-gray-600">Memuat galeri...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (galleryItems.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">Galeri Kegiatan</h1>
+            <div className="text-6xl mb-4">📸</div>
+            <p className="text-xl text-gray-600">
+              Galeri foto akan segera hadir. Tunggu update dari kami!
+            </p>
           </div>
         </div>
       </div>
@@ -97,11 +119,10 @@ export default function GalleryClient() {
               onClick={() => setSelectedImage(item.id)}
             >
               <div className="relative h-64 overflow-hidden">
-                <Image
+                <img
                   src={item.image}
                   alt={item.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
                   <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -129,11 +150,10 @@ export default function GalleryClient() {
                 <FaTimes size={24} />
               </button>
               <div className="relative h-[80vh] w-full">
-                <Image
+                <img
                   src={selectedItem.image}
                   alt={selectedItem.title}
-                  fill
-                  className="object-contain"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div className="p-6 bg-white">
