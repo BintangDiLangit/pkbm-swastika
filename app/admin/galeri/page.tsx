@@ -356,60 +356,39 @@ export default function AdminGaleriPage() {
 
                 {/* Upload from Computer */}
                 <div className="mb-4">
-                  <label className="block text-sm text-gray-600 mb-2">
-                    📤 Upload dari Komputer
+                  <label className="flex-1 cursor-pointer">
+                    <div className="border-2 border-dashed border-blue-300 rounded-lg p-6 hover:border-blue-500 transition-colors text-center bg-blue-50">
+                      <FaImage className="text-blue-500 text-3xl mx-auto mb-2" />
+                      <span className="text-sm text-gray-600 block">
+                        {uploading ? "Mengupload..." : "📤 Klik untuk pilih foto dari komputer"}
+                      </span>
+                      <p className="text-xs text-gray-500 mt-1">
+                        JPG, PNG, GIF, WebP (Max 5MB)
+                      </p>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="hidden"
+                    />
                   </label>
-                  <div className="flex items-center space-x-3">
-                    <label className="flex-1 cursor-pointer">
-                      <div className="border-2 border-dashed border-blue-300 rounded-lg p-6 hover:border-blue-500 transition-colors text-center bg-blue-50">
-                        <FaImage className="text-blue-500 text-3xl mx-auto mb-2" />
-                        <span className="text-sm text-gray-600 block">
-                          {uploading ? "Mengupload..." : "Klik untuk pilih foto"}
-                        </span>
-                        <p className="text-xs text-gray-500 mt-1">
-                          JPG, PNG, GIF (Max 5MB)
-                        </p>
-                      </div>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        disabled={uploading}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
                 </div>
 
                 {/* Preview */}
-                {uploadedImage && (
-                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                {formData.image && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                     <p className="text-sm text-green-700 mb-2 font-semibold">
-                      ✅ Foto berhasil diupload!
+                      ✅ Preview Foto:
                     </p>
                     <img
-                      src={uploadedImage}
+                      src={formData.image}
                       alt="Preview"
                       className="w-full h-48 object-cover rounded-lg"
                     />
                   </div>
                 )}
-
-                {/* Or use URL */}
-                <div>
-                  <label className="block text-sm text-gray-600 mb-2">
-                    🔗 Atau gunakan URL Gambar
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.image}
-                    onChange={(e) =>
-                      setFormData({ ...formData, image: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none"
-                    placeholder="https://images.unsplash.com/..."
-                  />
-                </div>
               </div>
 
               <div className="flex space-x-4 pt-4">
