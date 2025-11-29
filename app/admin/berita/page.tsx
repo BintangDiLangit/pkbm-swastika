@@ -444,11 +444,18 @@ export default function AdminBeritaPage() {
                     <p className="text-sm text-green-700 mb-2 font-semibold">
                       ✅ Preview Gambar:
                     </p>
-                    <img
-                      src={formData.image}
-                      alt="Preview"
-                      className="w-full h-48 object-cover rounded-lg"
-                    />
+                    <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                      <img
+                        src={formData.image}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          target.parentElement!.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500"><span>❌ Gambar tidak dapat dimuat</span></div>';
+                        }}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
