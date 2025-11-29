@@ -66,7 +66,7 @@ Website ini fully responsive dan dapat diakses dengan baik di:
 
 - **Alamat**: Jl. Pendidikan No. 123, Malang, Jawa Timur
 - **Telepon**: (0341) 123-4567
-- **WhatsApp**: +62 812-3456-7890
+- **WhatsApp**: +62 851-0475-5189
 - **Email**: info@pkbmswastika.com
 
 ## 📄 License
