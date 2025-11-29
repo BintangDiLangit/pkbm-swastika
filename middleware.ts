@@ -5,7 +5,8 @@ export function middleware(request: NextRequest) {
   const isLoggedIn = request.cookies.get("admin_logged_in");
 
   // Protect admin routes
-  if (request.nextUrl.pathname.startsWith("/admin/berita")) {
+  if (request.nextUrl.pathname.startsWith("/admin/berita") || 
+      request.nextUrl.pathname.startsWith("/admin/galeri")) {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
