@@ -23,11 +23,12 @@ function writeGaleriData(data: any) {
 // GET - Ambil galeri berdasarkan ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const galeri = readGaleriData();
-    const item = galeri.find((g: any) => g.id === params.id);
+    const item = galeri.find((g: any) => g.id === id);
     
     if (!item) {
       return NextResponse.json(
@@ -48,12 +49,13 @@ export async function GET(
 // PUT - Update galeri
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const galeri = readGaleriData();
-    const index = galeri.findIndex((g: any) => g.id === params.id);
+    const index = galeri.findIndex((g: any) => g.id === id);
     
     if (index === -1) {
       return NextResponse.json(
@@ -88,11 +90,12 @@ export async function PUT(
 // DELETE - Hapus galeri
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const galeri = readGaleriData();
-    const filtered = galeri.filter((g: any) => g.id !== params.id);
+    const filtered = galeri.filter((g: any) => g.id !== id);
     
     if (filtered.length === galeri.length) {
       return NextResponse.json(
