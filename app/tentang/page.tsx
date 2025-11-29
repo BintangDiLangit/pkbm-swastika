@@ -68,9 +68,9 @@ export default function TentangPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {/* Vision */}
-            <div className="bg-white p-8 rounded-xl shadow-lg">
+            <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-xl shadow-lg border-2 border-blue-100 hover:shadow-xl transition-shadow">
               <div className="flex items-center mb-6">
-                <div className="bg-primary text-white p-4 rounded-lg mr-4">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-lg mr-4 shadow-md">
                   <FaEye size={32} />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">Visi</h2>
@@ -82,9 +82,9 @@ export default function TentangPage() {
             </div>
 
             {/* Mission */}
-            <div className="bg-white p-8 rounded-xl shadow-lg">
+            <div className="bg-gradient-to-br from-orange-50 to-white p-8 rounded-xl shadow-lg border-2 border-orange-100 hover:shadow-xl transition-shadow">
               <div className="flex items-center mb-6">
-                <div className="bg-secondary text-white p-4 rounded-lg mr-4">
+                <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-4 rounded-lg mr-4 shadow-md">
                   <FaBullseye size={32} />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">Misi</h2>
@@ -147,7 +147,7 @@ export default function TentangPage() {
           <div className="max-w-4xl mx-auto">
             <div className="space-y-6">
               {/* Ketua */}
-              <div className="bg-gradient-to-r from-primary to-blue-600 text-white p-6 rounded-xl text-center">
+              <div className="bg-gradient-to-r from-primary to-blue-600 text-white p-6 rounded-xl text-center shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
                 <div className="flex justify-center mb-3">
                   <FaUsers size={40} />
                 </div>
@@ -221,7 +221,7 @@ export default function TentangPage() {
             Akreditasi & Legalitas
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white p-8 rounded-xl shadow-lg">
+            <div className="bg-gradient-to-br from-orange-50 to-white p-8 rounded-xl shadow-lg border-2 border-orange-100 hover:shadow-xl transition-shadow">
               <div className="flex items-center mb-4">
                 <FaAward className="text-secondary text-4xl mr-4" />
                 <div>
@@ -238,7 +238,7 @@ export default function TentangPage() {
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-xl shadow-lg">
+            <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-xl shadow-lg border-2 border-blue-100 hover:shadow-xl transition-shadow">
               <div className="flex items-center mb-4">
                 <FaCertificate className="text-primary text-4xl mr-4" />
                 <div>

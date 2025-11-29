@@ -88,7 +88,7 @@ export default function BeritaPage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-white rounded-2xl shadow-2xl overflow-hidden border-2 border-blue-100 hover:shadow-3xl transition-shadow">
               <div className="grid md:grid-cols-2 gap-0">
                 <div className="relative h-64 md:h-auto">
                   <Image
@@ -146,7 +146,7 @@ export default function BeritaPage() {
             {newsData.slice(1).map((news) => (
               <div
                 key={news.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow"
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:scale-[1.02] border border-gray-100"
               >
                 <div className="relative h-48">
                   <Image

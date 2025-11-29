@@ -29,7 +29,7 @@ export default function KontakPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {/* Address */}
-            <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-lg text-center">
+            <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-lg text-center border-2 border-blue-100 hover:shadow-xl transition-all transform hover:scale-105">
               <div className="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaMapMarkerAlt size={28} />
               </div>
@@ -43,7 +43,7 @@ export default function KontakPage() {
             </div>
 
             {/* Phone */}
-            <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-xl shadow-lg text-center">
+            <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-xl shadow-lg text-center border-2 border-orange-100 hover:shadow-xl transition-all transform hover:scale-105">
               <div className="bg-secondary text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaPhone size={28} />
               </div>
@@ -58,7 +58,7 @@ export default function KontakPage() {
             </div>
 
             {/* WhatsApp */}
-            <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl shadow-lg text-center">
+            <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl shadow-lg text-center border-2 border-green-100 hover:shadow-xl transition-all transform hover:scale-105">
               <div className="bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaWhatsapp size={28} />
               </div>
@@ -75,7 +75,7 @@ export default function KontakPage() {
             </div>
 
             {/* Email */}
-            <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl shadow-lg text-center">
+            <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl shadow-lg text-center border-2 border-purple-100 hover:shadow-xl transition-all transform hover:scale-105">
               <div className="bg-purple-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaEnvelope size={28} />
               </div>
@@ -95,7 +95,7 @@ export default function KontakPage() {
       {/* Office Hours */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+          <div className="max-w-3xl mx-auto bg-gradient-to-br from-blue-50 to-white p-8 rounded-xl shadow-lg border-2 border-blue-100 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-center mb-6">
               <FaClock className="text-primary text-4xl mr-4" />
               <h2 className="text-2xl font-bold text-gray-800">Jam Operasional</h2>

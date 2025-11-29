@@ -29,7 +29,7 @@ export default function ProgramPage() {
         <div className="container mx-auto px-4">
           <div className="space-y-12">
             {/* Paket A */}
-            <div className="bg-gradient-to-br from-blue-50 to-white p-8 md:p-12 rounded-2xl shadow-xl">
+            <div className="bg-gradient-to-br from-blue-50 to-white p-8 md:p-12 rounded-2xl shadow-xl border-2 border-blue-100 hover:shadow-2xl transition-shadow">
               <div className="flex flex-col md:flex-row items-start gap-8">
                 <div className="bg-primary text-white w-24 h-24 rounded-2xl flex items-center justify-center text-4xl font-bold flex-shrink-0">
                   A
@@ -76,7 +76,7 @@ export default function ProgramPage() {
             </div>
 
             {/* Paket B */}
-            <div className="bg-gradient-to-br from-orange-50 to-white p-8 md:p-12 rounded-2xl shadow-xl">
+            <div className="bg-gradient-to-br from-orange-50 to-white p-8 md:p-12 rounded-2xl shadow-xl border-2 border-orange-100 hover:shadow-2xl transition-shadow">
               <div className="flex flex-col md:flex-row items-start gap-8">
                 <div className="bg-secondary text-white w-24 h-24 rounded-2xl flex items-center justify-center text-4xl font-bold flex-shrink-0">
                   B
@@ -124,7 +124,7 @@ export default function ProgramPage() {
             </div>
 
             {/* Paket C */}
-            <div className="bg-gradient-to-br from-blue-50 to-white p-8 md:p-12 rounded-2xl shadow-xl">
+            <div className="bg-gradient-to-br from-purple-50 to-white p-8 md:p-12 rounded-2xl shadow-xl border-2 border-purple-100 hover:shadow-2xl transition-shadow">
               <div className="flex flex-col md:flex-row items-start gap-8">
                 <div className="bg-primary text-white w-24 h-24 rounded-2xl flex items-center justify-center text-4xl font-bold flex-shrink-0">
                   C
@@ -191,8 +191,8 @@ export default function ProgramPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* TIK */}
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <div className="bg-blue-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 border border-gray-100">
+              <div className="bg-gradient-to-br from-blue-100 to-blue-50 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                 <FaLaptop className="text-primary text-3xl" />
               </div>
               <h3 className="font-bold text-xl text-gray-800 mb-3">Teknologi Informasi</h3>
@@ -205,8 +205,8 @@ export default function ProgramPage() {
             </div>
 
             {/* Entrepreneurship */}
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <div className="bg-orange-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 border border-gray-100">
+              <div className="bg-gradient-to-br from-orange-100 to-orange-50 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                 <FaBook className="text-secondary text-3xl" />
               </div>
               <h3 className="font-bold text-xl text-gray-800 mb-3">Kewirausahaan</h3>
@@ -219,8 +219,8 @@ export default function ProgramPage() {
             </div>
 
             {/* Crafts */}
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <div className="bg-purple-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 border border-gray-100">
+              <div className="bg-gradient-to-br from-purple-100 to-purple-50 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                 <FaPaintBrush className="text-purple-600 text-3xl" />
               </div>
               <h3 className="font-bold text-xl text-gray-800 mb-3">Kerajinan Tangan</h3>
@@ -233,8 +233,8 @@ export default function ProgramPage() {
             </div>
 
             {/* Culinary */}
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <div className="bg-green-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 border border-gray-100">
+              <div className="bg-gradient-to-br from-green-100 to-green-50 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                 <FaUtensils className="text-green-600 text-3xl" />
               </div>
               <h3 className="font-bold text-xl text-gray-800 mb-3">Tata Boga</h3>
