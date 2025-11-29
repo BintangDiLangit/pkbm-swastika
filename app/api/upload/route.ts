@@ -60,8 +60,21 @@ export async function POST(request: NextRequest) {
     // Save file
     const filepath = path.join(uploadDir, filename);
     console.log("Saving to:", filepath);
-    await writeFile(filepath, buffer);
-    console.log("File saved successfully");
+    
+    try {
+      await writeFile(filepath, buffer);
+      console.log("File saved successfully");
+      
+      // Verify file exists
+      if (!existsSync(filepath)) {
+        throw new Error("File was not saved");
+      }
+      
+      console.log("File verified exists");
+    } catch (saveError) {
+      console.error("Error saving file:", saveError);
+      throw new Error(`Failed to save file: ${saveError}`);
+    }
 
     // Return URL
     const imageUrl = `/uploads/berita/${filename}`;
@@ -71,6 +84,7 @@ export async function POST(request: NextRequest) {
       success: true,
       message: "File uploaded successfully",
       url: imageUrl,
+      filename: filename,
     });
   } catch (error) {
     console.error("Upload error:", error);
