@@ -261,7 +261,7 @@ export default function Home() {
             </div>
 
             {/* Paket B */}
-            <div className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2 md:-mt-4">
+            <div className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2">
               <div className="absolute -top-4 -right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-2 rounded-full text-xs font-bold shadow-lg z-10 rotate-12">
                 POPULER
               </div>
