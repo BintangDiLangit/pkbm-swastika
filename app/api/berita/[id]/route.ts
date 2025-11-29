@@ -23,11 +23,12 @@ function writeBeritaData(data: any) {
 // GET - Ambil berita berdasarkan ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const berita = readBeritaData();
-    const item = berita.find((b: any) => b.id === params.id);
+    const item = berita.find((b: any) => b.id === id);
     
     if (!item) {
       return NextResponse.json(
@@ -48,12 +49,13 @@ export async function GET(
 // PUT - Update berita
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const berita = readBeritaData();
-    const index = berita.findIndex((b: any) => b.id === params.id);
+    const index = berita.findIndex((b: any) => b.id === id);
     
     if (index === -1) {
       return NextResponse.json(
@@ -91,11 +93,12 @@ export async function PUT(
 // DELETE - Hapus berita
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const berita = readBeritaData();
-    const filtered = berita.filter((b: any) => b.id !== params.id);
+    const filtered = berita.filter((b: any) => b.id !== id);
     
     if (filtered.length === berita.length) {
       return NextResponse.json(
