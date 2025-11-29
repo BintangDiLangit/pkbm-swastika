@@ -255,11 +255,15 @@ export default function AdminGaleriPage() {
                 key={item.id}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
               >
-                <div className="relative h-48">
+                <div className="relative h-48 bg-gray-200">
                   <img
                     src={item.image}
                     alt={item.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23ddd" width="200" height="200"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="14" dy="100" dx="50" text-anchor="middle"%3EGambar Error%3C/text%3E%3C/svg%3E';
+                    }}
                   />
                   <div className="absolute top-2 right-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
                     {categories.find((c) => c.id === item.category)?.icon}{" "}
@@ -382,11 +386,18 @@ export default function AdminGaleriPage() {
                     <p className="text-sm text-green-700 mb-2 font-semibold">
                       ✅ Preview Foto:
                     </p>
-                    <img
-                      src={formData.image}
-                      alt="Preview"
-                      className="w-full h-48 object-cover rounded-lg"
-                    />
+                    <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                      <img
+                        src={formData.image}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          target.parentElement!.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500"><span>❌ Gambar tidak dapat dimuat</span></div>';
+                        }}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
