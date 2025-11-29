@@ -202,13 +202,27 @@ export default function AdminBeritaPage() {
               Admin Dashboard - Berita
             </h1>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </button>
+          <div className="flex items-center space-x-4">
+            <a
+              href="/admin"
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            >
+              🏠 Dashboard
+            </a>
+            <a
+              href="/admin/galeri"
+              className="text-purple-600 hover:text-purple-700 font-semibold transition-colors"
+            >
+              📸 Kelola Galeri
+            </a>
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </header>
 
