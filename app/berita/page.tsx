@@ -1,6 +1,4 @@
-import Link from "next/link";
-import Image from "next/image";
-import { FaCalendar, FaUser, FaClock } from "react-icons/fa";
+import BeritaClient from "./BeritaClient";
 
 export const metadata = {
   title: "Berita & Pengumuman PKBM SWASTIKA - Informasi Terbaru di Malang",
@@ -13,8 +11,12 @@ export const metadata = {
   },
 };
 
-// Sample news data
-const newsData = [
+export default function BeritaPage() {
+  return <BeritaClient />;
+}
+
+// OLD Sample news data - replaced with dynamic data from API
+const newsData_OLD = [
   {
     id: 1,
     title: "Pendaftaran Peserta Didik Baru Tahun Ajaran 2025/2026 Dibuka",
@@ -70,6 +72,8 @@ const newsData = [
     image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80",
   },
 ];
+/*
+  OLD COMPONENT - Now using BeritaClient for dynamic data
 
 export default function BeritaPage() {
   return (
@@ -213,3 +217,4 @@ export default function BeritaPage() {
     </div>
   );
 }
+*/
