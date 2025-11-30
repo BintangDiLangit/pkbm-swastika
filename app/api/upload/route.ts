@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFileSync, mkdirSync, existsSync } from "fs";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 
 export const runtime = "nodejs";
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,59 +45,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Convert file to base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const base64 = buffer.toString("base64");
+    const dataURI = `data:${file.type};base64,${base64}`;
 
-    // Create unique filename
-    const timestamp = Date.now();
-    const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filename = `${timestamp}-${originalName}`;
+    console.log("Uploading to Cloudinary...");
 
-    // Ensure upload directory exists
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "berita");
-    console.log("Upload directory:", uploadDir);
-    
-    if (!existsSync(uploadDir)) {
-      console.log("Creating directory...");
-      mkdirSync(uploadDir, { recursive: true });
-    }
+    // Upload to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(dataURI, {
+      folder: "pkbm-swastika",
+      resource_type: "auto",
+      transformation: [
+        { width: 1200, height: 1200, crop: "limit" }, // Resize jika terlalu besar
+        { quality: "auto" }, // Auto-optimize quality
+      ],
+    });
 
-    // Save file SYNCHRONOUSLY
-    const filepath = path.join(uploadDir, filename);
-    console.log("Saving to:", filepath);
-    
-    try {
-      writeFileSync(filepath, buffer);
-      console.log("File written with writeFileSync");
-      
-      // Verify file exists
-      if (!existsSync(filepath)) {
-        throw new Error("File was not saved after writeFileSync");
-      }
-      
-      console.log("File verified exists at:", filepath);
-    } catch (saveError) {
-      console.error("Error saving file:", saveError);
-      return NextResponse.json(
-        { success: false, message: `Failed to save file: ${saveError}` },
-        { status: 500 }
-      );
-    }
-
-    // Return URL
-    const imageUrl = `/uploads/berita/${filename}`;
-    console.log("Returning URL:", imageUrl);
+    console.log("Cloudinary upload success:", uploadResponse.secure_url);
 
     return NextResponse.json({
       success: true,
       message: "File uploaded successfully",
-      url: imageUrl,
-      filename: filename,
+      url: uploadResponse.secure_url,
+      public_id: uploadResponse.public_id,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Upload error:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to upload file" },
+      { success: false, message: error.message || "Failed to upload file" },
       { status: 500 }
     );
   }
