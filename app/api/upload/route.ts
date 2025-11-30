@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
+import { writeFileSync, mkdirSync, existsSync } from "fs";
 import path from "path";
-import { existsSync } from "fs";
 
 export const runtime = "nodejs";
 
@@ -54,26 +53,29 @@ export async function POST(request: NextRequest) {
     
     if (!existsSync(uploadDir)) {
       console.log("Creating directory...");
-      await mkdir(uploadDir, { recursive: true });
+      mkdirSync(uploadDir, { recursive: true });
     }
 
-    // Save file
+    // Save file SYNCHRONOUSLY
     const filepath = path.join(uploadDir, filename);
     console.log("Saving to:", filepath);
     
     try {
-      await writeFile(filepath, buffer);
-      console.log("File saved successfully");
+      writeFileSync(filepath, buffer);
+      console.log("File written with writeFileSync");
       
       // Verify file exists
       if (!existsSync(filepath)) {
-        throw new Error("File was not saved");
+        throw new Error("File was not saved after writeFileSync");
       }
       
-      console.log("File verified exists");
+      console.log("File verified exists at:", filepath);
     } catch (saveError) {
       console.error("Error saving file:", saveError);
-      throw new Error(`Failed to save file: ${saveError}`);
+      return NextResponse.json(
+        { success: false, message: `Failed to save file: ${saveError}` },
+        { status: 500 }
+      );
     }
 
     // Return URL
