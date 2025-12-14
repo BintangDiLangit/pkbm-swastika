@@ -41,4 +41,4 @@ next-env.d.ts
 /app/generated/prisma
 bun.lockb
 bun.lock
-package-lock.json
+# package-lock.json - Keep this file for Docker builds

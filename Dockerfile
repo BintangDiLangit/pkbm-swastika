@@ -5,10 +5,22 @@ FROM node:20-alpine AS deps
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY package.json ./
+
+# Copy package-lock.json if it exists (it might be in .gitignore)
+# Using wildcard to avoid build failure if file doesn't exist
+COPY package-lock.json* ./
 
 # Install dependencies
-RUN npm ci
+# Check if package-lock.json exists and use appropriate command
+RUN set -e; \
+    if [ -f package-lock.json ]; then \
+      echo "✓ Found package-lock.json, using npm ci"; \
+      npm ci --legacy-peer-deps || npm install --legacy-peer-deps; \
+    else \
+      echo "⚠ package-lock.json not found, using npm install"; \
+      npm install --legacy-peer-deps; \
+    fi
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
