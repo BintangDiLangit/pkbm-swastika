@@ -136,18 +136,16 @@ pipeline {
                         # PostgreSQL requires URL-encoding for special chars in password
                         if grep -q "^DATABASE_URL=" .env.production; then
                             # Use Python to URL-encode password in connection string
-                            if command -v python3 >/dev/null 2>&1; then
-                                python3 << 'ENCODE_SCRIPT'
+                            # Write Python script to temp file to avoid heredoc issues
+                            cat > /tmp/encode_db_url.py << 'PYTHON_EOF'
 import sys
 import re
 from urllib.parse import quote, urlparse, urlunparse
 
 try:
-    # Read the .env file
     with open('.env.production', 'r') as f:
         lines = f.readlines()
     
-    # Process each line
     output_lines = []
     for line in lines:
         line = line.strip()
@@ -156,50 +154,27 @@ try:
                 output_lines.append(line)
             continue
         
-        # Extract DATABASE_URL value
         db_url = line.split('=', 1)[1]
         
-        # Parse the PostgreSQL URL
-        # Format: postgresql://user:password@host:port/database?params
         if db_url.startswith('postgresql://'):
             try:
-                # Parse URL
                 parsed = urlparse(db_url)
-                
-                # Check if password contains special chars that need encoding
                 if '@' in parsed.netloc:
-                    # Split user:password@host
                     auth, host = parsed.netloc.rsplit('@', 1)
                     if ':' in auth:
                         user, password = auth.split(':', 1)
-                        
-                        # Check if password has unencoded special chars
-                        # Special chars that need encoding: & ! * # @ ? = + % space
                         needs_encoding = bool(re.search(r'[&!*#@?=+% ]', password))
-                        
                         if needs_encoding:
-                            # URL-encode the password
                             encoded_password = quote(password, safe='')
-                            # Reconstruct URL
                             new_netloc = f"{user}:{encoded_password}@{host}"
                             new_parsed = parsed._replace(netloc=new_netloc)
                             db_url = urlunparse(new_parsed)
-                            print(f"✓ URL-encoded password in DATABASE_URL")
-                        else:
-                            print(f"✓ Password already safe (no special chars or already encoded)")
-                    else:
-                        # No password, just user@host
-                        pass
-                else:
-                    # No auth part
-                    pass
+                            print("✓ URL-encoded password in DATABASE_URL")
             except Exception as e:
                 print(f"⚠ Warning: Could not parse DATABASE_URL: {e}")
-                print(f"  Using original value")
         
         output_lines.append(f"DATABASE_URL={db_url}")
     
-    # Write back
     with open('.env.production', 'w') as f:
         for line in output_lines:
             f.write(line + '\n')
@@ -207,8 +182,12 @@ try:
     print("✓ Processed DATABASE_URL")
 except Exception as e:
     print(f"⚠ Error processing DATABASE_URL: {e}")
-    sys.exit(0)  # Don't fail, just continue with original
-ENCODE_SCRIPT
+    sys.exit(0)
+PYTHON_EOF
+                            
+                            if command -v python3 >/dev/null 2>&1; then
+                                python3 /tmp/encode_db_url.py
+                                rm -f /tmp/encode_db_url.py
                             fi
                         fi
                         
