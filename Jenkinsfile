@@ -79,13 +79,15 @@ pipeline {
                         string(credentialsId: 'ENV_PKBM_SWASTIKA', variable: 'ENV_CONTENT')
                     ]) {
                         // Create .env file from credential content
-                        // Jenkins preserves newlines as \n in the string, we need to convert them
-                        sh """
-                        # Write credential content to file using printf to handle newlines properly
-                        printf '%s\\n' "\${ENV_CONTENT}" > .env.production
+                        // ENV_CONTENT is available as environment variable from withCredentials
+                        // Use sh script with environment variable to write file
+                        sh '''
+                        echo "$ENV_CONTENT" > .env.production
+                        '''
                         
+                        // Process the .env file
+                        sh '''
                         # Convert escaped newlines (\\n) to actual newlines if they exist
-                        # This handles the case where Jenkins shows as one line but preserves \\n
                         sed -i 's/\\\\n/\\n/g' .env.production
                         
                         # Remove quotes from values if present (e.g., DATABASE_URL="value" -> DATABASE_URL=value)
@@ -97,7 +99,7 @@ pipeline {
                         
                         # Remove trailing whitespace from each line
                         sed -i 's/[[:space:]]*$//' .env.production
-                        """
+                        '''
                         
                         // Show first few lines for debugging (without sensitive data)
                         sh "head -n 3 .env.production | sed 's/=.*/=***/' || true"
