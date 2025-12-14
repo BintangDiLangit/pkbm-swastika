@@ -14,7 +14,7 @@ export async function GET() {
     });
 
     // Format dates for response
-    const formattedGaleri = galeri.map((item) => ({
+    const formattedGaleri = galeri.map((item: typeof galeri[0]) => ({
       ...item,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
