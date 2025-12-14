@@ -241,7 +241,7 @@ pipeline {
                                 fi
                                 
                                 # Show masked format for debugging
-                                MASKED=$(echo "$DB_VALUE" | sed -E 's|://([^:]+):([^@]+)@|://\1:***@|')
+                                MASKED=$(echo "$DB_VALUE" | sed 's|://[^:]*:[^@]*@|://***:***@|')
                                 echo "  Format: ${MASKED:0:80}..."
                             else
                                 echo "  ✗ ERROR: Does not start with 'postgresql://'"
