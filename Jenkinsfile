@@ -136,56 +136,56 @@ pipeline {
                         # PostgreSQL requires URL-encoding for special chars in password
                         if grep -q "^DATABASE_URL=" .env.production; then
                             # Use Python to URL-encode password in connection string
-                            # Write Python script to temp file to avoid heredoc issues
-                            cat > /tmp/encode_db_url.py << 'PYTHON_EOF'
-import sys
-import re
-from urllib.parse import quote, urlparse, urlunparse
-
-try:
-    with open('.env.production', 'r') as f:
-        lines = f.readlines()
-    
-    output_lines = []
-    for line in lines:
-        line = line.strip()
-        if not line or not line.startswith('DATABASE_URL='):
-            if line:
-                output_lines.append(line)
-            continue
-        
-        db_url = line.split('=', 1)[1]
-        
-        if db_url.startswith('postgresql://'):
-            try:
-                parsed = urlparse(db_url)
-                if '@' in parsed.netloc:
-                    auth, host = parsed.netloc.rsplit('@', 1)
-                    if ':' in auth:
-                        user, password = auth.split(':', 1)
-                        needs_encoding = bool(re.search(r'[&!*#@?=+% ]', password))
-                        if needs_encoding:
-                            encoded_password = quote(password, safe='')
-                            new_netloc = f"{user}:{encoded_password}@{host}"
-                            new_parsed = parsed._replace(netloc=new_netloc)
-                            db_url = urlunparse(new_parsed)
-                            print("✓ URL-encoded password in DATABASE_URL")
-            except Exception as e:
-                print(f"⚠ Warning: Could not parse DATABASE_URL: {e}")
-        
-        output_lines.append(f"DATABASE_URL={db_url}")
-    
-    with open('.env.production', 'w') as f:
-        for line in output_lines:
-            f.write(line + '\n')
-    
-    print("✓ Processed DATABASE_URL")
-except Exception as e:
-    print(f"⚠ Error processing DATABASE_URL: {e}")
-    sys.exit(0)
-PYTHON_EOF
-                            
                             if command -v python3 >/dev/null 2>&1; then
+                                # Write Python script using printf to avoid heredoc issues
+                                printf '%s\n' \
+                                    'import sys' \
+                                    'import re' \
+                                    'from urllib.parse import quote, urlparse, urlunparse' \
+                                    '' \
+                                    'try:' \
+                                    '    with open(".env.production", "r") as f:' \
+                                    '        lines = f.readlines()' \
+                                    '' \
+                                    '    output_lines = []' \
+                                    '    for line in lines:' \
+                                    '        line = line.strip()' \
+                                    '        if not line or not line.startswith("DATABASE_URL="):' \
+                                    '            if line:' \
+                                    '                output_lines.append(line)' \
+                                    '            continue' \
+                                    '' \
+                                    '        db_url = line.split("=", 1)[1]' \
+                                    '' \
+                                    '        if db_url.startswith("postgresql://"):' \
+                                    '            try:' \
+                                    '                parsed = urlparse(db_url)' \
+                                    '                if "@" in parsed.netloc:' \
+                                    '                    auth, host = parsed.netloc.rsplit("@", 1)' \
+                                    '                    if ":" in auth:' \
+                                    '                        user, password = auth.split(":", 1)' \
+                                    '                        needs_encoding = bool(re.search(r"[&!*#@?=+% ]", password))' \
+                                    '                        if needs_encoding:' \
+                                    '                            encoded_password = quote(password, safe="")' \
+                                    '                            new_netloc = f"{user}:{encoded_password}@{host}"' \
+                                    '                            new_parsed = parsed._replace(netloc=new_netloc)' \
+                                    '                            db_url = urlunparse(new_parsed)' \
+                                    '                            print("✓ URL-encoded password in DATABASE_URL")' \
+                                    '            except Exception as e:' \
+                                    '                print(f"⚠ Warning: Could not parse DATABASE_URL: {e}")' \
+                                    '' \
+                                    '        output_lines.append(f"DATABASE_URL={db_url}")' \
+                                    '' \
+                                    '    with open(".env.production", "w") as f:' \
+                                    '        for line in output_lines:' \
+                                    '            f.write(line)' \
+                                    '            f.write(chr(10))' \
+                                    '' \
+                                    '    print("✓ Processed DATABASE_URL")' \
+                                    'except Exception as e:' \
+                                    '    print(f"⚠ Error processing DATABASE_URL: {e}")' \
+                                    '    sys.exit(0)' > /tmp/encode_db_url.py
+                                
                                 python3 /tmp/encode_db_url.py
                                 rm -f /tmp/encode_db_url.py
                             fi
