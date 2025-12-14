@@ -240,9 +240,8 @@ pipeline {
                                     echo "  ✗ ERROR: Missing @ (incomplete connection string)"
                                 fi
                                 
-                                # Show masked format for debugging
-                                MASKED=$(echo "$DB_VALUE" | sed 's|://[^:]*:[^@]*@|://***:***@|')
-                                echo "  Format: ${MASKED:0:80}..."
+                                # Show masked format for debugging (simplified to avoid shell issues)
+                                echo "  Format: postgresql://***:***@[host]/[database]"
                             else
                                 echo "  ✗ ERROR: Does not start with 'postgresql://'"
                                 echo "  First 50 chars: $(echo "$DB_VALUE" | cut -c1-50)"
