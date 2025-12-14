@@ -1,24 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const DATA_FILE = path.join(process.cwd(), "data", "berita.json");
-
-function readBeritaData() {
-  try {
-    const data = fs.readFileSync(DATA_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-}
-
-function writeBeritaData(data: any) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
 
 // GET - Ambil berita berdasarkan ID
 export async function GET(
@@ -27,18 +11,33 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const berita = readBeritaData();
-    const item = berita.find((b: any) => b.id === id);
-    
+
+    const item = await prisma.berita.findUnique({
+      where: { id },
+    });
+
     if (!item) {
       return NextResponse.json(
         { success: false, message: "Berita tidak ditemukan" },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json({ success: true, data: item });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        ...item,
+        date: item.date || new Date(item.createdAt).toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }),
+        createdAt: item.createdAt.toISOString(),
+        updatedAt: item.updatedAt.toISOString(),
+      },
+    });
   } catch (error) {
+    console.error("Error fetching berita:", error);
     return NextResponse.json(
       { success: false, message: "Gagal mengambil data berita" },
       { status: 500 }
@@ -54,35 +53,55 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const berita = readBeritaData();
-    const index = berita.findIndex((b: any) => b.id === id);
-    
-    if (index === -1) {
+
+    // Check if berita exists
+    const existing = await prisma.berita.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
       return NextResponse.json(
         { success: false, message: "Berita tidak ditemukan" },
         { status: 404 }
       );
     }
-    
-    berita[index] = {
-      ...berita[index],
-      title: body.title,
-      excerpt: body.excerpt,
-      content: body.content,
-      author: body.author,
-      category: body.category,
-      image: body.image,
-      updatedAt: new Date().toISOString(),
-    };
-    
-    writeBeritaData(berita);
-    
+
+    // Validate required fields
+    if (!body.title || !body.content) {
+      return NextResponse.json(
+        { success: false, message: "Title dan content harus diisi" },
+        { status: 400 }
+      );
+    }
+
+    const updated = await prisma.berita.update({
+      where: { id },
+      data: {
+        title: body.title,
+        excerpt: body.excerpt || null,
+        content: body.content,
+        author: body.author || null,
+        category: body.category || null,
+        image: body.image || existing.image,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       message: "Berita berhasil diupdate",
-      data: berita[index],
+      data: {
+        ...updated,
+        date: updated.date || new Date(updated.createdAt).toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }),
+        createdAt: updated.createdAt.toISOString(),
+        updatedAt: updated.updatedAt.toISOString(),
+      },
     });
   } catch (error) {
+    console.error("Error updating berita:", error);
     return NextResponse.json(
       { success: false, message: "Gagal mengupdate berita" },
       { status: 500 }
@@ -97,23 +116,29 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const berita = readBeritaData();
-    const filtered = berita.filter((b: any) => b.id !== id);
-    
-    if (filtered.length === berita.length) {
+
+    // Check if berita exists
+    const existing = await prisma.berita.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
       return NextResponse.json(
         { success: false, message: "Berita tidak ditemukan" },
         { status: 404 }
       );
     }
-    
-    writeBeritaData(filtered);
-    
+
+    await prisma.berita.delete({
+      where: { id },
+    });
+
     return NextResponse.json({
       success: true,
       message: "Berita berhasil dihapus",
     });
   } catch (error) {
+    console.error("Error deleting berita:", error);
     return NextResponse.json(
       { success: false, message: "Gagal menghapus berita" },
       { status: 500 }

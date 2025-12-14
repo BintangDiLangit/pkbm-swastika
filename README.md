@@ -18,12 +18,26 @@ Website resmi PKBM SWASTIKA - Pusat Kegiatan Belajar Masyarakat di Malang yang m
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling
 - **React Icons** - Icon library
+- **PostgreSQL** - Database production-ready
+- **Prisma ORM** - Type-safe database access
+- **bcryptjs** - Password hashing untuk keamanan
 
 ## 📦 Instalasi
 
 ```bash
 # Install dependencies
 npm install
+
+# Setup database (lihat DATABASE_SETUP.md untuk detail)
+# 1. Copy .env.example ke .env.local dan isi DATABASE_URL
+# 2. Generate Prisma client
+npm run db:generate
+
+# 3. Run database migrations
+npm run db:migrate
+
+# 4. Seed database (migrate data dari JSON)
+npm run db:seed
 
 # Run development server
 npm run dev
@@ -36,6 +50,17 @@ npm start
 ```
 
 Buka [http://localhost:3000](http://localhost:3000) di browser.
+
+## 🗄️ Database
+
+Aplikasi menggunakan **PostgreSQL** dengan **Prisma ORM** untuk penyimpanan data dengan tingkat keamanan tinggi. Lihat [DATABASE_SETUP.md](./DATABASE_SETUP.md) untuk panduan setup lengkap.
+
+### Scripts Database
+
+- `npm run db:generate` - Generate Prisma client
+- `npm run db:migrate` - Run database migrations
+- `npm run db:seed` - Seed database dengan data awal
+- `npm run db:studio` - Buka Prisma Studio untuk melihat data
 
 ## 🎨 Tema Warna
 

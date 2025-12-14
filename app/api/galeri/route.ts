@@ -1,32 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import path from "path";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DATA_FILE = path.join(process.cwd(), "data", "galeri.json");
-
-function readGaleriData() {
-  try {
-    const data = readFileSync(DATA_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-}
-
-function writeGaleriData(data: any) {
-  writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
-
 // GET - Ambil semua galeri
 export async function GET() {
   try {
-    const galeri = readGaleriData();
-    return NextResponse.json({ success: true, data: galeri });
+    const galeri = await prisma.galeri.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // Format dates for response
+    const formattedGaleri = galeri.map((item) => ({
+      ...item,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    }));
+
+    return NextResponse.json({ success: true, data: formattedGaleri });
   } catch (error) {
+    console.error("Error fetching galeri:", error);
     return NextResponse.json(
       { success: false, message: "Gagal mengambil data galeri" },
       { status: 500 }
@@ -38,25 +34,34 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const galeri = readGaleriData();
-    
-    const newItem = {
-      id: Date.now().toString(),
-      title: body.title,
-      category: body.category,
-      image: body.image,
-      createdAt: new Date().toISOString(),
-    };
-    
-    galeri.unshift(newItem);
-    writeGaleriData(galeri);
-    
+
+    // Validate required fields
+    if (!body.title || !body.image) {
+      return NextResponse.json(
+        { success: false, message: "Title dan image harus diisi" },
+        { status: 400 }
+      );
+    }
+
+    const newItem = await prisma.galeri.create({
+      data: {
+        title: body.title,
+        category: body.category || null,
+        image: body.image,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       message: "Foto berhasil ditambahkan",
-      data: newItem,
+      data: {
+        ...newItem,
+        createdAt: newItem.createdAt.toISOString(),
+        updatedAt: newItem.updatedAt.toISOString(),
+      },
     });
   } catch (error) {
+    console.error("Error creating galeri:", error);
     return NextResponse.json(
       { success: false, message: "Gagal menambahkan foto" },
       { status: 500 }

@@ -1,80 +1,80 @@
 import { NextRequest, NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
+import { writeFile, mkdir } from "fs/promises";
+import { existsSync } from "fs";
+import path from "path";
 
 export const runtime = "nodejs";
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// Validasi tipe file yang diizinkan
+const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("Upload API called");
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const category = formData.get("category") as string || "general"; // berita, galeri, atau general
 
     if (!file) {
-      console.log("No file in request");
       return NextResponse.json(
-        { success: false, message: "No file uploaded" },
+        { success: false, message: "Tidak ada file yang diupload" },
         { status: 400 }
       );
     }
 
-    console.log("File received:", file.name, file.type, file.size);
-
-    // Validate file type
-    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
-    if (!validTypes.includes(file.type)) {
-      console.log("Invalid file type:", file.type);
+    // Validasi tipe file
+    if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { success: false, message: "Invalid file type. Only images allowed." },
+        { success: false, message: "Tipe file tidak valid. Hanya gambar (JPEG, PNG, GIF, WebP) yang diizinkan." },
         { status: 400 }
       );
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      console.log("File too large:", file.size);
+    // Validasi ukuran file
+    if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, message: "File size too large. Max 5MB." },
+        { success: false, message: `Ukuran file terlalu besar. Maksimal ${MAX_FILE_SIZE / 1024 / 1024}MB.` },
         { status: 400 }
       );
     }
 
-    // Convert file to base64
+    // Generate unique filename
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(2, 15);
+    const fileExtension = path.extname(file.name);
+    const fileName = `${timestamp}-${randomString}${fileExtension}`;
+
+    // Tentukan folder upload berdasarkan category
+    const uploadFolder = path.join(process.cwd(), "public", "uploads", category);
+    const filePath = path.join(uploadFolder, fileName);
+
+    // Buat folder jika belum ada
+    if (!existsSync(uploadFolder)) {
+      await mkdir(uploadFolder, { recursive: true });
+    }
+
+    // Convert file to buffer dan simpan
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const base64 = buffer.toString("base64");
-    const dataURI = `data:${file.type};base64,${base64}`;
+    await writeFile(filePath, buffer);
 
-    console.log("Uploading to Cloudinary...");
+    // Generate URL untuk akses file
+    const fileUrl = `/uploads/${category}/${fileName}`;
 
-    // Upload to Cloudinary
-    const uploadResponse = await cloudinary.uploader.upload(dataURI, {
-      folder: "pkbm-swastika",
-      resource_type: "auto",
-      transformation: [
-        { width: 1200, height: 1200, crop: "limit" }, // Resize jika terlalu besar
-        { quality: "auto" }, // Auto-optimize quality
-      ],
-    });
-
-    console.log("Cloudinary upload success:", uploadResponse.secure_url);
+    console.log("File uploaded successfully:", fileUrl);
 
     return NextResponse.json({
       success: true,
-      message: "File uploaded successfully",
-      url: uploadResponse.secure_url,
-      public_id: uploadResponse.public_id,
+      message: "File berhasil diupload",
+      url: fileUrl,
+      fileName: fileName,
+      size: file.size,
+      type: file.type,
     });
   } catch (error: any) {
     console.error("Upload error:", error);
     return NextResponse.json(
-      { success: false, message: error.message || "Failed to upload file" },
+      { success: false, message: error.message || "Gagal mengupload file" },
       { status: 500 }
     );
   }

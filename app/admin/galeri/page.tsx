@@ -41,6 +41,7 @@ export default function AdminGaleriPage() {
   });
   const [uploading, setUploading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState("");
+  const [previewUrl, setPreviewUrl] = useState<string>(""); // Preview lokal sebelum upload
 
   useEffect(() => {
     fetchGaleri();
@@ -131,6 +132,7 @@ export default function AdminGaleriPage() {
     setEditMode(false);
     setCurrentId("");
     setUploadedImage("");
+    setPreviewUrl(""); // Reset preview lokal juga
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,11 +151,20 @@ export default function AdminGaleriPage() {
       return;
     }
 
+    // Preview lokal dulu sebelum upload
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewUrl(reader.result as string);
+      setFormData((prev) => ({ ...prev, image: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
+
     setUploading(true);
 
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("category", "galeri"); // Kategori untuk folder upload
 
       console.log("Uploading to /api/upload...");
 
@@ -167,16 +178,19 @@ export default function AdminGaleriPage() {
 
       if (data.success) {
         console.log("Image URL:", data.url);
+        // Update dengan URL dari server setelah upload berhasil
         setUploadedImage(data.url);
         setFormData((prev) => ({ ...prev, image: data.url }));
-        // Alert removed - preview akan langsung muncul
+        setPreviewUrl(""); // Clear preview lokal karena sudah pakai URL server
       } else {
         console.error("Upload failed:", data.message);
         alert(data.message || "Gagal upload gambar");
+        // Jika upload gagal, tetap pakai preview lokal
       }
     } catch (error) {
       console.error("Upload error:", error);
       alert("Gagal upload gambar");
+      // Jika upload error, tetap pakai preview lokal
     } finally {
       setUploading(false);
     }
@@ -389,21 +403,27 @@ export default function AdminGaleriPage() {
                 </div>
 
                 {/* Preview */}
-                {formData.image && (
+                {(formData.image || previewUrl) && (
                   <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                     <p className="text-sm text-green-700 mb-2 font-semibold">
                       ✅ Preview Foto:
                     </p>
                     <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                       <img
-                        src={formData.image}
+                        src={formData.image || previewUrl}
                         alt="Preview"
                         className="w-full h-full object-cover"
                         onError={(e) => {
+                          console.error("Error loading image:", formData.image || previewUrl);
                           e.currentTarget.style.display = 'none';
                         }}
                       />
                     </div>
+                    {uploading && (
+                      <p className="text-xs text-blue-600 mt-2 text-center">
+                        ⏳ Mengupload ke server...
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

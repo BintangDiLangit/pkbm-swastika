@@ -1,24 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFileSync, writeFileSync } from "fs";
-import path from "path";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const DATA_FILE = path.join(process.cwd(), "data", "galeri.json");
-
-function readGaleriData() {
-  try {
-    const data = readFileSync(DATA_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-}
-
-function writeGaleriData(data: any) {
-  writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
 
 // GET - Ambil galeri berdasarkan ID
 export async function GET(
@@ -27,18 +11,28 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const galeri = readGaleriData();
-    const item = galeri.find((g: any) => g.id === id);
-    
+
+    const item = await prisma.galeri.findUnique({
+      where: { id },
+    });
+
     if (!item) {
       return NextResponse.json(
         { success: false, message: "Foto tidak ditemukan" },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json({ success: true, data: item });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        ...item,
+        createdAt: item.createdAt.toISOString(),
+        updatedAt: item.updatedAt.toISOString(),
+      },
+    });
   } catch (error) {
+    console.error("Error fetching galeri:", error);
     return NextResponse.json(
       { success: false, message: "Gagal mengambil data" },
       { status: 500 }
@@ -54,32 +48,47 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const galeri = readGaleriData();
-    const index = galeri.findIndex((g: any) => g.id === id);
-    
-    if (index === -1) {
+
+    // Check if galeri exists
+    const existing = await prisma.galeri.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
       return NextResponse.json(
         { success: false, message: "Foto tidak ditemukan" },
         { status: 404 }
       );
     }
-    
-    galeri[index] = {
-      ...galeri[index],
-      title: body.title,
-      category: body.category,
-      image: body.image,
-      updatedAt: new Date().toISOString(),
-    };
-    
-    writeGaleriData(galeri);
-    
+
+    // Validate required fields
+    if (!body.title || !body.image) {
+      return NextResponse.json(
+        { success: false, message: "Title dan image harus diisi" },
+        { status: 400 }
+      );
+    }
+
+    const updated = await prisma.galeri.update({
+      where: { id },
+      data: {
+        title: body.title,
+        category: body.category || null,
+        image: body.image,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       message: "Foto berhasil diupdate",
-      data: galeri[index],
+      data: {
+        ...updated,
+        createdAt: updated.createdAt.toISOString(),
+        updatedAt: updated.updatedAt.toISOString(),
+      },
     });
   } catch (error) {
+    console.error("Error updating galeri:", error);
     return NextResponse.json(
       { success: false, message: "Gagal mengupdate foto" },
       { status: 500 }
@@ -94,23 +103,29 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const galeri = readGaleriData();
-    const filtered = galeri.filter((g: any) => g.id !== id);
-    
-    if (filtered.length === galeri.length) {
+
+    // Check if galeri exists
+    const existing = await prisma.galeri.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
       return NextResponse.json(
         { success: false, message: "Foto tidak ditemukan" },
         { status: 404 }
       );
     }
-    
-    writeGaleriData(filtered);
-    
+
+    await prisma.galeri.delete({
+      where: { id },
+    });
+
     return NextResponse.json({
       success: true,
       message: "Foto berhasil dihapus",
     });
   } catch (error) {
+    console.error("Error deleting galeri:", error);
     return NextResponse.json(
       { success: false, message: "Gagal menghapus foto" },
       { status: 500 }
