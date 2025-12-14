@@ -113,31 +113,66 @@ pipeline {
                             # Use Python for reliable parsing (handles quoted values correctly)
                             if command -v python3 >/dev/null 2>&1; then
                                 python3 << 'PYTHON_SCRIPT'
-import re
 import sys
 
 try:
     with open('.env.production', 'r') as f:
         content = f.read().strip()
     
-    # Match KEY=VALUE pairs, handling quoted values and special characters
-    # Pattern: KEY="quoted value" or KEY='quoted value' or KEY=unquoted_value
-    # This handles passwords with special characters like &!*@ etc.
-    # Build pattern using string concatenation to avoid Groovy parsing issues
-    dquote = '"'
-    squote = "'"
-    pattern = r'([A-Z_][A-Z0-9_]*)=(?:' + dquote + r'([^' + dquote + r']*)' + dquote + r'|' + squote + r'([^' + squote + r']*)' + squote + r'|([^\s=]+))'
-    matches = re.findall(pattern, content)
+    # Simple parser that handles KEY=VALUE pairs with quoted and unquoted values
+    # This avoids complex regex that Groovy might try to parse
+    lines = []
+    i = 0
+    while i < len(content):
+        # Skip whitespace
+        while i < len(content) and content[i] in ' \t':
+            i += 1
+        if i >= len(content):
+            break
+        
+        # Find key
+        key_start = i
+        while i < len(content) and content[i] not in '= \t':
+            i += 1
+        if i >= len(content) or content[i] != '=':
+            break
+        key = content[key_start:i]
+        i += 1  # skip '='
+        
+        # Find value (handle quotes)
+        if i < len(content) and content[i] == '"':
+            # Double quoted value
+            i += 1
+            value_start = i
+            while i < len(content) and content[i] != '"':
+                i += 1
+            value = content[value_start:i]
+            if i < len(content):
+                i += 1  # skip closing quote
+        elif i < len(content) and content[i] == "'":
+            # Single quoted value
+            i += 1
+            value_start = i
+            while i < len(content) and content[i] != "'":
+                i += 1
+            value = content[value_start:i]
+            if i < len(content):
+                i += 1  # skip closing quote
+        else:
+            # Unquoted value (until space or end)
+            value_start = i
+            while i < len(content) and content[i] not in ' \t':
+                i += 1
+            value = content[value_start:i]
+        
+        if key:
+            lines.append(f'{key}={value}')
     
     with open('.env.production.tmp', 'w') as f:
-        for match in matches:
-            key = match[0]
-            # Get value from any of the capture groups (quoted double, quoted single, or unquoted)
-            value = match[1] or match[2] or match[3]
-            if value:
-                f.write(f'{key}={value}\n')
+        for line in lines:
+            f.write(line + '\n')
     
-    print(f"✓ Parsed {len(matches)} environment variables")
+    print(f"✓ Parsed {len(lines)} environment variables")
 except Exception as e:
     print(f"Python parsing failed: {e}, using fallback method")
     sys.exit(1)
