@@ -110,105 +110,19 @@ pipeline {
                         LINE_COUNT=$(wc -l < .env.production | tr -d ' ')
                         if [ "$LINE_COUNT" -eq 1 ]; then
                             echo "⚠ File has only 1 line, attempting to split by spaces..."
-                            # More robust: use a state machine approach with awk
-                            # This properly handles quoted values and special characters
-                            awk '
-                            BEGIN {
-                                in_quotes = 0
-                                quote_char = ""
-                                key = ""
-                                value = ""
-                                result = ""
-                            }
-                            {
-                                line = $0
-                                len = length(line)
-                                i = 1
-                                
-                                while (i <= len) {
-                                    c = substr(line, i, 1)
-                                    
-                                    # Skip leading whitespace
-                                    if (key == "" && (c == " " || c == "\t")) {
-                                        i++
-                                        continue
-                                    }
-                                    
-                                    # Building key
-                                    if (key == "" && c != "=") {
-                                        key = key c
-                                    }
-                                    # Found =, start reading value
-                                    else if (c == "=" && value == "") {
-                                        i++
-                                        if (i <= len) {
-                                            next_c = substr(line, i, 1)
-                                            if (next_c == "\"" || next_c == "'"'"'") {
-                                                in_quotes = 1
-                                                quote_char = next_c
-                                                i++
-                                            }
-                                        }
-                                        # Read value
-                                        while (i <= len) {
-                                            c = substr(line, i, 1)
-                                            if (in_quotes) {
-                                                if (c == quote_char) {
-                                                    i++
-                                                    break
-                                                } else {
-                                                    value = value c
-                                                }
-                                            } else {
-                                                if (c == " " || c == "\t") {
-                                                    break
-                                                } else {
-                                                    value = value c
-                                                }
-                                            }
-                                            i++
-                                        }
-                                        
-                                        # Output the pair
-                                        if (key != "") {
-                                            result = result key "=" value "\n"
-                                        }
-                                        
-                                        # Reset
-                                        key = ""
-                                        value = ""
-                                        in_quotes = 0
-                                        quote_char = ""
-                                        continue
-                                    }
-                                    
-                                    i++
-                                }
-                                
-                                # Handle last pair if exists
-                                if (key != "" && value != "") {
-                                    result = result key "=" value "\n"
-                                }
-                                
-                                printf "%s", result
-                            }' .env.production > .env.production.tmp
+                            # Simple and effective: use xargs which handles quoted values correctly
+                            # xargs -n1 splits on spaces but preserves quoted strings
+                            cat .env.production | xargs -n1 echo > .env.production.tmp
                             
                             if [ -s .env.production.tmp ]; then
                                 mv .env.production.tmp .env.production
-                                echo "✓ Parsed environment variables using awk"
+                                echo "✓ Parsed environment variables using xargs"
                             else
-                                echo "⚠ Awk parsing failed, using xargs fallback..."
-                                # Fallback: use xargs
-                                cat .env.production | xargs -n1 echo > .env.production.tmp
-                                if [ -s .env.production.tmp ]; then
-                                    mv .env.production.tmp .env.production
-                                    echo "✓ Parsed using xargs fallback"
-                                else
-                                    # Last resort: simple split
-                                    tr ' ' '\n' < .env.production | grep -v '^$' > .env.production.tmp
-                                    mv .env.production.tmp .env.production
-                                    echo "⚠ Used simple split (may break quoted values with spaces)"
-                                fi
+                                echo "⚠ xargs parsing failed, using simple fallback..."
+                                # Fallback: simple space-based splitting
+                                tr ' ' '\n' < .env.production | grep -v '^$' > .env.production.tmp
+                                mv .env.production.tmp .env.production
+                                echo "⚠ Used simple split (may break quoted values with spaces)"
                             fi
                         fi
                         
