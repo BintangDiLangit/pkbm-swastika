@@ -112,7 +112,7 @@ pipeline {
                             echo "⚠ File has only 1 line, attempting to split by spaces..."
                             # Use Python for reliable parsing (handles quoted values correctly)
                             if command -v python3 >/dev/null 2>&1; then
-                                python3 << "PYTHON_SCRIPT"
+                                python3 << 'PYTHON_SCRIPT'
 import re
 import sys
 
@@ -123,8 +123,10 @@ try:
     # Match KEY=VALUE pairs, handling quoted values and special characters
     # Pattern: KEY="quoted value" or KEY='quoted value' or KEY=unquoted_value
     # This handles passwords with special characters like &!*@ etc.
-    # Use double quotes for pattern to avoid Groovy parsing issues
-    pattern = r"([A-Z_][A-Z0-9_]*)=(?:\"([^\"]*)\"|\x27([^\x27]*)\x27|([^\s=]+))"
+    # Build pattern using string concatenation to avoid Groovy parsing issues
+    dquote = '"'
+    squote = "'"
+    pattern = r'([A-Z_][A-Z0-9_]*)=(?:' + dquote + r'([^' + dquote + r']*)' + dquote + r'|' + squote + r'([^' + squote + r']*)' + squote + r'|([^\s=]+))'
     matches = re.findall(pattern, content)
     
     with open('.env.production.tmp', 'w') as f:
