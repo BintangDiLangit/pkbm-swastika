@@ -4,16 +4,11 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 
-# Copy package files (package-lock.json is optional)
+# Copy package files
 COPY package.json package-lock.json* ./
 
 # Install dependencies
-# Use npm ci if package-lock.json exists, otherwise use npm install
-RUN if [ -f package-lock.json ]; then \
-      npm ci --legacy-peer-deps; \
-    else \
-      npm install --legacy-peer-deps; \
-    fi
+RUN npm ci
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
@@ -21,19 +16,7 @@ WORKDIR /app
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
-
-# Copy Prisma schema and config
-COPY prisma ./prisma
-COPY prisma.config.ts ./
-
-# Copy rest of the application
 COPY . .
-
-# Generate Prisma Client
-# DATABASE_URL is required by prisma.config.ts but not actually used during generate
-# Using dummy URL for build stage
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?schema=public"
-RUN npx prisma generate
 
 # Build Next.js application
 RUN npm run build
@@ -52,10 +35,6 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-
-# Copy Prisma Client (needed at runtime)
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app

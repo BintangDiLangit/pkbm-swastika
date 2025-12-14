@@ -72,11 +72,47 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    sh """
-                    docker run -d --name ${DOCKER_IMAGE_NAME} \
-                    -p ${DEPLOY_PORT}:3000 \
-                    ${DOCKER_IMAGE_NAME}:${env.BUILD_ID}
-                    """
+                    // Get environment variables from Jenkins credentials
+                    // Note: When pasting multi-line .env to Jenkins Secret Text,
+                    // newlines are preserved as \n characters in the string
+                    withCredentials([
+                        string(credentialsId: 'ENV_PKBM_SWASTIKA', variable: 'ENV_CONTENT')
+                    ]) {
+                        // Create .env file from credential content
+                        // Jenkins preserves newlines as \n in the string, we need to convert them
+                        sh """
+                        # Write credential content to file using printf to handle newlines properly
+                        printf '%s\\n' "\${ENV_CONTENT}" > .env.production
+                        
+                        # Convert escaped newlines (\\n) to actual newlines if they exist
+                        # This handles the case where Jenkins shows as one line but preserves \\n
+                        sed -i 's/\\\\n/\\n/g' .env.production
+                        
+                        # Remove quotes from values if present (e.g., DATABASE_URL="value" -> DATABASE_URL=value)
+                        sed -i 's/="\\(.*\\)"/=\\1/g' .env.production
+                        sed -i "s/='\\(.*\\)'/=\\1/g" .env.production
+                        
+                        # Remove empty lines
+                        sed -i '/^$/d' .env.production
+                        
+                        # Remove trailing whitespace from each line
+                        sed -i 's/[[:space:]]*$//' .env.production
+                        """
+                        
+                        // Show first few lines for debugging (without sensitive data)
+                        sh "head -n 3 .env.production | sed 's/=.*/=***/' || true"
+                        
+                        // Deploy with environment file
+                        sh """
+                        docker run -d --name ${DOCKER_IMAGE_NAME} \
+                        -p ${DEPLOY_PORT}:3000 \
+                        --env-file .env.production \
+                        ${DOCKER_IMAGE_NAME}:${env.BUILD_ID}
+                        """
+                        
+                        // Clean up .env file
+                        sh "rm -f .env.production"
+                    }
 
                     echo "Next.js application deployed successfully on port ${DEPLOY_PORT}"
                 }
