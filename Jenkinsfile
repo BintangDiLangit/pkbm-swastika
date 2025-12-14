@@ -80,29 +80,60 @@ pipeline {
                     ]) {
                         // Create .env file from credential content
                         // ENV_CONTENT is available as environment variable from withCredentials
-                        // Use sh script with environment variable to write file
                         sh '''
+                        # Write the content to file
                         echo "$ENV_CONTENT" > .env.production
+                        
+                        # Debug: Show file size and first few characters
+                        echo "=== Debug: .env.production file info ==="
+                        ls -lh .env.production
+                        echo "First 100 chars:"
+                        head -c 100 .env.production || true
+                        echo ""
                         '''
                         
                         // Process the .env file
                         sh '''
                         # Convert escaped newlines (\\n) to actual newlines if they exist
-                        sed -i 's/\\\\n/\\n/g' .env.production
+                        # Use printf to properly handle newlines
+                        printf "%s\\n" "$(cat .env.production)" | sed 's/\\\\n/\\n/g' > .env.production.tmp
+                        mv .env.production.tmp .env.production
+                        
+                        # Use perl for better newline handling (if available)
+                        if command -v perl >/dev/null 2>&1; then
+                            perl -i -pe 's/\\\\n/\\n/g' .env.production
+                        fi
                         
                         # Remove quotes from values if present (e.g., DATABASE_URL="value" -> DATABASE_URL=value)
-                        sed -i 's/="\\(.*\\)"/=\\1/g' .env.production
-                        sed -i "s/='\\(.*\\)'/=\\1/g" .env.production
+                        sed -i.bak 's/="\\([^"]*\\)"/=\\1/g' .env.production
+                        sed -i.bak "s/='\\([^']*\\)'/=\\1/g" .env.production
+                        rm -f .env.production.bak
                         
                         # Remove empty lines
-                        sed -i '/^$/d' .env.production
+                        sed -i.bak '/^[[:space:]]*$/d' .env.production
+                        rm -f .env.production.bak
                         
                         # Remove trailing whitespace from each line
-                        sed -i 's/[[:space:]]*$//' .env.production
+                        sed -i.bak 's/[[:space:]]*$//' .env.production
+                        rm -f .env.production.bak
+                        
+                        # Ensure file ends with newline
+                        echo "" >> .env.production
                         '''
                         
-                        // Show first few lines for debugging (without sensitive data)
-                        sh "head -n 3 .env.production | sed 's/=.*/=***/' || true"
+                        // Verify the file was created and show debug info
+                        sh '''
+                        echo "=== Debug: After processing ==="
+                        echo "File exists: $(test -f .env.production && echo 'YES' || echo 'NO')"
+                        echo "File size: $(wc -c < .env.production) bytes"
+                        echo "Line count: $(wc -l < .env.production) lines"
+                        echo ""
+                        echo "First 3 lines (masked):"
+                        head -n 3 .env.production | sed 's/=.*/=***/' || echo "File is empty or cannot be read"
+                        echo ""
+                        echo "Checking for DATABASE_URL:"
+                        grep -q "^DATABASE_URL=" .env.production && echo "✓ DATABASE_URL found" || echo "✗ DATABASE_URL NOT FOUND"
+                        '''
                         
                         // Deploy with environment file
                         sh """
