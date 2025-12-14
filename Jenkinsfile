@@ -110,17 +110,50 @@ pipeline {
                         LINE_COUNT=$(wc -l < .env.production | tr -d ' ')
                         if [ "$LINE_COUNT" -eq 1 ]; then
                             echo "⚠ File has only 1 line, attempting to split by spaces..."
-                            # Split by spaces but preserve quoted values
-                            # This handles: VAR1=value1 VAR2=value2 VAR3="value with spaces"
-                            awk '{
-                                gsub(/^[[:space:]]+|[[:space:]]+$/, "");
-                                while (match($0, /([^=[:space:]]+)=("([^"]*)"|'"'"'([^'"'"']*)'"'"'|([^[:space:]]+))/, arr)) {
-                                    print arr[1] "=" (arr[3] ? arr[3] : (arr[4] ? arr[4] : arr[5]));
-                                    $0 = substr($0, RSTART + RLENGTH);
-                                    gsub(/^[[:space:]]+/, "");
-                                }
-                            }' .env.production > .env.production.tmp
-                            mv .env.production.tmp .env.production
+                            # Use Python for reliable parsing (handles quoted values correctly)
+                            if command -v python3 >/dev/null 2>&1; then
+                                python3 << 'PYTHON_SCRIPT'
+import re
+import sys
+
+try:
+    with open('.env.production', 'r') as f:
+        content = f.read().strip()
+    
+    # Match KEY=VALUE pairs, handling quoted values and special characters
+    # Pattern: KEY="quoted value" or KEY='quoted value' or KEY=unquoted_value
+    # This handles passwords with special characters like &!*@ etc.
+    pattern = r'([A-Z_][A-Z0-9_]*)=(?:"([^"]*)"|\'([^\']*)\'|([^\s=]+))'
+    matches = re.findall(pattern, content)
+    
+    with open('.env.production.tmp', 'w') as f:
+        for match in matches:
+            key = match[0]
+            # Get value from any of the capture groups (quoted double, quoted single, or unquoted)
+            value = match[1] or match[2] or match[3]
+            if value:
+                f.write(f'{key}={value}\n')
+    
+    print(f"✓ Parsed {len(matches)} environment variables")
+except Exception as e:
+    print(f"Python parsing failed: {e}, using fallback method")
+    sys.exit(1)
+PYTHON_SCRIPT
+                                
+                                if [ $? -eq 0 ]; then
+                                    mv .env.production.tmp .env.production
+                                else
+                                    echo "Python parsing failed, using simple fallback..."
+                                    # Fallback: simple space-based splitting
+                                    tr ' ' '\n' < .env.production | grep -v '^$' > .env.production.tmp
+                                    mv .env.production.tmp .env.production
+                                fi
+                            else
+                                echo "Python3 not available, using simple fallback..."
+                                # Fallback: simple space-based splitting
+                                tr ' ' '\n' < .env.production | grep -v '^$' > .env.production.tmp
+                                mv .env.production.tmp .env.production
+                            fi
                         fi
                         
                         # Step 3: Remove quotes from values if present (e.g., DATABASE_URL="value" -> DATABASE_URL=value)
