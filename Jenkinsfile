@@ -110,84 +110,15 @@ pipeline {
                         LINE_COUNT=$(wc -l < .env.production | tr -d ' ')
                         if [ "$LINE_COUNT" -eq 1 ]; then
                             echo "⚠ File has only 1 line, attempting to split by spaces..."
-                            # Use Python for reliable parsing (handles quoted values correctly)
-                            if command -v python3 >/dev/null 2>&1; then
-                                python3 << 'PYTHON_SCRIPT'
-import sys
-
-try:
-    with open('.env.production', 'r') as f:
-        content = f.read().strip()
-    
-    # Simple parser that handles KEY=VALUE pairs with quoted and unquoted values
-    # This avoids complex regex that Groovy might try to parse
-    lines = []
-    i = 0
-    while i < len(content):
-        # Skip whitespace
-        while i < len(content) and content[i] in ' \t':
-            i += 1
-        if i >= len(content):
-            break
-        
-        # Find key
-        key_start = i
-        while i < len(content) and content[i] not in '= \t':
-            i += 1
-        if i >= len(content) or content[i] != '=':
-            break
-        key = content[key_start:i]
-        i += 1  # skip '='
-        
-        # Find value (handle quotes)
-        if i < len(content) and content[i] == '"':
-            # Double quoted value
-            i += 1
-            value_start = i
-            while i < len(content) and content[i] != '"':
-                i += 1
-            value = content[value_start:i]
-            if i < len(content):
-                i += 1  # skip closing quote
-        elif i < len(content) and content[i] == "'":
-            # Single quoted value
-            i += 1
-            value_start = i
-            while i < len(content) and content[i] != "'":
-                i += 1
-            value = content[value_start:i]
-            if i < len(content):
-                i += 1  # skip closing quote
-        else:
-            # Unquoted value (until space or end)
-            value_start = i
-            while i < len(content) and content[i] not in ' \t':
-                i += 1
-            value = content[value_start:i]
-        
-        if key:
-            lines.append(f'{key}={value}')
-    
-    with open('.env.production.tmp', 'w') as f:
-        for line in lines:
-            f.write(line + '\n')
-    
-    print(f"✓ Parsed {len(lines)} environment variables")
-except Exception as e:
-    print(f"Python parsing failed: {e}, using fallback method")
-    sys.exit(1)
-PYTHON_SCRIPT
-                                
-                                if [ $? -eq 0 ]; then
-                                    mv .env.production.tmp .env.production
-                                else
-                                    echo "Python parsing failed, using simple fallback..."
-                                    # Fallback: simple space-based splitting
-                                    tr ' ' '\n' < .env.production | grep -v '^$' > .env.production.tmp
-                                    mv .env.production.tmp .env.production
-                                fi
+                            # Simple and effective: use xargs to split, which handles basic quoting
+                            # xargs -n1 will split on spaces but preserve quoted strings
+                            cat .env.production | xargs -n1 echo > .env.production.tmp
+                            
+                            if [ -s .env.production.tmp ]; then
+                                mv .env.production.tmp .env.production
+                                echo "✓ Parsed environment variables using xargs"
                             else
-                                echo "Python3 not available, using simple fallback..."
+                                echo "⚠ xargs parsing failed, using simple fallback..."
                                 # Fallback: simple space-based splitting
                                 tr ' ' '\n' < .env.production | grep -v '^$' > .env.production.tmp
                                 mv .env.production.tmp .env.production
