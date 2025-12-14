@@ -30,6 +30,9 @@ COPY prisma.config.ts ./
 COPY . .
 
 # Generate Prisma Client
+# DATABASE_URL is required by prisma.config.ts but not actually used during generate
+# Using dummy URL for build stage
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?schema=public"
 RUN npx prisma generate
 
 # Build Next.js application
@@ -49,6 +52,10 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+
+# Copy Prisma Client (needed at runtime)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
