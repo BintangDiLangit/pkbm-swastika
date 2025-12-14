@@ -85,39 +85,58 @@ pipeline {
                         echo "$ENV_CONTENT" > .env.production
                         
                         # Debug: Show file size and first few characters
-                        echo "=== Debug: .env.production file info ==="
+                        echo "=== Debug: .env.production file info (BEFORE processing) ==="
                         ls -lh .env.production
-                        echo "First 100 chars:"
-                        head -c 100 .env.production || true
+                        echo "First 200 chars:"
+                        head -c 200 .env.production || true
                         echo ""
+                        echo "Line count: $(wc -l < .env.production)"
                         '''
                         
                         // Process the .env file
                         sh '''
-                        # Convert escaped newlines (\\n) to actual newlines if they exist
-                        # Use printf to properly handle newlines
-                        printf "%s\\n" "$(cat .env.production)" | sed 's/\\\\n/\\n/g' > .env.production.tmp
-                        mv .env.production.tmp .env.production
-                        
+                        # Step 1: Convert escaped newlines (\\n) to actual newlines
                         # Use perl for better newline handling (if available)
                         if command -v perl >/dev/null 2>&1; then
                             perl -i -pe 's/\\\\n/\\n/g' .env.production
+                        else
+                            # Fallback: use sed
+                            sed -i.bak 's/\\\\n/\\n/g' .env.production
+                            rm -f .env.production.bak
                         fi
                         
-                        # Remove quotes from values if present (e.g., DATABASE_URL="value" -> DATABASE_URL=value)
+                        # Step 2: If file still has only 1 line, try to split by spaces (for single-line format)
+                        # Check if file has multiple lines
+                        LINE_COUNT=$(wc -l < .env.production | tr -d ' ')
+                        if [ "$LINE_COUNT" -eq 1 ]; then
+                            echo "⚠ File has only 1 line, attempting to split by spaces..."
+                            # Split by spaces but preserve quoted values
+                            # This handles: VAR1=value1 VAR2=value2 VAR3="value with spaces"
+                            awk '{
+                                gsub(/^[[:space:]]+|[[:space:]]+$/, "");
+                                while (match($0, /([^=[:space:]]+)=("([^"]*)"|'"'"'([^'"'"']*)'"'"'|([^[:space:]]+))/, arr)) {
+                                    print arr[1] "=" (arr[3] ? arr[3] : (arr[4] ? arr[4] : arr[5]));
+                                    $0 = substr($0, RSTART + RLENGTH);
+                                    gsub(/^[[:space:]]+/, "");
+                                }
+                            }' .env.production > .env.production.tmp
+                            mv .env.production.tmp .env.production
+                        fi
+                        
+                        # Step 3: Remove quotes from values if present (e.g., DATABASE_URL="value" -> DATABASE_URL=value)
                         sed -i.bak 's/="\\([^"]*\\)"/=\\1/g' .env.production
                         sed -i.bak "s/='\\([^']*\\)'/=\\1/g" .env.production
                         rm -f .env.production.bak
                         
-                        # Remove empty lines
+                        # Step 4: Remove empty lines and lines with only whitespace
                         sed -i.bak '/^[[:space:]]*$/d' .env.production
                         rm -f .env.production.bak
                         
-                        # Remove trailing whitespace from each line
+                        # Step 5: Remove trailing whitespace from each line
                         sed -i.bak 's/[[:space:]]*$//' .env.production
                         rm -f .env.production.bak
                         
-                        # Ensure file ends with newline
+                        # Step 6: Ensure file ends with newline
                         echo "" >> .env.production
                         '''
                         
@@ -128,11 +147,27 @@ pipeline {
                         echo "File size: $(wc -c < .env.production) bytes"
                         echo "Line count: $(wc -l < .env.production) lines"
                         echo ""
-                        echo "First 3 lines (masked):"
-                        head -n 3 .env.production | sed 's/=.*/=***/' || echo "File is empty or cannot be read"
+                        echo "All environment variables (masked):"
+                        cat .env.production | sed 's/=.*/=***/' || echo "File is empty or cannot be read"
                         echo ""
-                        echo "Checking for DATABASE_URL:"
+                        echo "Checking for required variables:"
                         grep -q "^DATABASE_URL=" .env.production && echo "✓ DATABASE_URL found" || echo "✗ DATABASE_URL NOT FOUND"
+                        grep -q "^NODE_ENV=" .env.production && echo "✓ NODE_ENV found" || echo "⚠ NODE_ENV not found (optional)"
+                        echo ""
+                        echo "Full content (first 500 chars, masked):"
+                        head -c 500 .env.production | sed 's/=.*/=***/g' || true
+                        echo ""
+                        '''
+                        
+                        // Validate DATABASE_URL exists before deploying
+                        sh '''
+                        if ! grep -q "^DATABASE_URL=" .env.production; then
+                            echo "❌ ERROR: DATABASE_URL is required but not found in .env.production"
+                            echo "Please check your Jenkins credential 'ENV_PKBM_SWASTIKA'"
+                            echo "It should contain DATABASE_URL=postgresql://..."
+                            exit 1
+                        fi
+                        echo "✅ DATABASE_URL validation passed"
                         '''
                         
                         // Deploy with environment file
