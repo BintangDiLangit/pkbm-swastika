@@ -14,7 +14,7 @@ export async function GET() {
     });
 
     // Format date for response
-    const formattedBerita = berita.map((item) => ({
+    const formattedBerita = berita.map((item: typeof berita[0]) => ({
       ...item,
       date: item.date || new Date(item.createdAt).toLocaleDateString("id-ID", {
         day: "numeric",
