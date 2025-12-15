@@ -89,10 +89,25 @@ pipeline {
                         
                         // Create uploads directory on host with correct permissions
                         // Container runs as user nextjs (UID 1001), so we need to set ownership
+                        // Create uploads directory on host with correct permissions
+                        // Container runs as user nextjs (UID 1001), so we need to set ownership
                         sh '''
-                        mkdir -p /var/www/pkbmswastika.sch.id/uploads
+                        # Create parent directory if it doesn't exist
+                        mkdir -p /var/www/pkbmswastika.sch.id
+                        
+                        # Create uploads directory with subdirectories
+                        mkdir -p /var/www/pkbmswastika.sch.id/uploads/galeri
+                        mkdir -p /var/www/pkbmswastika.sch.id/uploads/berita
+                        mkdir -p /var/www/pkbmswastika.sch.id/uploads/general
+                        
+                        # Set ownership to nextjs user (UID 1001) in container
                         chown -R 1001:1001 /var/www/pkbmswastika.sch.id/uploads
-                        chmod -R 755 /var/www/pkbmswastika.sch.id/uploads
+                        
+                        # Set permissions (rwx for owner, rx for group/others)
+                        chmod -R 775 /var/www/pkbmswastika.sch.id/uploads
+                        
+                        # Verify permissions
+                        ls -la /var/www/pkbmswastika.sch.id/ | grep uploads || echo "Directory created"
                         '''
                         
                         sh """

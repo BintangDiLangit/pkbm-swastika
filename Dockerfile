@@ -61,7 +61,10 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
 # Create uploads directory structure (will be mounted as volume in production)
-RUN mkdir -p ./public/uploads/galeri ./public/uploads/berita ./public/uploads/general
+# Set permissions so nextjs user can write
+RUN mkdir -p ./public/uploads/galeri ./public/uploads/berita ./public/uploads/general && \
+    chown -R nextjs:nodejs ./public/uploads && \
+    chmod -R 775 ./public/uploads
 
 # Copy Prisma Client (needed at runtime)
 # Next.js standalone should include it, but copy explicitly to be safe
