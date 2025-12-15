@@ -87,8 +87,11 @@ pipeline {
                         echo "✅ DATABASE_URL validated"
                         '''
                         
+                        // Create uploads directory on host with correct permissions
+                        // Container runs as user nextjs (UID 1001), so we need to set ownership
                         sh '''
                         mkdir -p /var/www/pkbmswastika.sch.id/uploads
+                        chown -R 1001:1001 /var/www/pkbmswastika.sch.id/uploads
                         chmod -R 755 /var/www/pkbmswastika.sch.id/uploads
                         '''
                         
