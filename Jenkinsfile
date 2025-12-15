@@ -38,13 +38,6 @@ pipeline {
                 script {
                     sh """ls -la"""
                     sh """pwd"""
-                    // Optional: Uncomment if you need to inject environment variables
-                    // withCredentials([
-                    //     string(credentialsId: ENV_FILE,
-                    //     variable: 'ENV_FILE_PATH')
-                    // ]) {
-                    //     sh 'echo $ENV_FILE_PATH > .env.local'
-                    // }
                 }
             }
         }
@@ -72,248 +65,39 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    // Get environment variables from Jenkins credentials
-                    // Note: When pasting multi-line .env to Jenkins Secret Text,
-                    // newlines are preserved as \n characters in the string
                     withCredentials([
-                        string(credentialsId: 'ENV_PKBM_SWASTIKA', variable: 'ENV_CONTENT')
+                        string(credentialsId: 'DATABASE_URL_PKBM_SWASTIKA', variable: 'DATABASE_URL'),
+                        string(credentialsId: 'NEXT_PUBLIC_EMAILJS_SERVICE_ID', variable: 'NEXT_PUBLIC_EMAILJS_SERVICE_ID'),
+                        string(credentialsId: 'NEXT_PUBLIC_EMAILJS_TEMPLATE_ID', variable: 'NEXT_PUBLIC_EMAILJS_TEMPLATE_ID'),
+                        string(credentialsId: 'NEXT_PUBLIC_EMAILJS_PUBLIC_KEY', variable: 'NEXT_PUBLIC_EMAILJS_PUBLIC_KEY'),
+                        string(credentialsId: 'NEXT_PUBLIC_SHEET_BEST_URL', variable: 'NEXT_PUBLIC_SHEET_BEST_URL')
                     ]) {
-                        // Create .env file from credential content
-                        // ENV_CONTENT is available as environment variable from withCredentials
+                        // Validate DATABASE_URL before deploying
                         sh '''
-                        # Write the content to file
-                        echo "$ENV_CONTENT" > .env.production
-                        
-                        # Debug: Show file size and first few characters
-                        echo "=== Debug: .env.production file info (BEFORE processing) ==="
-                        ls -lh .env.production
-                        echo "First 200 chars:"
-                        head -c 200 .env.production || true
-                        echo ""
-                        echo "Line count: $(wc -l < .env.production)"
-                        '''
-                        
-                        // Process the .env file
-                        sh '''
-                        # Step 1: Convert escaped newlines (\\n) to actual newlines
-                        # Use perl for better newline handling (if available)
-                        if command -v perl >/dev/null 2>&1; then
-                            perl -i -pe 's/\\\\n/\\n/g' .env.production
-                        else
-                            # Fallback: use sed
-                            sed -i.bak 's/\\\\n/\\n/g' .env.production
-                            rm -f .env.production.bak
-                        fi
-                        
-                        # Step 2: If file still has only 1 line, try to split by spaces (for single-line format)
-                        # Check if file has multiple lines
-                        LINE_COUNT=$(wc -l < .env.production | tr -d ' ')
-                        if [ "$LINE_COUNT" -eq 1 ]; then
-                            echo "⚠ File has only 1 line, attempting to split by spaces..."
-                            # Simple and effective: use xargs which handles quoted values correctly
-                            # xargs -n1 splits on spaces but preserves quoted strings
-                            cat .env.production | xargs -n1 echo > .env.production.tmp
-                            
-                            if [ -s .env.production.tmp ]; then
-                                mv .env.production.tmp .env.production
-                                echo "✓ Parsed environment variables using xargs"
-                            else
-                                echo "⚠ xargs parsing failed, using simple fallback..."
-                                # Fallback: simple space-based splitting
-                                tr ' ' '\n' < .env.production | grep -v '^$' > .env.production.tmp
-                                mv .env.production.tmp .env.production
-                                echo "⚠ Used simple split (may break quoted values with spaces)"
-                            fi
-                        fi
-                        
-                        # Step 3: Remove quotes from values if present (e.g., DATABASE_URL="value" -> DATABASE_URL=value)
-                        # But preserve the connection string structure
-                        sed -i.bak 's/="\\([^"]*\\)"/=\\1/g' .env.production
-                        sed -i.bak "s/='\\([^']*\\)'/=\\1/g" .env.production
-                        rm -f .env.production.bak
-                        
-                        # Step 3.5: Auto URL-encode password in DATABASE_URL if it contains special characters
-                        # PostgreSQL requires URL-encoding for special chars in password
-                        if grep -q "^DATABASE_URL=" .env.production; then
-                            # Use Python to URL-encode password in connection string
-                            if command -v python3 >/dev/null 2>&1; then
-                                # Write Python script using printf to avoid heredoc issues
-                                printf '%s\n' \
-                                    'import sys' \
-                                    'import re' \
-                                    'from urllib.parse import quote, urlparse, urlunparse' \
-                                    '' \
-                                    'try:' \
-                                    '    with open(".env.production", "r") as f:' \
-                                    '        lines = f.readlines()' \
-                                    '' \
-                                    '    output_lines = []' \
-                                    '    for line in lines:' \
-                                    '        line = line.strip()' \
-                                    '        if not line or not line.startswith("DATABASE_URL="):' \
-                                    '            if line:' \
-                                    '                output_lines.append(line)' \
-                                    '            continue' \
-                                    '' \
-                                    '        db_url = line.split("=", 1)[1]' \
-                                    '' \
-                                    '        if db_url.startswith("postgresql://"):' \
-                                    '            try:' \
-                                    '                parsed = urlparse(db_url)' \
-                                    '                if "@" in parsed.netloc:' \
-                                    '                    auth, host = parsed.netloc.rsplit("@", 1)' \
-                                    '                    if ":" in auth:' \
-                                    '                        user, password = auth.split(":", 1)' \
-                                    '                        needs_encoding = bool(re.search(r"[&!*#@?=+% ]", password))' \
-                                    '                        if needs_encoding:' \
-                                    '                            encoded_password = quote(password, safe="")' \
-                                    '                            new_netloc = f"{user}:{encoded_password}@{host}"' \
-                                    '                            new_parsed = parsed._replace(netloc=new_netloc)' \
-                                    '                            db_url = urlunparse(new_parsed)' \
-                                    '                            print("✓ URL-encoded password in DATABASE_URL")' \
-                                    '            except Exception as e:' \
-                                    '                print(f"⚠ Warning: Could not parse DATABASE_URL: {e}")' \
-                                    '' \
-                                    '        output_lines.append(f"DATABASE_URL={db_url}")' \
-                                    '' \
-                                    '    with open(".env.production", "w") as f:' \
-                                    '        for line in output_lines:' \
-                                    '            f.write(line)' \
-                                    '            f.write(chr(10))' \
-                                    '' \
-                                    '    print("✓ Processed DATABASE_URL")' \
-                                    'except Exception as e:' \
-                                    '    print(f"⚠ Error processing DATABASE_URL: {e}")' \
-                                    '    sys.exit(0)' > /tmp/encode_db_url.py
-                                
-                                python3 /tmp/encode_db_url.py
-                                rm -f /tmp/encode_db_url.py
-                            fi
-                        fi
-                        
-                        # Step 4: Remove empty lines and lines with only whitespace
-                        sed -i.bak '/^[[:space:]]*$/d' .env.production
-                        rm -f .env.production.bak
-                        
-                        # Step 5: Remove trailing whitespace from each line
-                        sed -i.bak 's/[[:space:]]*$//' .env.production
-                        rm -f .env.production.bak
-                        
-                        # Step 6: Ensure file ends with newline
-                        echo "" >> .env.production
-                        '''
-                        
-                        // Verify the file was created and show debug info
-                        sh '''
-                        echo "=== Debug: After processing ==="
-                        echo "File exists: $(test -f .env.production && echo 'YES' || echo 'NO')"
-                        echo "File size: $(wc -c < .env.production) bytes"
-                        echo "Line count: $(wc -l < .env.production) lines"
-                        echo ""
-                        echo "All environment variables (masked):"
-                        cat .env.production | sed 's/=.*/=***/' || echo "File is empty or cannot be read"
-                        echo ""
-                        echo "Checking for required variables:"
-                        if grep -q "^DATABASE_URL=" .env.production; then
-                            echo "✓ DATABASE_URL found"
-                            # Show DATABASE_URL format (masked) for debugging
-                            DB_LINE=$(grep "^DATABASE_URL=" .env.production)
-                            DB_VALUE=$(echo "$DB_LINE" | cut -d'=' -f2-)
-                            DB_LENGTH=${#DB_VALUE}
-                            echo "  DATABASE_URL length: $DB_LENGTH characters"
-                            
-                            # Check if it looks like a valid PostgreSQL URL
-                            if echo "$DB_VALUE" | grep -q "^postgresql://"; then
-                                echo "  ✓ Valid PostgreSQL URL format"
-                                
-                                # Extract and validate components
-                                # Format: postgresql://user:password@host:port/database
-                                if echo "$DB_VALUE" | grep -q "@"; then
-                                    echo "  ✓ Contains @ (has host)"
-                                    # Check if it has database name (after last /)
-                                    if echo "$DB_VALUE" | grep -qE "/[^/]+"; then
-                                        echo "  ✓ Contains database name"
-                                    else
-                                        echo "  ⚠ WARNING: May be missing database name"
-                                    fi
-                                else
-                                    echo "  ✗ ERROR: Missing @ (incomplete connection string)"
-                                fi
-                                
-                                # Show masked format for debugging (simplified to avoid shell issues)
-                                echo "  Format: postgresql://***:***@[host]/[database]"
-                            else
-                                echo "  ✗ ERROR: Does not start with 'postgresql://'"
-                                echo "  First 50 chars: $(echo "$DB_VALUE" | cut -c1-50)"
-                            fi
-                        else
-                            echo "✗ DATABASE_URL NOT FOUND"
-                        fi
-                        grep -q "^NODE_ENV=" .env.production && echo "✓ NODE_ENV found" || echo "⚠ NODE_ENV not found (optional)"
-                        echo ""
-                        '''
-                        
-                        // Validate DATABASE_URL exists and is valid before deploying
-                        sh '''
-                        if ! grep -q "^DATABASE_URL=" .env.production; then
-                            echo "❌ ERROR: DATABASE_URL is required but not found in .env.production"
-                            echo "Please check your Jenkins credential 'ENV_PKBM_SWASTIKA'"
-                            echo "It should contain DATABASE_URL=postgresql://..."
-                            exit 1
-                        fi
-                        
-                        # Get DATABASE_URL value
-                        DB_URL=$(grep "^DATABASE_URL=" .env.production | cut -d'=' -f2-)
-                        
-                        # Validate it's not empty
-                        if [ -z "$DB_URL" ]; then
+                        if [ -z "$DATABASE_URL" ]; then
                             echo "❌ ERROR: DATABASE_URL is empty"
                             exit 1
                         fi
                         
-                        # Validate it starts with postgresql://
-                        if ! echo "$DB_URL" | grep -q "^postgresql://"; then
+                        if ! echo "$DATABASE_URL" | grep -q "^postgresql://"; then
                             echo "❌ ERROR: DATABASE_URL must start with 'postgresql://'"
-                            echo "Current value starts with: $(echo "$DB_URL" | cut -c1-20)..."
                             exit 1
                         fi
                         
-                        # Validate it contains @ (has host)
-                        if ! echo "$DB_URL" | grep -q "@"; then
-                            echo "❌ ERROR: DATABASE_URL appears to be incomplete (missing @)"
-                            echo "   This usually means the connection string was truncated during parsing"
-                            echo "   Make sure DATABASE_URL is in quotes in your Jenkins credential"
-                            exit 1
-                        fi
-                        
-                        # Validate it has database name (after last /)
-                        if ! echo "$DB_URL" | grep -qE "/[^/]+"; then
-                            echo "⚠ WARNING: DATABASE_URL may be missing database name"
-                        fi
-                        
-                        # Check for common issues with special characters
-                        if echo "$DB_URL" | grep -qE "[&!*]"; then
-                            echo "⚠ WARNING: DATABASE_URL contains special characters (&!*)"
-                            echo "   These should be URL-encoded in the password part"
-                            echo "   Example: & becomes %26, ! becomes %21, * becomes %2A"
-                            echo "   Current URL may fail to connect. Consider URL-encoding the password."
-                        fi
-                        
-                        echo "✅ DATABASE_URL validation passed"
-                        echo "   URL format: postgresql://user:***@host:port/database"
-                        echo "   Note: If connection fails, ensure password special chars are URL-encoded"
+                        echo "✅ DATABASE_URL validated"
                         '''
                         
-                        // Deploy with environment file
+                        // Deploy with environment variables directly injected (clean & simple!)
                         sh """
                         docker run -d --name ${DOCKER_IMAGE_NAME} \
                         -p ${DEPLOY_PORT}:3000 \
-                        --env-file .env.production \
+                        -e DATABASE_URL="${DATABASE_URL}" \
+                        -e NEXT_PUBLIC_EMAILJS_SERVICE_ID="${NEXT_PUBLIC_EMAILJS_SERVICE_ID}" \
+                        -e NEXT_PUBLIC_EMAILJS_TEMPLATE_ID="${NEXT_PUBLIC_EMAILJS_TEMPLATE_ID}" \
+                        -e NEXT_PUBLIC_EMAILJS_PUBLIC_KEY="${NEXT_PUBLIC_EMAILJS_PUBLIC_KEY}" \
+                        -e NEXT_PUBLIC_SHEET_BEST_URL="${NEXT_PUBLIC_SHEET_BEST_URL}" \
                         ${DOCKER_IMAGE_NAME}:${env.BUILD_ID}
                         """
-                        
-                        // Clean up .env file
-                        sh "rm -f .env.production"
                     }
 
                     echo "Next.js application deployed successfully on port ${DEPLOY_PORT}"
