@@ -87,10 +87,10 @@ pipeline {
                         echo "✅ DATABASE_URL validated"
                         '''
                         
-                        // Deploy with environment variables directly injected (clean & simple!)
                         sh """
                         docker run -d --name ${DOCKER_IMAGE_NAME} \
-                        -p ${DEPLOY_PORT}:3000 \
+                        --network host \
+                        -e PORT=8005 \
                         -e DATABASE_URL="${DATABASE_URL}" \
                         -e NEXT_PUBLIC_EMAILJS_SERVICE_ID="${NEXT_PUBLIC_EMAILJS_SERVICE_ID}" \
                         -e NEXT_PUBLIC_EMAILJS_TEMPLATE_ID="${NEXT_PUBLIC_EMAILJS_TEMPLATE_ID}" \
