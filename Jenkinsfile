@@ -87,10 +87,16 @@ pipeline {
                         echo "✅ DATABASE_URL validated"
                         '''
                         
+                        sh '''
+                        mkdir -p /var/www/pkbmswastika.sch.id/uploads
+                        chmod -R 755 /var/www/pkbmswastika.sch.id/uploads
+                        '''
+                        
                         sh """
                         docker run -d --name ${DOCKER_IMAGE_NAME} \
                         --network host \
                         -e PORT=8005 \
+                        -v /var/www/pkbmswastika.sch.id/uploads:/app/public/uploads \
                         -e DATABASE_URL="${DATABASE_URL}" \
                         -e NEXT_PUBLIC_EMAILJS_SERVICE_ID="${NEXT_PUBLIC_EMAILJS_SERVICE_ID}" \
                         -e NEXT_PUBLIC_EMAILJS_TEMPLATE_ID="${NEXT_PUBLIC_EMAILJS_TEMPLATE_ID}" \
