@@ -12,7 +12,7 @@ datasource db {
 model Admin {
   id        String   @id @default(uuid())
   username  String   @unique
-  password  String   // Hashed password
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -62,4 +62,116 @@ model Pendaftaran {
   updatedAt          DateTime @updatedAt
 
   @@map("pendaftaran")
+}
+
+// === Landing page CMS models ===
+
+model Program {
+  id          String   @id @default(uuid())
+  code        String   @unique @db.VarChar(20)   // "A", "B", "C", "KETERAMPILAN"
+  title       String   @db.VarChar(100)           // "Paket A"
+  subtitle    String?  @db.VarChar(120)           // "Setara SD/MI"
+  description String   @db.Text
+  features    String[] @default([])               // ["Durasi 2 tahun", ...]
+  image       String?
+  duration    String?  @db.VarChar(50)
+  badge       String?  @db.VarChar(50)            // "POPULER" / "BARU"
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("programs")
+}
+
+model Stat {
+  id        String   @id @default(uuid())
+  label     String   @db.VarChar(80)              // "Lulusan Bekerja"
+  value     String   @db.VarChar(20)              // "830", "85%"
+  caption   String?  @db.VarChar(120)             // "di sektor formal & informal"
+  icon      String?  @db.VarChar(40)              // react-icons name
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("stats")
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(100)
+  role      String?  @db.VarChar(120)             // "Alumni Paket C, 2023"
+  quote     String   @db.Text
+  avatar    String?
+  rating    Int      @default(5)
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model Faq {
+  id        String   @id @default(uuid())
+  question  String   @db.Text
+  answer    String   @db.Text
+  category  String?  @db.VarChar(50)              // "umur", "biaya", "ijazah", "jadwal"
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+model AlumniDestination {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(150)             // "Universitas Brawijaya" / "PT Astra"
+  type      String   @default("kampus") @db.VarChar(30) // "kampus" | "karier" | "wirausaha"
+  logo      String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("alumni_destinations")
+}
+
+model Recognition {
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(150)           // "Akreditasi BAN PAUD & PNF"
+  issuer      String?  @db.VarChar(150)           // "Kemendikbudristek"
+  description String?  @db.Text
+  logo        String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("recognitions")
+}
+
+model QuickLink {
+  id        String   @id @default(uuid())
+  label     String   @db.VarChar(60)
+  href      String   @db.VarChar(255)
+  icon      String?  @db.VarChar(40)
+  external  Boolean  @default(false)
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("quick_links")
+}
+
+model SiteSetting {
+  id              String   @id @default(uuid())
+  key             String   @unique @db.VarChar(60)
+  value           String   @db.Text
+  updatedAt       DateTime @updatedAt
+
+  @@map("site_settings")
 }
