@@ -16,14 +16,15 @@ type Props = {
 } & Omit<HTMLMotionProps<"div">, "variants" | "initial" | "whileInView" | "viewport" | "transition">;
 
 export function Reveal({ children, delay = 0, className, as = "div", ...rest }: Props) {
-  const MotionTag =
+  const MotionTag = (
     as === "section"
       ? motion.section
       : as === "li"
         ? motion.li
         : as === "article"
           ? motion.article
-          : motion.div;
+          : motion.div
+  ) as typeof motion.div;
 
   return (
     <MotionTag
