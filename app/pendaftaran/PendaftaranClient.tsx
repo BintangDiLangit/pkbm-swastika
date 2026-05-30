@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import emailjs from "@emailjs/browser";
-import { FaCheckCircle, FaFileAlt, FaUserCheck, FaWhatsapp, FaEnvelope, FaSpinner } from "react-icons/fa";
+import { FaCheckCircle, FaFileAlt, FaUserCheck, FaWhatsapp, FaEnvelope, FaSpinner, FaCloudUploadAlt, FaFilePdf, FaTimes } from "react-icons/fa";
 
 // Batasan karakter untuk setiap field
 const FIELD_LIMITS = {
@@ -17,6 +17,40 @@ const FIELD_LIMITS = {
   motivasi: { max: 1000 },
 };
 
+// Daftar berkas yang wajib diunggah
+const BERKAS_FIELDS = [
+  { key: "fotoKk", label: "Fotocopy Kartu Keluarga (KK)" },
+  { key: "fotoKtp", label: "Fotocopy KTP" },
+  { key: "pasFoto", label: "Pasfoto 3x4" },
+  { key: "fotoIjazah", label: "Fotocopy Ijazah / Raport" },
+] as const;
+
+type BerkasKey = (typeof BERKAS_FIELDS)[number]["key"];
+
+// Ukuran maksimal & tipe file yang diterima untuk upload berkas
+// Berkas disimpan sebagai base64 di database, jadi dibatasi agar payload tidak terlalu besar
+const MAX_BERKAS_SIZE = 3 * 1024 * 1024; // 3MB
+const ACCEPTED_BERKAS_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "application/pdf"];
+
+// Nomor WhatsApp PKBM SWASTIKA (tujuan konfirmasi pendaftaran)
+const PKBM_WHATSAPP = "6285104755189";
+
+// Label program untuk ditampilkan di pesan konfirmasi
+const PAKET_LABEL: Record<string, string> = {
+  "paket-a": "Paket A (Setara SD/MI)",
+  "paket-b": "Paket B (Setara SMP/MTs)",
+  "paket-c": "Paket C (Setara SMA/MA)",
+};
+
+// Ubah File menjadi data URL base64 untuk disimpan di database
+const fileToBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Gagal membaca file"));
+    reader.readAsDataURL(file);
+  });
+
 export default function PendaftaranClient() {
   const [formData, setFormData] = useState({
     nama: "",
@@ -28,6 +62,28 @@ export default function PendaftaranClient() {
     pendidikanTerakhir: "",
     pekerjaan: "",
     motivasi: ""
+  });
+
+  // Berkas (base64 data URL) yang akan disimpan di database PostgreSQL
+  const [berkas, setBerkas] = useState<Record<BerkasKey, string>>({
+    fotoKk: "",
+    fotoKtp: "",
+    pasFoto: "",
+    fotoIjazah: "",
+  });
+  // Nama file asli (untuk ditampilkan ke user)
+  const [berkasNama, setBerkasNama] = useState<Record<BerkasKey, string>>({
+    fotoKk: "",
+    fotoKtp: "",
+    pasFoto: "",
+    fotoIjazah: "",
+  });
+  // Status sedang upload per berkas
+  const [uploadingBerkas, setUploadingBerkas] = useState<Record<BerkasKey, boolean>>({
+    fotoKk: false,
+    fotoKtp: false,
+    pasFoto: false,
+    fotoIjazah: false,
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -107,6 +163,44 @@ export default function PendaftaranClient() {
     });
   };
 
+  const handleBerkasUpload = async (key: BerkasKey, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    // Reset value supaya bisa pilih file yang sama lagi setelah dihapus
+    e.target.value = "";
+    if (!file) return;
+
+    // Validasi tipe file di sisi client
+    if (!ACCEPTED_BERKAS_TYPES.includes(file.type)) {
+      setFieldErrors({ ...fieldErrors, [key]: "Format harus JPG, PNG, atau PDF" });
+      return;
+    }
+    // Validasi ukuran file
+    if (file.size > MAX_BERKAS_SIZE) {
+      setFieldErrors({ ...fieldErrors, [key]: "Ukuran file maksimal 3MB" });
+      return;
+    }
+
+    setFieldErrors({ ...fieldErrors, [key]: "" });
+    setUploadingBerkas((prev) => ({ ...prev, [key]: true }));
+
+    try {
+      // Baca file menjadi base64 untuk disimpan langsung di database
+      const dataUrl = await fileToBase64(file);
+      setBerkas((prev) => ({ ...prev, [key]: dataUrl }));
+      setBerkasNama((prev) => ({ ...prev, [key]: file.name }));
+    } catch {
+      setFieldErrors({ ...fieldErrors, [key]: "Gagal memproses file. Silakan coba lagi." });
+    } finally {
+      setUploadingBerkas((prev) => ({ ...prev, [key]: false }));
+    }
+  };
+
+  const removeBerkas = (key: BerkasKey) => {
+    setBerkas((prev) => ({ ...prev, [key]: "" }));
+    setBerkasNama((prev) => ({ ...prev, [key]: "" }));
+    setFieldErrors({ ...fieldErrors, [key]: "" });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -119,9 +213,23 @@ export default function PendaftaranClient() {
       if (error) errors[key] = error;
     });
 
+    // Validasi semua berkas wajib sudah terunggah
+    BERKAS_FIELDS.forEach((b) => {
+      if (!berkas[b.key]) {
+        errors[b.key] = "Berkas wajib diunggah";
+      }
+    });
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       setError("Mohon perbaiki error di form sebelum mengirim");
+      setIsLoading(false);
+      return;
+    }
+
+    // Jangan submit jika masih ada berkas yang sedang diupload
+    if (Object.values(uploadingBerkas).some(Boolean)) {
+      setError("Tunggu hingga semua berkas selesai diunggah");
       setIsLoading(false);
       return;
     }
@@ -138,6 +246,10 @@ export default function PendaftaranClient() {
         pendidikanTerakhir: formData.pendidikanTerakhir || null,
         pekerjaan: formData.pekerjaan.trim() || null,
         motivasi: formData.motivasi.trim() || null,
+        fotoKk: berkas.fotoKk,
+        fotoKtp: berkas.fotoKtp,
+        pasFoto: berkas.pasFoto,
+        fotoIjazah: berkas.fotoIjazah,
       });
 
       if (response.data.success) {
@@ -154,6 +266,10 @@ export default function PendaftaranClient() {
               pendidikan_terakhir: formData.pendidikanTerakhir,
               alamat_lengkap: formData.alamat,
               motivasi_program: formData.motivasi,
+              berkas_kk: berkas.fotoKk,
+              berkas_ktp: berkas.fotoKtp,
+              pasfoto: berkas.pasFoto,
+              berkas_ijazah: berkas.fotoIjazah,
               status_verifikasi: "Menunggu",
               catatan_admin: ""
             };
@@ -194,6 +310,24 @@ export default function PendaftaranClient() {
     }
   };
 
+  // Bangun link WhatsApp berisi template konfirmasi pendaftaran ke nomor PKBM
+  const buildWaConfirmation = (): string => {
+    const pesan = [
+      "Halo Admin PKBM SWASTIKA 🙏",
+      "",
+      "Saya sudah melakukan pendaftaran online melalui website. Berikut data saya:",
+      "",
+      `Nama Lengkap: ${formData.nama}`,
+      `Program: ${PAKET_LABEL[formData.paket] || formData.paket}`,
+      `No. Telepon: ${formData.telepon}`,
+      `Email: ${formData.email}`,
+      `Tanggal Lahir: ${formData.tanggalLahir}`,
+      "",
+      "Mohon konfirmasi pendaftaran saya dan informasi mengenai langkah selanjutnya. Terima kasih 🙏",
+    ].join("\n");
+    return `https://wa.me/${PKBM_WHATSAPP}?text=${encodeURIComponent(pesan)}`;
+  };
+
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 py-16">
@@ -204,9 +338,26 @@ export default function PendaftaranClient() {
               <FaCheckCircle className="text-green-500 text-7xl mx-auto relative z-10 drop-shadow-lg" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">Pendaftaran Berhasil!</h1>
-            <p className="text-xl text-gray-600 mb-10 leading-relaxed">
-              Terima kasih telah mendaftar di PKBM SWASTIKA. Kami akan menghubungi Anda dalam 1-2 hari kerja untuk proses selanjutnya.
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              Terima kasih telah mendaftar di PKBM SWASTIKA. Untuk mempercepat proses, silakan kirim konfirmasi pendaftaran Anda melalui WhatsApp dengan menekan tombol di bawah ini.
             </p>
+            <div className="mb-10 rounded-2xl border-2 border-green-300 bg-green-50 p-6">
+              <p className="mb-4 text-green-800 font-semibold">
+                📲 Satu langkah lagi! Kirim konfirmasi ke admin via WhatsApp:
+              </p>
+              <a
+                href={buildWaConfirmation()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <FaWhatsapp className="mr-2 text-xl" />
+                Kirim Konfirmasi via WhatsApp
+              </a>
+              <p className="mt-3 text-sm text-green-700">
+                Pesan konfirmasi sudah otomatis terisi dengan data Anda — tinggal tekan kirim di WhatsApp.
+              </p>
+            </div>
             <div className="space-y-6">
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl border-2 border-green-200">
                 <p className="text-green-800 font-bold text-xl mb-4">Langkah Selanjutnya:</p>
@@ -229,16 +380,17 @@ export default function PendaftaranClient() {
                   </li>
                 </ul>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <a
-                  href="https://api.whatsapp.com/send?phone=6285104755189&text=Halo%20PKBM%20SWASTIKA,%20saya%20sudah%20mendaftar%20online"
-                  className="inline-flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                >
-                  <FaWhatsapp className="mr-2 text-xl" />
-                  Hubungi via WhatsApp
-                </a>
+              <div className="flex justify-center pt-4">
                 <button
-                  onClick={() => setIsSubmitted(false)}
+                  onClick={() => {
+                    setFormData({
+                      nama: "", email: "", telepon: "", paket: "", alamat: "",
+                      tanggalLahir: "", pendidikanTerakhir: "", pekerjaan: "", motivasi: "",
+                    });
+                    setBerkas({ fotoKk: "", fotoKtp: "", pasFoto: "", fotoIjazah: "" });
+                    setBerkasNama({ fotoKk: "", fotoKtp: "", pasFoto: "", fotoIjazah: "" });
+                    setIsSubmitted(false);
+                  }}
                   className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                 >
                   Daftar Lagi
@@ -503,6 +655,94 @@ export default function PendaftaranClient() {
               </div>
             </div>
 
+            {/* Upload Berkas */}
+            <div className="mb-10">
+              <div className="flex items-center mb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                  <FaCloudUploadAlt className="text-white text-xl" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-800">Upload Berkas</h2>
+              </div>
+              <p className="text-gray-500 mb-8 ml-1">
+                Unggah berkas persyaratan. Format JPG, PNG, atau PDF. Maksimal 3MB per file.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {BERKAS_FIELDS.map((b) => {
+                  const url = berkas[b.key];
+                  const isUploading = uploadingBerkas[b.key];
+                  const isPdf = berkasNama[b.key].toLowerCase().endsWith(".pdf");
+                  return (
+                    <div key={b.key} className="group">
+                      <label className="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
+                        {b.label} *
+                      </label>
+                      {url ? (
+                        <div className="flex items-center justify-between gap-3 px-5 py-4 border-2 border-green-300 bg-green-50 rounded-xl">
+                          <div className="flex items-center gap-3 min-w-0">
+                            {isPdf ? (
+                              <FaFilePdf className="text-red-500 text-2xl flex-shrink-0" />
+                            ) : (
+                              <img src={url} alt={b.label} className="w-12 h-12 object-cover rounded-lg flex-shrink-0" />
+                            )}
+                            <div className="min-w-0">
+                              <p className="text-green-700 font-medium truncate">{berkasNama[b.key] || "Berkas terunggah"}</p>
+                              <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 text-sm hover:underline"
+                              >
+                                Lihat berkas
+                              </a>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeBerkas(b.key)}
+                            className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-white border-2 border-red-200 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                            aria-label={`Hapus ${b.label}`}
+                          >
+                            <FaTimes />
+                          </button>
+                        </div>
+                      ) : (
+                        <label
+                          className={`flex flex-col items-center justify-center px-5 py-8 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${
+                            fieldErrors[b.key]
+                              ? "border-red-400 bg-red-50"
+                              : "border-gray-300 hover:border-orange-400 hover:bg-orange-50"
+                          } ${isUploading ? "pointer-events-none opacity-70" : ""}`}
+                        >
+                          {isUploading ? (
+                            <>
+                              <FaSpinner className="animate-spin text-orange-500 text-2xl mb-2" />
+                              <span className="text-gray-600 text-sm">Mengunggah...</span>
+                            </>
+                          ) : (
+                            <>
+                              <FaCloudUploadAlt className="text-gray-400 text-3xl mb-2" />
+                              <span className="text-gray-600 text-sm font-medium">Klik untuk pilih file</span>
+                              <span className="text-gray-400 text-xs mt-1">JPG, PNG, atau PDF (maks 3MB)</span>
+                            </>
+                          )}
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
+                            onChange={(e) => handleBerkasUpload(b.key, e)}
+                            disabled={isUploading}
+                            className="hidden"
+                          />
+                        </label>
+                      )}
+                      {fieldErrors[b.key] && (
+                        <p className="text-red-600 text-sm mt-1">{fieldErrors[b.key]}</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Error Message */}
             {error && (
               <div className="mb-8 p-5 bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-2xl">
@@ -515,9 +755,9 @@ export default function PendaftaranClient() {
             <div className="text-center pt-6">
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || Object.values(uploadingBerkas).some(Boolean)}
                 className={`font-bold py-5 px-12 rounded-2xl text-lg transition-all duration-300 transform shadow-xl ${
-                  isLoading
+                  isLoading || Object.values(uploadingBerkas).some(Boolean)
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 hover:scale-105 hover:shadow-2xl"
                 } text-white`}

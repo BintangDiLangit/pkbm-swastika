@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isAdminAuthenticated } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -126,6 +127,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validasi berkas wajib (URL hasil upload Cloudinary)
+    const requiredBerkas: { key: string; label: string }[] = [
+      { key: "fotoKk", label: "Fotocopy Kartu Keluarga (KK)" },
+      { key: "fotoKtp", label: "Fotocopy KTP" },
+      { key: "pasFoto", label: "Pasfoto 3x4" },
+      { key: "fotoIjazah", label: "Fotocopy Ijazah/Raport" },
+    ];
+    for (const berkas of requiredBerkas) {
+      if (!body[berkas.key] || typeof body[berkas.key] !== "string" || body[berkas.key].trim() === "") {
+        return NextResponse.json(
+          { success: false, message: `Berkas ${berkas.label} harus diunggah` },
+          { status: 400 }
+        );
+      }
+    }
+
     // Validasi pendidikan terakhir (optional)
     if (body.pendidikanTerakhir && body.pendidikanTerakhir.length > VALIDATION_LIMITS.pendidikanTerakhir.max) {
       return NextResponse.json(
@@ -162,6 +179,10 @@ export async function POST(request: NextRequest) {
         pendidikanTerakhir: body.pendidikanTerakhir?.trim() || null,
         pekerjaan: body.pekerjaan?.trim() || null,
         motivasi: body.motivasi?.trim() || null,
+        fotoKk: body.fotoKk?.trim() || null,
+        fotoKtp: body.fotoKtp?.trim() || null,
+        pasFoto: body.pasFoto?.trim() || null,
+        fotoIjazah: body.fotoIjazah?.trim() || null,
         status: "Menunggu",
       },
     });
@@ -193,8 +214,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET - Ambil semua pendaftaran (untuk admin)
-export async function GET() {
+// GET - Ambil semua pendaftaran (hanya untuk admin)
+export async function GET(request: NextRequest) {
+  // Data pendaftar bersifat sensitif (KTP, KK, alamat) — wajib login admin
+  if (!isAdminAuthenticated(request)) {
+    return NextResponse.json(
+      { success: false, message: "Tidak terautentikasi" },
+      { status: 401 }
+    );
+  }
+
   try {
     const pendaftaran = await prisma.pendaftaran.findMany({
       orderBy: {

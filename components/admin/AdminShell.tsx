@@ -15,11 +15,13 @@ import {
   FaShieldAlt,
   FaLink,
   FaCog,
+  FaClipboardList,
 } from "react-icons/fa";
 import type { ReactNode } from "react";
 
 const nav = [
   { label: "Dashboard", href: "/admin", icon: FaHome },
+  { label: "Pendaftaran", href: "/admin/pendaftaran", icon: FaClipboardList },
   { label: "Berita", href: "/admin/berita", icon: FaNewspaper },
   { label: "Galeri", href: "/admin/galeri", icon: FaImages },
   { label: "Program", href: "/admin/program", icon: FaBookOpen },

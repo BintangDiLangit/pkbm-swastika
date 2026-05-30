@@ -14,10 +14,12 @@ import {
   FaLink,
   FaCog,
   FaUsers,
+  FaClipboardList,
 } from "react-icons/fa";
 import { AdminShell } from "@/components/admin/AdminShell";
 
 const tiles = [
+  { label: "Pendaftaran", href: "/admin/pendaftaran", icon: FaClipboardList, key: "pendaftaran", color: "bg-accent-100 text-accent-600" },
   { label: "Berita", href: "/admin/berita", icon: FaNewspaper, key: "berita", color: "bg-primary-50 text-primary-700" },
   { label: "Galeri", href: "/admin/galeri", icon: FaImages, key: "galeri", color: "bg-accent-100 text-accent-600" },
   { label: "Program", href: "/admin/program", icon: FaBookOpen, key: "program", color: "bg-primary-50 text-primary-700" },
@@ -35,6 +37,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const endpoints = [
+      ["pendaftaran", "/api/pendaftaran"],
       ["berita", "/api/berita"],
       ["galeri", "/api/galeri"],
       ["program", "/api/program"],

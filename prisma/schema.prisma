@@ -56,6 +56,10 @@ model Pendaftaran {
   pendidikanTerakhir String?  @db.VarChar(50)
   pekerjaan          String?  @db.VarChar(100)
   motivasi           String?  @db.Text
+  fotoKk             String?  @db.Text
+  fotoKtp            String?  @db.Text
+  pasFoto            String?  @db.Text
+  fotoIjazah         String?  @db.Text
   status             String   @default("Menunggu") @db.VarChar(50)
   catatanAdmin       String?  @db.Text
   createdAt          DateTime @default(now())

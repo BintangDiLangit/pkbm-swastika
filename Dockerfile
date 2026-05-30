@@ -62,7 +62,7 @@ COPY --from=builder /app/.next/static ./.next/static
 
 # Create uploads directory structure (will be mounted as volume in production)
 # Set permissions so nextjs user can write
-RUN mkdir -p ./public/uploads/galeri ./public/uploads/berita ./public/uploads/general && \
+RUN mkdir -p ./public/uploads/galeri ./public/uploads/berita ./public/uploads/general ./public/uploads/pendaftaran && \
     chown -R nextjs:nodejs ./public/uploads && \
     chmod -R 775 ./public/uploads
 

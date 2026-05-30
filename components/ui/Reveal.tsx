@@ -11,33 +11,57 @@ const variants: Variants = {
 type Props = {
   children: ReactNode;
   delay?: number;
-  className?: string;
-  as?: "div" | "section" | "li" | "article";
-} & Omit<HTMLMotionProps<"div">, "variants" | "initial" | "whileInView" | "viewport" | "transition">;
+} & (
+  | ({ as?: "div" } & Omit<HTMLMotionProps<"div">, "variants" | "initial" | "whileInView" | "viewport" | "transition">)
+  | ({ as: "section" } & Omit<HTMLMotionProps<"section">, "variants" | "initial" | "whileInView" | "viewport" | "transition">)
+  | ({ as: "li" } & Omit<HTMLMotionProps<"li">, "variants" | "initial" | "whileInView" | "viewport" | "transition">)
+  | ({ as: "article" } & Omit<HTMLMotionProps<"article">, "variants" | "initial" | "whileInView" | "viewport" | "transition">)
+);
 
-export function Reveal({ children, delay = 0, className, as = "div", ...rest }: Props) {
-  const MotionTag = (
-    as === "section"
-      ? motion.section
-      : as === "li"
-        ? motion.li
-        : as === "article"
-          ? motion.article
-          : motion.div
-  ) as typeof motion.div;
+export function Reveal(props: Props) {
+  const { children, delay = 0, className } = props;
 
+  const shared = {
+    variants,
+    initial: "hidden" as const,
+    whileInView: "show" as const,
+    viewport: { once: true, margin: "-80px" },
+    transition: { duration: 0.6, delay, ease: [0.21, 0.47, 0.32, 0.98] as [number, number, number, number] },
+    className,
+  };
+
+  if (props.as === "section") {
+    const { as: _as, children: _children, delay: _delay, className: _className, ...rest } = props;
+    return (
+      <motion.section {...shared} {...rest}>
+        {children}
+      </motion.section>
+    );
+  }
+
+  if (props.as === "li") {
+    const { as: _as, children: _children, delay: _delay, className: _className, ...rest } = props;
+    return (
+      <motion.li {...shared} {...rest}>
+        {children}
+      </motion.li>
+    );
+  }
+
+  if (props.as === "article") {
+    const { as: _as, children: _children, delay: _delay, className: _className, ...rest } = props;
+    return (
+      <motion.article {...shared} {...rest}>
+        {children}
+      </motion.article>
+    );
+  }
+
+  const { as: _as, children: _children, delay: _delay, className: _className, ...rest } = props;
   return (
-    <MotionTag
-      variants={variants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className={className}
-      {...rest}
-    >
+    <motion.div {...shared} {...rest}>
       {children}
-    </MotionTag>
+    </motion.div>
   );
 }
 

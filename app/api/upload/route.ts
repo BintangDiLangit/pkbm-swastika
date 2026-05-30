@@ -5,8 +5,8 @@ import path from "path";
 
 export const runtime = "nodejs";
 
-// Validasi tipe file yang diizinkan
-const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+// Validasi tipe file yang diizinkan (gambar atau PDF untuk berkas dokumen)
+const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp", "application/pdf"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function POST(request: NextRequest) {
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     // Validasi tipe file
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { success: false, message: "Tipe file tidak valid. Hanya gambar (JPEG, PNG, GIF, WebP) yang diizinkan." },
+        { success: false, message: "Tipe file tidak valid. Hanya gambar (JPEG, PNG, GIF, WebP) atau PDF yang diizinkan." },
         { status: 400 }
       );
     }
