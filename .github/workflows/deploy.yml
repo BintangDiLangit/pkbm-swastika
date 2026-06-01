@@ -1,0 +1,63 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, production]
+    env:
+      IMAGE_NAME: pkbm-swastika
+      PORT: 8005
+
+    steps:
+      - name: Pull latest code
+        env:
+          HOME: /root
+        run: git -C /var/www/pkbmswastika.sch.id/pkbm-swastika pull origin master
+
+      - name: Build Docker image
+        run: |
+          cd /var/www/pkbmswastika.sch.id/pkbm-swastika
+          docker build -t ${{ env.IMAGE_NAME }}:${{ github.run_number }} .
+
+      - name: Stop & remove old container
+        run: |
+          docker stop ${{ env.IMAGE_NAME }} || true
+          docker rm ${{ env.IMAGE_NAME }} || true
+
+      - name: Remove old images
+        run: |
+          docker images --filter=reference='${{ env.IMAGE_NAME }}' \
+            --format '{{.ID}} {{.Repository}}:{{.Tag}}' \
+            | grep -v "${{ env.IMAGE_NAME }}:${{ github.run_number }}" \
+            | awk '{print $1}' \
+            | xargs -r docker rmi || true
+
+      - name: Setup uploads directory
+        run: |
+          mkdir -p /var/www/pkbmswastika.sch.id/uploads/galeri
+          mkdir -p /var/www/pkbmswastika.sch.id/uploads/berita
+          mkdir -p /var/www/pkbmswastika.sch.id/uploads/general
+          mkdir -p /var/www/pkbmswastika.sch.id/uploads/pendaftaran
+          chown -R 1001:1001 /var/www/pkbmswastika.sch.id/uploads
+          chmod -R 775 /var/www/pkbmswastika.sch.id/uploads
+
+      - name: Deploy container
+        run: |
+          docker run -d \
+            --name ${{ env.IMAGE_NAME }} \
+            --network host \
+            --restart unless-stopped \
+            -e PORT=${{ env.PORT }} \
+            -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            -e NEXT_PUBLIC_EMAILJS_SERVICE_ID="${{ secrets.NEXT_PUBLIC_EMAILJS_SERVICE_ID }}" \
+            -e NEXT_PUBLIC_EMAILJS_TEMPLATE_ID="${{ secrets.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID }}" \
+            -e NEXT_PUBLIC_EMAILJS_PUBLIC_KEY="${{ secrets.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }}" \
+            -e NEXT_PUBLIC_SHEET_BEST_URL="${{ secrets.NEXT_PUBLIC_SHEET_BEST_URL }}" \
+            -v /var/www/pkbmswastika.sch.id/uploads:/app/public/uploads \
+            ${{ env.IMAGE_NAME }}:${{ github.run_number }}
+
+          echo "✅ Deployed pkbm-swastika on port ${{ env.PORT }}"
