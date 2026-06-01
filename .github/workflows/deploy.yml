@@ -11,6 +11,7 @@ jobs:
     env:
       IMAGE_NAME: pkbm-swastika
       PORT: 8005
+      ENV_FILE: /var/www/pkbmswastika.sch.id/pkbm-swastika/.env
 
     steps:
       - name: Pull latest code
@@ -52,12 +53,8 @@ jobs:
             --network host \
             --restart unless-stopped \
             -e PORT=${{ env.PORT }} \
-            -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-            -e NEXT_PUBLIC_EMAILJS_SERVICE_ID="${{ secrets.NEXT_PUBLIC_EMAILJS_SERVICE_ID }}" \
-            -e NEXT_PUBLIC_EMAILJS_TEMPLATE_ID="${{ secrets.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID }}" \
-            -e NEXT_PUBLIC_EMAILJS_PUBLIC_KEY="${{ secrets.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }}" \
-            -e NEXT_PUBLIC_SHEET_BEST_URL="${{ secrets.NEXT_PUBLIC_SHEET_BEST_URL }}" \
+            --env-file ${{ env.ENV_FILE }} \
             -v /var/www/pkbmswastika.sch.id/uploads:/app/public/uploads \
             ${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
-          echo "✅ Deployed pkbm-swastika on port ${{ env.PORT }}"
+          echo "✅ Deployed ${{ env.IMAGE_NAME }} on port ${{ env.PORT }}"
