@@ -24,6 +24,20 @@ jobs:
           cd /var/www/pkbmswastika.sch.id/pkbm-swastika
           docker build -t ${{ env.IMAGE_NAME }}:${{ github.run_number }} .
 
+      - name: Run database migration
+        run: |
+          cd /var/www/pkbmswastika.sch.id/pkbm-swastika
+          # Sinkronkan skema database (tambah kolom baru, dll) sebelum container baru jalan.
+          # Build target 'builder' karena di sana tersedia Prisma CLI + schema lengkap.
+          docker build --target builder -t ${{ env.IMAGE_NAME }}-migrate:${{ github.run_number }} .
+          # Aman & non-destruktif: prisma db push tanpa --accept-data-loss (hanya menambah perubahan).
+          docker run --rm \
+            --network host \
+            --env-file ${{ env.ENV_FILE }} \
+            ${{ env.IMAGE_NAME }}-migrate:${{ github.run_number }} \
+            npx prisma db push --skip-generate
+          docker rmi ${{ env.IMAGE_NAME }}-migrate:${{ github.run_number }} || true
+
       - name: Stop & remove old container
         run: |
           docker stop ${{ env.IMAGE_NAME }} || true
