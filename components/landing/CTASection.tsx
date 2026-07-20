@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { FaUserPlus, FaWhatsapp } from "react-icons/fa";
 import { Reveal } from "../ui/Reveal";
+import { ShootingStarsGrid } from "../ui/shooting-stars-grid";
 
 export function CTASection({ whatsapp }: { whatsapp: string }) {
   const waLink = `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
@@ -11,21 +11,7 @@ export function CTASection({ whatsapp }: { whatsapp: string }) {
   )}`;
 
   return (
-    <section className="relative overflow-hidden bg-primary-700 py-20 text-white sm:py-24">
-      {/* background image */}
-      <div className="absolute inset-0">
-        <Image
-          src="/images/diskusi.jpg"
-          alt=""
-          fill
-          className="object-cover opacity-15"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-800 via-primary-700 to-primary-700" />
-      </div>
-      <div className="pointer-events-none absolute -top-20 -left-20 h-80 w-80 animate-blob rounded-full bg-accent-400/30 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-20 -right-20 h-80 w-80 animate-blob rounded-full bg-primary-400/30 blur-3xl" style={{ animationDelay: "4s" }} />
-
+    <ShootingStarsGrid interactive contentClassName="py-20 sm:py-24">
       <div className="container relative">
         <Reveal className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold backdrop-blur">
@@ -63,6 +49,6 @@ export function CTASection({ whatsapp }: { whatsapp: string }) {
           </div>
         </Reveal>
       </div>
-    </section>
+    </ShootingStarsGrid>
   );
 }

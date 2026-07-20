@@ -18,8 +18,9 @@ export function StatsSection({ stats }: { stats: LandingStat[] }) {
   if (!stats.length) return null;
 
   return (
-    <section className="bg-white py-20 sm:py-24">
-      <div className="container">
+    <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-primary-50/40 py-20 sm:py-28">
+      <div className="absolute inset-0 bg-grid opacity-40" />
+      <div className="container relative">
         <SectionHeader
           eyebrow="Dampak Alumni"
           title="Lulusan kami"
@@ -27,40 +28,20 @@ export function StatsSection({ stats }: { stats: LandingStat[] }) {
           description="Bukan hanya lulus — alumni PKBM Swastika melanjutkan pendidikan, bekerja, dan membuka usaha sendiri."
         />
 
-        <Stagger className="mt-12 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {stats.map((s, idx) => {
+        {/* Thursina-style giant bare numbers */}
+        <Stagger className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+          {stats.map((s) => {
             const Icon = getIcon(s.icon);
-            const isHighlight = idx === 0;
             return (
-              <StaggerItem key={s.id}>
-                <div
-                  className={`relative h-full overflow-hidden rounded-3xl border p-6 transition-all hover:-translate-y-1 ${
-                    isHighlight
-                      ? "border-primary-700 bg-primary-700 text-white shadow-glow"
-                      : "border-soft-200 bg-white text-ink shadow-soft hover:shadow-card"
-                  }`}
-                >
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
-                      isHighlight ? "bg-white/15 text-accent-300" : "bg-primary-50 text-primary-700"
-                    }`}
-                  >
-                    <Icon size={22} />
-                  </div>
-                  <div className="mt-5">
-                    <div className={`text-4xl font-bold leading-none ${isHighlight ? "text-white" : "text-ink"}`}>
-                      <Counter value={s.value} />
-                    </div>
-                    <div className={`mt-2 text-sm font-bold ${isHighlight ? "text-white" : "text-ink"}`}>
-                      {s.label}
-                    </div>
-                    {s.caption && (
-                      <div className={`mt-1 text-xs ${isHighlight ? "text-white/70" : "text-ink-soft"}`}>
-                        {s.caption}
-                      </div>
-                    )}
-                  </div>
+              <StaggerItem key={s.id} className="flex flex-col items-center text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
+                  <Icon size={20} />
                 </div>
+                <div className="mt-4 text-6xl font-bold leading-none text-primary-800 sm:text-7xl md:text-8xl">
+                  <Counter value={s.value} />
+                </div>
+                <div className="mt-3 text-base font-bold text-ink sm:text-lg">{s.label}</div>
+                {s.caption && <div className="mt-1 text-sm text-ink-soft">{s.caption}</div>}
               </StaggerItem>
             );
           })}

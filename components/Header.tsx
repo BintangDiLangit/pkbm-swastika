@@ -30,12 +30,17 @@ export default function Header() {
     setOpen(false);
   }, [pathname]);
 
+  // transparent over the homepage hero until the user scrolls
+  const transparent = pathname === "/" && !scrolled && !open;
+
   return (
     <header
-      className={`sticky top-0 z-50 transition-all ${
-        scrolled
-          ? "bg-white/85 backdrop-blur-md shadow-soft"
-          : "bg-white/60 backdrop-blur-sm"
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        transparent
+          ? "bg-transparent"
+          : scrolled
+            ? "bg-white/85 backdrop-blur-md shadow-soft"
+            : "bg-white/60 backdrop-blur-sm"
       }`}
     >
       <div className="container">
@@ -46,8 +51,14 @@ export default function Header() {
               <FaGraduationCap size={20} />
             </div>
             <div className="leading-tight">
-              <div className="text-base font-bold text-ink">PKBM Swastika</div>
-              <div className="hidden text-[11px] font-medium text-ink-soft sm:block">
+              <div className={`text-base font-bold ${transparent ? "text-white" : "text-ink"}`}>
+                PKBM Swastika
+              </div>
+              <div
+                className={`hidden text-[11px] font-medium sm:block ${
+                  transparent ? "text-white/70" : "text-ink-soft"
+                }`}
+              >
                 Pendidikan untuk semua
               </div>
             </div>
@@ -62,9 +73,13 @@ export default function Header() {
                   key={item.path}
                   href={item.path}
                   className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors ${
-                    active
-                      ? "bg-primary-50 text-primary-700"
-                      : "text-ink-muted hover:bg-soft-100 hover:text-ink"
+                    transparent
+                      ? active
+                        ? "bg-white/15 text-white"
+                        : "text-white/80 hover:bg-white/10 hover:text-white"
+                      : active
+                        ? "bg-primary-50 text-primary-700"
+                        : "text-ink-muted hover:bg-soft-100 hover:text-ink"
                   }`}
                 >
                   {item.name}
@@ -84,7 +99,9 @@ export default function Header() {
 
             <button
               onClick={() => setOpen((s) => !s)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-ink hover:bg-soft-100 lg:hidden"
+              className={`flex h-10 w-10 items-center justify-center rounded-xl lg:hidden ${
+                transparent ? "text-white hover:bg-white/10" : "text-ink hover:bg-soft-100"
+              }`}
               aria-label={open ? "Tutup menu" : "Buka menu"}
             >
               {open ? <FaTimes size={20} /> : <FaBars size={20} />}

@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FaQuoteLeft, FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
 import { SectionHeader } from "../ui/SectionHeader";
 import type { LandingTestimonial } from "@/lib/data";
@@ -13,14 +13,31 @@ export function TestimonialsSection({
   testimonials: LandingTestimonial[];
 }) {
   const [index, setIndex] = useState(0);
-  if (!testimonials.length) return null;
+  const [paused, setPaused] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const current = testimonials[index];
   const next = () => setIndex((i) => (i + 1) % testimonials.length);
   const prev = () => setIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
 
+  useEffect(() => {
+    if (reduceMotion || paused || testimonials.length < 2) return;
+    timerRef.current = setInterval(next, 6000);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, reduceMotion, testimonials.length]);
+
+  if (!testimonials.length) return null;
+  const current = testimonials[index];
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-accent-50 py-20 sm:py-24">
+    <section
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-accent-50 py-20 sm:py-24"
+    >
       <div className="pointer-events-none absolute -top-20 right-0 h-96 w-96 rounded-full bg-primary-200/30 blur-3xl" />
       <div className="container relative">
         <SectionHeader

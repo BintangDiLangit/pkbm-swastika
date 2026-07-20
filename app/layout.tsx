@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Preloader } from "@/components/ui/Preloader";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pkbmswastika.com"),
@@ -92,6 +93,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans" suppressHydrationWarning>
+        <Preloader />
         <Header />
         <main>{children}</main>
         <Footer />

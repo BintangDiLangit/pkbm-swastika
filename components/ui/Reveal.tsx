@@ -26,7 +26,7 @@ export function Reveal(props: Props) {
     initial: "hidden" as const,
     whileInView: "show" as const,
     viewport: { once: true, margin: "-80px" },
-    transition: { duration: 0.6, delay, ease: [0.21, 0.47, 0.32, 0.98] as [number, number, number, number] },
+    transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
     className,
   };
 

@@ -1,8 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { FaArrowRight, FaUserPlus, FaPlay } from "react-icons/fa";
 
 type Props = {
@@ -11,119 +12,147 @@ type Props = {
   image: string;
 };
 
-export function HeroSection({ title, subtitle, image }: Props) {
+const EXPO_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+function HeroHeadline({ text }: { text: string }) {
+  const reduceMotion = useReducedMotion();
+  const words = text.split(" ");
+
+  if (reduceMotion) {
+    return (
+      <h1 className="mt-4 max-w-5xl text-balance text-5xl font-bold leading-[1.02] text-white sm:text-7xl md:text-8xl">
+        {text}
+      </h1>
+    );
+  }
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-accent-50">
-      {/* decorative blobs */}
-      <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 animate-blob rounded-full bg-primary-200/40 blur-3xl" />
-      <div
-        className="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 animate-blob rounded-full bg-accent-200/50 blur-3xl"
-        style={{ animationDelay: "3s" }}
-      />
-      <div className="absolute inset-0 bg-grid opacity-30" />
+    <h1 className="mt-4 max-w-5xl text-balance text-5xl font-bold leading-[1.02] text-white sm:text-7xl md:text-8xl">
+      {words.map((w, i) => (
+        <span key={`${w}-${i}`} className="inline-block overflow-hidden align-top">
+          <motion.span
+            initial={{ y: "110%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.1 + i * 0.06, ease: EXPO_OUT }}
+            className="inline-block"
+          >
+            {w}
+            {i < words.length - 1 ? " " : ""}
+          </motion.span>
+        </span>
+      ))}
+    </h1>
+  );
+}
 
-      <div className="container relative grid gap-12 py-16 sm:py-20 lg:grid-cols-12 lg:py-28">
-        {/* left content */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="lg:col-span-7 flex flex-col justify-center"
-        >
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary-100 bg-white/80 px-4 py-1.5 text-xs font-semibold text-primary-700 shadow-soft backdrop-blur">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-accent-400" />
-            Pendaftaran tahun ajaran baru dibuka
-          </div>
+export function HeroSection({ title, subtitle, image }: Props) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], reduceMotion ? ["0%", "0%"] : ["0%", "18%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], reduceMotion ? [1, 1] : [1.08, 1.18]);
 
-          <h1 className="mt-5 text-balance text-4xl font-bold leading-[1.1] text-ink sm:text-5xl md:text-6xl">
-            {title.split(" - ")[0]}
-            <span className="mt-2 block bg-gradient-to-r from-primary-700 via-primary-600 to-accent-500 bg-clip-text text-transparent">
-              {title.split(" - ")[1] ?? "Pendidikan untuk Semua"}
-            </span>
-          </h1>
+  return (
+    <section ref={sectionRef} className="relative -mt-[68px] bg-white px-2 pb-2 sm:px-3 sm:pb-3">
+      {/* Thursina-style framed hero: rounded card with thin white gutter */}
+      <div className="relative isolate min-h-[100vh] overflow-hidden rounded-b-[2rem] sm:rounded-b-[2.5rem]">
+        {/* full-bleed background photo, parallax on scroll */}
+        <motion.div style={{ y: bgY, scale: bgScale }} className="absolute inset-0">
+          <Image
+            src={image}
+            alt="PKBM Swastika"
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/45 to-ink/80" />
 
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-ink-muted sm:text-lg">
+        <div className="container relative flex min-h-[100vh] flex-col items-center justify-center pb-24 pt-32 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EXPO_OUT }}
+            className="text-xs font-bold uppercase tracking-[0.35em] text-accent-400 sm:text-sm"
+          >
+            Selamat Datang di
+          </motion.div>
+
+          <HeroHeadline text={title.split(" - ")[0]} />
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: EXPO_OUT }}
+            className="mt-4 text-xl font-semibold text-accent-300 sm:text-2xl"
+          >
+            {title.split(" - ")[1] ?? "Pendidikan untuk Semua"}
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7, ease: EXPO_OUT }}
+            className="mt-5 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg"
+          >
             {subtitle}
-          </p>
+          </motion.p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/pendaftaran" className="btn-primary">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8, ease: EXPO_OUT }}
+            className="mt-9 flex flex-wrap justify-center gap-3"
+          >
+            <Link href="/pendaftaran" className="btn-accent">
               <FaUserPlus />
               Daftar Sekarang
               <FaArrowRight className="text-xs" />
             </Link>
-            <Link href="#program" className="btn-ghost">
-              <FaPlay className="text-xs text-primary-600" />
+            <Link
+              href="#program"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
+            >
+              <FaPlay className="text-xs" />
               Lihat Program
             </Link>
-          </div>
+          </motion.div>
 
           {/* trust strip */}
-          <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-ink-soft">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.9, ease: EXPO_OUT }}
+            className="mt-12 flex flex-wrap items-center justify-center gap-6 text-xs text-white/80"
+          >
             <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-primary-700">✓</span>
-              <span className="font-semibold text-ink">Terakreditasi BAN PAUD & PNF</span>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-accent-300">✓</span>
+              <span className="font-semibold text-white">Terakreditasi BAN PAUD & PNF</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-100 text-accent-600">✓</span>
-              <span className="font-semibold text-ink">Ijazah resmi Kemendikbud</span>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-accent-300">✓</span>
+              <span className="font-semibold text-white">Ijazah resmi Kemendikbud</span>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
-        {/* right image */}
+        {/* scroll cue */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-          className="relative lg:col-span-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-white/70 sm:flex"
         >
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-md">
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-primary-200/60 to-accent-200/60 blur-2xl" />
-            <div className="relative h-full w-full overflow-hidden rounded-[2rem] border-4 border-white shadow-glow">
-              <Image src={image} alt="PKBM Swastika" fill className="object-cover" priority sizes="(min-width: 1024px) 40vw, 90vw" />
-            </div>
-
-            {/* floating cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="absolute -left-6 top-10 hidden rounded-2xl border border-soft-200 bg-white/95 p-3 shadow-card backdrop-blur sm:block"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2">
-                  {["1", "2", "3"].map((n) => (
-                    <div
-                      key={n}
-                      className="h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-primary-400 to-primary-600"
-                    />
-                  ))}
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-ink">500+ alumni</div>
-                  <div className="text-xs text-ink-soft">sudah lulus & berkarya</div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="absolute -right-6 bottom-10 hidden rounded-2xl border border-soft-200 bg-white/95 p-3 shadow-card backdrop-blur sm:block"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-100 text-accent-600">
-                  ⭐
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-ink">Tanpa batas usia</div>
-                  <div className="text-xs text-ink-soft">jadwal fleksibel</div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
+          <motion.span
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="h-8 w-5 rounded-full border border-white/40"
+          />
         </motion.div>
       </div>
     </section>
