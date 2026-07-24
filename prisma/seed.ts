@@ -24,7 +24,11 @@ async function main() {
   console.log('🌱 Starting seed...');
 
   // === Admin ===
-  const adminPassword = await bcrypt.hash('admin123', 10);
+  const seedPassword = process.env.SEED_ADMIN_PASSWORD;
+  if (!seedPassword) {
+    throw new Error('SEED_ADMIN_PASSWORD environment variable is required to seed the admin user');
+  }
+  const adminPassword = await bcrypt.hash(seedPassword, 10);
   const admin = await prisma.admin.upsert({
     where: { username: 'admin' },
     update: { password: adminPassword },

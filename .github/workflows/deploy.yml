@@ -5,70 +5,56 @@ on:
     branches:
       - master
 
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
-    runs-on: [self-hosted, production]
-    env:
-      IMAGE_NAME: pkbm-swastika
-      PORT: 8005
-      ENV_FILE: /var/www/pkbmswastika.sch.id/pkbm-swastika/.env
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Pull latest code
+      - name: Deploy over SSH
         env:
-          HOME: /root
-        run: git -C /var/www/pkbmswastika.sch.id/pkbm-swastika pull origin master
-
-      - name: Build Docker image
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          cd /var/www/pkbmswastika.sch.id/pkbm-swastika
-          docker build -t ${{ env.IMAGE_NAME }}:${{ github.run_number }} .
+          install -m 600 /dev/null deploy_key
+          printf '%s\n' "$SSH_KEY" > deploy_key
+          ssh -i deploy_key -o StrictHostKeyChecking=accept-new "$SSH_HOST" 'bash -s' <<'DEPLOY'
+          set -euo pipefail
 
-      - name: Run database migration
-        run: |
-          cd /var/www/pkbmswastika.sch.id/pkbm-swastika
-          # Sinkronkan skema database (tambah kolom baru, dll) sebelum container baru jalan.
-          # Build target 'builder' karena di sana tersedia Prisma CLI + schema lengkap.
-          docker build --target builder -t ${{ env.IMAGE_NAME }}-migrate:${{ github.run_number }} .
-          # Aman & non-destruktif: prisma db push tanpa --accept-data-loss (hanya menambah perubahan).
-          docker run --rm \
-            --network host \
-            --env-file ${{ env.ENV_FILE }} \
-            ${{ env.IMAGE_NAME }}-migrate:${{ github.run_number }} \
-            npx prisma db push --skip-generate
-          docker rmi ${{ env.IMAGE_NAME }}-migrate:${{ github.run_number }} || true
+          APP=pkbm-swastika
+          DIR=/var/www/pkbmswastika.sch.id/pkbm-swastika
+          UPLOADS=/var/www/pkbmswastika.sch.id/uploads
+          ENV_FILE=$DIR/.env
 
-      - name: Stop & remove old container
-        run: |
-          docker stop ${{ env.IMAGE_NAME }} || true
-          docker rm ${{ env.IMAGE_NAME }} || true
+          cd "$DIR"
+          git fetch origin master
+          git reset --hard origin/master
 
-      - name: Remove old images
-        run: |
-          docker images --filter=reference='${{ env.IMAGE_NAME }}' \
-            --format '{{.ID}} {{.Repository}}:{{.Tag}}' \
-            | grep -v "${{ env.IMAGE_NAME }}:${{ github.run_number }}" \
-            | awk '{print $1}' \
-            | xargs -r docker rmi || true
+          docker build -t $APP:latest .
 
-      - name: Setup uploads directory
-        run: |
-          mkdir -p /var/www/pkbmswastika.sch.id/uploads/galeri
-          mkdir -p /var/www/pkbmswastika.sch.id/uploads/berita
-          mkdir -p /var/www/pkbmswastika.sch.id/uploads/general
-          mkdir -p /var/www/pkbmswastika.sch.id/uploads/pendaftaran
-          chown -R 1001:1001 /var/www/pkbmswastika.sch.id/uploads
-          chmod -R 775 /var/www/pkbmswastika.sch.id/uploads
+          # Schema sync (non-destructive: no --accept-data-loss)
+          docker build --target builder -t $APP-migrate .
+          docker run --rm --network host --env-file "$ENV_FILE" \
+            $APP-migrate npx prisma db push --skip-generate
+          docker rmi $APP-migrate || true
 
-      - name: Deploy container
-        run: |
+          mkdir -p "$UPLOADS"/{galeri,berita,general,pendaftaran}
+          chown -R 1001:1001 "$UPLOADS"
+          chmod -R 775 "$UPLOADS"
+
+          docker stop $APP || true
+          docker rm $APP || true
           docker run -d \
-            --name ${{ env.IMAGE_NAME }} \
+            --name $APP \
             --network host \
             --restart unless-stopped \
-            -e PORT=${{ env.PORT }} \
-            --env-file ${{ env.ENV_FILE }} \
-            -v /var/www/pkbmswastika.sch.id/uploads:/app/public/uploads \
-            ${{ env.IMAGE_NAME }}:${{ github.run_number }}
+            -e PORT=8005 \
+            --env-file "$ENV_FILE" \
+            -v "$UPLOADS":/app/public/uploads \
+            $APP:latest
 
-          echo "✅ Deployed ${{ env.IMAGE_NAME }} on port ${{ env.PORT }}"
+          docker image prune -f
+          echo "✅ Deployed $APP on port 8005"
+          DEPLOY
