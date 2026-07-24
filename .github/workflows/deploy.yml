@@ -11,16 +11,11 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # Runner lives on the production server (aira-1), so no SSH hop is needed.
+    runs-on: [self-hosted, production]
     steps:
-      - name: Deploy over SSH
-        env:
-          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+      - name: Deploy
         run: |
-          install -m 600 /dev/null deploy_key
-          printf '%s\n' "$SSH_KEY" > deploy_key
-          ssh -i deploy_key -o StrictHostKeyChecking=accept-new "$SSH_HOST" 'bash -s' <<'DEPLOY'
           set -euo pipefail
 
           APP=pkbm-swastika
@@ -37,7 +32,7 @@ jobs:
           # Schema sync (non-destructive: no --accept-data-loss)
           docker build --target builder -t $APP-migrate .
           docker run --rm --network host --env-file "$ENV_FILE" \
-            $APP-migrate npx prisma db push --skip-generate
+            $APP-migrate npx prisma db push
           docker rmi $APP-migrate || true
 
           mkdir -p "$UPLOADS"/{galeri,berita,general,pendaftaran}
@@ -57,4 +52,3 @@ jobs:
 
           docker image prune -f
           echo "✅ Deployed $APP on port 8005"
-          DEPLOY
