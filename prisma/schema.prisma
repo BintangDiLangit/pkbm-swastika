@@ -179,3 +179,17 @@ model SiteSetting {
 
   @@map("site_settings")
 }
+
+// File gambar hasil upload admin (galeri, berita) disimpan langsung di database
+// supaya migrasi server cukup dengan satu kali pg_dump. Diakses via /api/media/[id].
+model Media {
+  id        String   @id @default(uuid())
+  fileName  String   @db.VarChar(255)
+  mimeType  String   @db.VarChar(100)
+  size      Int
+  category  String   @default("general") @db.VarChar(50)
+  data      Bytes
+  createdAt DateTime @default(now())
+
+  @@map("media")
+}

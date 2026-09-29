@@ -195,6 +195,27 @@ async function main() {
       category: 'program',
       order: 6,
     },
+    {
+      question: 'Apa itu PKBM?',
+      answer:
+        'PKBM (Pusat Kegiatan Belajar Masyarakat) adalah lembaga pendidikan nonformal yang menyelenggarakan pendidikan kesetaraan: Paket A (setara SD/MI), Paket B (setara SMP/MTs), dan Paket C (setara SMA/MA). PKBM Swastika terakreditasi B oleh BAN PAUD & PNF.',
+      category: 'umum',
+      order: 0,
+    },
+    {
+      question: 'Berapa lama waktu belajarnya?',
+      answer:
+        'Program Paket A, B, dan C umumnya ditempuh dalam 2–3 tahun, tergantung jenjang dan riwayat pendidikan terakhir. Kursus keterampilan berlangsung sekitar 3–6 bulan.',
+      category: 'program',
+      order: 7,
+    },
+    {
+      question: 'Setelah lulus Paket C, bisa lanjut kuliah atau kerja?',
+      answer:
+        'Tentu. Ijazah Paket C setara SMA/MA, sehingga bisa dipakai untuk mendaftar ke perguruan tinggi negeri maupun swasta, mengikuti seleksi CPNS, atau melamar pekerjaan di sektor formal.',
+      category: 'ijazah',
+      order: 8,
+    },
   ];
 
   for (const f of faqs) {

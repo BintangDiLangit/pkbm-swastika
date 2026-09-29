@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
+import { siteConfig } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://pkbmswastika.com'
+  const baseUrl = siteConfig.url
 
   return [
     {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { isAdminAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -215,14 +215,10 @@ export async function POST(request: NextRequest) {
 }
 
 // GET - Ambil semua pendaftaran (hanya untuk admin)
+// Data pendaftar bersifat sensitif (KTP, KK, alamat) — wajib login admin
 export async function GET(request: NextRequest) {
-  // Data pendaftar bersifat sensitif (KTP, KK, alamat) — wajib login admin
-  if (!isAdminAuthenticated(request)) {
-    return NextResponse.json(
-      { success: false, message: "Tidak terautentikasi" },
-      { status: 401 }
-    );
-  }
+  const denied = requireAdmin(request);
+  if (denied) return denied;
 
   try {
     const pendaftaran = await prisma.pendaftaran.findMany({

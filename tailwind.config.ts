@@ -18,7 +18,6 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#1D4ED8",
           50: "#EFF6FF",
           100: "#DBEAFE",
           200: "#BFDBFE",
@@ -31,7 +30,6 @@ const config: Config = {
           900: "#1E3A8A",
         },
         accent: {
-          DEFAULT: "#FACC15",
           50: "#FEFCE8",
           100: "#FEF9C3",
           200: "#FEF08A",
@@ -51,43 +49,35 @@ const config: Config = {
           muted: "#475569",
           soft: "#64748B",
         },
-        secondary: "#FACC15",
+        // palet website publik (navy & gold); primary/accent/soft/ink dipakai panel admin
+        navy: {
+          DEFAULT: "#1a3a7a",
+          50: "#eef2fa",
+          100: "#d6e0f3",
+          600: "#1f4591",
+          700: "#1a3a7a",
+          800: "#142d60",
+          900: "#0e2046",
+          950: "#081530",
+        },
+        gold: {
+          DEFAULT: "#f5c518",
+          light: "#f9d95e",
+          dark: "#d9a90a",
+        },
       },
       fontFamily: {
-        sans: ["Poppins", "Inter", "system-ui", "sans-serif"],
-        display: ["Poppins", "Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        heading: ["var(--font-poppins)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       boxShadow: {
         card: "0 10px 30px -12px rgba(15, 23, 42, 0.12)",
         soft: "0 4px 16px -6px rgba(15, 23, 42, 0.08)",
         glow: "0 20px 50px -20px rgba(29, 78, 216, 0.45)",
+        "card-hover": "0 30px 60px -20px rgba(26, 58, 122, 0.35)",
       },
-      borderRadius: {
-        "4xl": "2rem",
-      },
-      keyframes: {
-        "fade-in-up": {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        "marquee": {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
-        "blob": {
-          "0%, 100%": { transform: "translate(0px, 0px) scale(1)" },
-          "33%": { transform: "translate(30px, -40px) scale(1.05)" },
-          "66%": { transform: "translate(-20px, 20px) scale(0.95)" },
-        },
-      },
-      animation: {
-        "fade-in-up": "fade-in-up 0.6s ease-out forwards",
-        "marquee": "marquee 30s linear infinite",
-        "blob": "blob 12s ease-in-out infinite",
-      },
-      backgroundImage: {
-        "grid-soft":
-          "linear-gradient(to right, rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.04) 1px, transparent 1px)",
+      transitionTimingFunction: {
+        premium: "cubic-bezier(0.22, 1, 0.36, 1)",
       },
     },
   },

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth";
+import { deleteMediaByUrl } from "@/lib/media";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -50,6 +52,8 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = requireAdmin(request);
+  if (denied) return denied;
   try {
     const { id } = await params;
     const body = await request.json();
@@ -86,6 +90,9 @@ export async function PUT(
       },
     });
 
+    // gambar diganti → file lama di tabel media tidak dipakai lagi
+    if (existing.image !== updated.image) await deleteMediaByUrl(existing.image);
+
     return NextResponse.json({
       success: true,
       message: "Berita berhasil diupdate",
@@ -114,6 +121,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = requireAdmin(request);
+  if (denied) return denied;
   try {
     const { id } = await params;
 
@@ -132,6 +141,7 @@ export async function DELETE(
     await prisma.berita.delete({
       where: { id },
     });
+    await deleteMediaByUrl(existing.image);
 
     return NextResponse.json({
       success: true,

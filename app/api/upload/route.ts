@@ -1,28 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
+import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth";
+import { mediaUrl } from "@/lib/media";
 
 export const runtime = "nodejs";
 
 // Validasi tipe file yang diizinkan (gambar atau PDF untuk berkas dokumen)
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp", "application/pdf"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+// File disimpan di database, jadi dibatasi agar tabel tidak cepat membengkak
+const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
 export async function POST(request: NextRequest) {
+  const denied = requireAdmin(request);
+  if (denied) return denied;
+
   try {
     const formData = await request.formData();
-    const file = formData.get("file") as File;
-    const category = formData.get("category") as string || "general"; // berita, galeri, atau general
+    const file = formData.get("file");
+    const category = (formData.get("category") as string) || "general"; // berita, galeri, atau general
 
-    if (!file) {
+    if (!(file instanceof File)) {
       return NextResponse.json(
         { success: false, message: "Tidak ada file yang diupload" },
         { status: 400 }
       );
     }
 
-    // Validasi tipe file
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
         { success: false, message: "Tipe file tidak valid. Hanya gambar (JPEG, PNG, GIF, WebP) atau PDF yang diizinkan." },
@@ -30,7 +33,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validasi ukuran file
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { success: false, message: `Ukuran file terlalu besar. Maksimal ${MAX_FILE_SIZE / 1024 / 1024}MB.` },
@@ -38,43 +40,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(2, 15);
-    const fileExtension = path.extname(file.name);
-    const fileName = `${timestamp}-${randomString}${fileExtension}`;
-
-    // Tentukan folder upload berdasarkan category
-    const uploadFolder = path.join(process.cwd(), "public", "uploads", category);
-    const filePath = path.join(uploadFolder, fileName);
-
-    // Buat folder jika belum ada
-    if (!existsSync(uploadFolder)) {
-      await mkdir(uploadFolder, { recursive: true });
-    }
-
-    // Convert file to buffer dan simpan
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filePath, buffer);
-
-    // Generate URL untuk akses file
-    const fileUrl = `/uploads/${category}/${fileName}`;
-
-    console.log("File uploaded successfully:", fileUrl);
+    const media = await prisma.media.create({
+      data: {
+        fileName: file.name.slice(0, 255),
+        mimeType: file.type,
+        size: file.size,
+        category: category.slice(0, 50),
+        data: Buffer.from(await file.arrayBuffer()),
+      },
+      select: { id: true },
+    });
 
     return NextResponse.json({
       success: true,
       message: "File berhasil diupload",
-      url: fileUrl,
-      fileName: fileName,
+      url: mediaUrl(media.id),
+      fileName: file.name,
       size: file.size,
       type: file.type,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
-      { success: false, message: error.message || "Gagal mengupload file" },
+      { success: false, message: "Gagal mengupload file" },
       { status: 500 }
     );
   }

@@ -1,99 +1,86 @@
 # Website PKBM SWASTIKA
 
-Website resmi PKBM SWASTIKA - Pusat Kegiatan Belajar Masyarakat di Malang yang menyelenggarakan pendidikan nonformal setara SD (Paket A), SMP (Paket B), dan SMA (Paket C).
+Website resmi PKBM SWASTIKA, Pusat Kegiatan Belajar Masyarakat di Malang yang menyelenggarakan pendidikan kesetaraan Paket A (SD), Paket B (SMP), Paket C (SMA), dan pelatihan keterampilan.
 
-## 🎯 Fitur
+## Teknologi
 
-- **Beranda**: Hero section dengan informasi utama dan statistik
-- **Tentang Kami**: Profil lembaga, visi misi, struktur organisasi, dan akreditasi
-- **Program Pendidikan**: Detail program Paket A, B, C dan pelatihan keterampilan
-- **Pendaftaran**: Formulir online untuk pendaftaran peserta didik baru
-- **Galeri**: Foto-foto kegiatan, pelatihan, dan acara
-- **Berita**: Pengumuman dan artikel terkini
-- **Kontak**: Informasi kontak lengkap dengan peta lokasi
+- **Next.js 15** (App Router) + **TypeScript**
+- **Tailwind CSS**, **Framer Motion**, **Lenis** (smooth scroll), **lucide-react** (ikon situs publik)
+- **PostgreSQL** + **Prisma 7** (semua konten, termasuk foto upload, disimpan di database)
 
-## 🚀 Teknologi
-
-- **Next.js 15** - Framework React
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **React Icons** - Icon library
-- **PostgreSQL** - Database production-ready
-- **Prisma ORM** - Type-safe database access
-- **bcryptjs** - Password hashing untuk keamanan
-
-## 📦 Instalasi
+## Menjalankan
 
 ```bash
-# Install dependencies
 npm install
-
-# Setup database (lihat DATABASE_SETUP.md untuk detail)
-# 1. Copy .env.example ke .env.local dan isi DATABASE_URL
-# 2. Generate Prisma client
-npm run db:generate
-
-# 3. Run database migrations
-npm run db:migrate
-
-# 4. Seed database (migrate data dari JSON)
-npm run db:seed
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
+cp .env.example .env.local     # isi DATABASE_URL
+npm run db:push                # buat/sinkronkan tabel
+SEED_ADMIN_PASSWORD=... npm run db:seed   # data awal + akun admin "admin" dengan password tsb
+npm run dev                    # http://localhost:3000
 ```
 
-Buka [http://localhost:3000](http://localhost:3000) di browser.
+Build produksi: `npm run build && npm start`. Panel admin: `/admin`.
 
-## 🗄️ Database
+### Script database
 
-Aplikasi menggunakan **PostgreSQL** dengan **Prisma ORM** untuk penyimpanan data dengan tingkat keamanan tinggi. Lihat [DATABASE_SETUP.md](./DATABASE_SETUP.md) untuk panduan setup lengkap.
+| Script | Fungsi |
+|---|---|
+| `npm run db:push` | Sinkronkan skema `prisma/schema.prisma` ke database |
+| `npm run db:generate` | Generate Prisma client |
+| `npm run db:seed` | Isi data awal |
+| `npm run db:studio` | Lihat/ubah data lewat Prisma Studio |
+| `npm run db:test` | Tes koneksi database |
 
-### Scripts Database
-
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:migrate` - Run database migrations
-- `npm run db:seed` - Seed database dengan data awal
-- `npm run db:studio` - Buka Prisma Studio untuk melihat data
-
-## 🎨 Tema Warna
-
-- **Primary (Biru)**: #007BFF
-- **Secondary (Oranye)**: #FFA500
-- **Putih**: #FFFFFF
-
-## 📱 Responsif
-
-Website ini fully responsive dan dapat diakses dengan baik di:
-- Desktop
-- Tablet
-- Mobile
-
-## 📝 Struktur Halaman
+## Struktur kode
 
 ```
-/                 - Beranda
-/tentang          - Tentang Kami
-/program          - Program Pendidikan
-/pendaftaran      - Pendaftaran
-/galeri           - Galeri
-/berita           - Berita & Pengumuman
-/kontak           - Kontak
+app/
+  (site)/              Halaman publik — punya layout sendiri (header, footer, preloader)
+    page.tsx           Beranda
+    tentang/ program/ galeri/ berita/ kontak/ pendaftaran/
+  admin/               Panel admin — tanpa header/footer publik, pakai AdminShell
+  api/                 Route API (lihat "API" di bawah)
+  layout.tsx           Root layout: font, metadata SEO, JSON-LD
+components/
+  layout/              Header, Footer, SocialLinks (situs publik)
+  landing/             Section-section beranda
+  ui/                  Komponen kecil yang dipakai ulang (Button, PageHero, Reveal, dst.)
+  admin/               AdminShell (sidebar admin) & CrudPage (tabel + form CRUD generik)
+lib/
+  site.ts              SATU sumber info situs: nama, kontak, jam buka, sosmed, menu
+  content/landing.ts   Query data beranda + tipe datanya
+  content/fallback.ts  Konten cadangan bila database kosong
+  api/crud.ts          Factory handler CRUD (GET/POST/PUT/DELETE) + cek login admin
+  api/resources.ts     Konfigurasi tiap konten CMS (field wajib & pemetaan data)
+  auth.ts              Cek login admin (requireAdmin)
+  media.ts             Helper file di tabel media
+  http.ts              Helper fetch JSON sisi klien
+  motion.ts            Easing & varian animasi bersama
+  prisma.ts            Prisma client
+  hooks/               React hooks
+prisma/                Skema & seed database
 ```
 
-## 📞 Kontak
+### Mengubah info situs
 
-- **Alamat**: Jl. Pendidikan No. 123, Malang, Jawa Timur
-- **Telepon**: (0341) 123-4567
-- **WhatsApp**: +62 851-0475-5189
-- **Email**: info@pkbmswastika.com
+Nomor WhatsApp, telepon, email, alamat, jam buka, media sosial, dan menu navigasi ada di **`lib/site.ts`**. Ubah sekali di sana dan header, footer, halaman kontak, pendaftaran, serta SEO ikut berubah. Teks hero dan WhatsApp di beranda juga bisa diubah dari **Admin > Pengaturan**.
 
-## 📄 License
+### API
 
-© 2025 PKBM SWASTIKA. All rights reserved.
+- Semua `GET` konten bersifat publik, kecuali data pendaftaran (berisi data pribadi).
+- Semua operasi tambah/ubah/hapus dan upload **wajib login admin** (`requireAdmin`).
+- `POST /api/pendaftaran` tetap publik (formulir pendaftaran).
+- Foto upload admin disimpan di tabel `media` dan disajikan lewat `/api/media/[id]`.
+  Foto lama di `public/uploads` (volume server produksi) tetap disajikan seperti biasa.
+
+### Menambah jenis konten CMS baru
+
+1. Tambah model di `prisma/schema.prisma`, lalu `npm run db:push`.
+2. Tambah satu entri di `lib/api/resources.ts` (label, field wajib, `toData`).
+3. Buat `app/api/<nama>/route.ts` dan `app/api/<nama>/[id]/route.ts` (masing-masing 3 baris, contoh: `app/api/faq/`).
+4. Buat halaman admin dengan `AdminShell` + `CrudPage` (contoh: `app/admin/faq/page.tsx`) dan tambahkan ke menu di `components/admin/AdminShell.tsx`.
+
+## Deploy
+
+Deploy lewat GitHub Actions (`.github/workflows/deploy.yml`) memakai `Dockerfile` (output `standalone`) dan menjalankan `prisma db push` otomatis.
+
+© PKBM SWASTIKA. All rights reserved.

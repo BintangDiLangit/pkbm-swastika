@@ -2,9 +2,11 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { FaArrowRight, FaUserPlus, FaPlay } from "react-icons/fa";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import { Button } from "../ui/Button";
+import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { EASE } from "@/lib/motion";
 
 type Props = {
   title: string;
@@ -12,149 +14,102 @@ type Props = {
   image: string;
 };
 
-const EXPO_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-function HeroHeadline({ text }: { text: string }) {
-  const reduceMotion = useReducedMotion();
-  const words = text.split(" ");
-
-  if (reduceMotion) {
-    return (
-      <h1 className="mt-4 max-w-5xl text-balance text-5xl font-bold leading-[1.02] text-white sm:text-7xl md:text-8xl">
-        {text}
-      </h1>
-    );
-  }
-
-  return (
-    <h1 className="mt-4 max-w-5xl text-balance text-5xl font-bold leading-[1.02] text-white sm:text-7xl md:text-8xl">
-      {words.map((w, i) => (
-        <span key={`${w}-${i}`} className="inline-block overflow-hidden align-top">
-          <motion.span
-            initial={{ y: "110%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.1 + i * 0.06, ease: EXPO_OUT }}
-            className="inline-block"
-          >
-            {w}
-            {i < words.length - 1 ? " " : ""}
-          </motion.span>
-        </span>
-      ))}
-    </h1>
-  );
-}
-
 export function HeroSection({ title, subtitle, image }: Props) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], reduceMotion ? ["0%", "0%"] : ["0%", "18%"]);
-  const bgScale = useTransform(scrollYProgress, [0, 1], reduceMotion ? [1, 1] : [1.08, 1.18]);
+  const ref = useRef<HTMLElement>(null);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+
+  // parallax hanya di layar md ke atas; di HP foto diam agar ringan
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", isDesktop ? "25%" : "0%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", isDesktop ? "40%" : "0%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  // "PKBM Swastika - Pendidikan untuk Semua" → baris 1 "PKBM", baris 2 "Swastika" (emas)
+  const [name, tagline] = title.split(" - ");
+  const words = name.split(" ");
+  const lastWord = words.pop();
 
   return (
-    <section ref={sectionRef} className="relative -mt-[68px] bg-white px-2 pb-2 sm:px-3 sm:pb-3">
-      {/* Thursina-style framed hero: rounded card with thin white gutter */}
-      <div className="relative isolate min-h-[100vh] overflow-hidden rounded-b-[2rem] sm:rounded-b-[2.5rem]">
-        {/* full-bleed background photo, parallax on scroll */}
-        <motion.div style={{ y: bgY, scale: bgScale }} className="absolute inset-0">
-          <Image
-            src={image}
-            alt="PKBM Swastika"
-            fill
-            priority
-            className="object-cover"
-            sizes="100vw"
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/45 to-ink/80" />
+    <section id="home" ref={ref} className="relative h-screen min-h-[640px] overflow-hidden bg-navy-950">
+      <motion.div style={{ y: imageY }} className="absolute inset-x-0 -top-[10%] h-[120%] will-change-transform">
+        {/* TODO: ganti dengan foto hero resolusi tinggi (min. 1920×1080px) — atur via Admin > Settings (hero_image) */}
+        <Image src={image} alt="Gedung PKBM Swastika" fill priority sizes="100vw" className="object-cover" />
+      </motion.div>
 
-        <div className="container relative flex min-h-[100vh] flex-col items-center justify-center pb-24 pt-32 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EXPO_OUT }}
-            className="text-xs font-bold uppercase tracking-[0.35em] text-accent-400 sm:text-sm"
-          >
-            Selamat Datang di
-          </motion.div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-950/60 via-transparent to-transparent" />
 
-          <HeroHeadline text={title.split(" - ")[0]} />
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: EXPO_OUT }}
-            className="mt-4 text-xl font-semibold text-accent-300 sm:text-2xl"
-          >
-            {title.split(" - ")[1] ?? "Pendidikan untuk Semua"}
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7, ease: EXPO_OUT }}
-            className="mt-5 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg"
-          >
-            {subtitle}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8, ease: EXPO_OUT }}
-            className="mt-9 flex flex-wrap justify-center gap-3"
-          >
-            <Link href="/pendaftaran" className="btn-accent">
-              <FaUserPlus />
-              Daftar Sekarang
-              <FaArrowRight className="text-xs" />
-            </Link>
-            <Link
-              href="#program"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
-            >
-              <FaPlay className="text-xs" />
-              Lihat Program
-            </Link>
-          </motion.div>
-
-          {/* trust strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.9, ease: EXPO_OUT }}
-            className="mt-12 flex flex-wrap items-center justify-center gap-6 text-xs text-white/80"
-          >
-            <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-accent-300">✓</span>
-              <span className="font-semibold text-white">Terakreditasi BAN PAUD & PNF</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-accent-300">✓</span>
-              <span className="font-semibold text-white">Ijazah resmi Kemendikbud</span>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-          className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-white/70 sm:flex"
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="container-premium relative flex h-full flex-col justify-center"
+      >
+        <motion.span
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.3 }}
+          className="mb-6 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-gold"
         >
-          <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
+          <span className="h-px w-10 bg-gold" aria-hidden />
+          Selamat Datang di
+        </motion.span>
+
+        <h1 className="max-w-4xl font-heading text-5xl font-bold leading-[1.05] text-white md:text-7xl">
           <motion.span
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            className="h-8 w-5 rounded-full border border-white/40"
-          />
+            className="block"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.5 }}
+          >
+            {words.join(" ")}
+          </motion.span>
+          <motion.span
+            className="block text-gold"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.65 }}
+          >
+            {lastWord}
+          </motion.span>
+        </h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.85 }}
+          className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg"
+        >
+          {tagline ? `${tagline}. ` : ""}
+          {subtitle}.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 1 }}
+          className="mt-10 flex flex-col gap-4 sm:flex-row"
+        >
+          <Button href="/pendaftaran" variant="primary">
+            Daftar Sekarang <ArrowRight className="h-4 w-4" />
+          </Button>
+          <Button href="#why-us" variant="outline">
+            Kenali PKBM Swastika
+          </Button>
         </motion.div>
-      </div>
+      </motion.div>
+
+      <motion.a
+        href="#berita"
+        aria-label="Gulir ke konten"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4, duration: 0.8 }}
+        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/70"
+      >
+        Scroll
+        <motion.span animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
+          <ChevronDown className="h-5 w-5 text-gold" />
+        </motion.span>
+      </motion.a>
     </section>
   );
 }

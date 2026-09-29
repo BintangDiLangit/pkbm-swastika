@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { isAdminAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,15 +8,13 @@ export const dynamic = "force-dynamic";
 // Status pendaftaran yang valid
 const VALID_STATUS = ["Menunggu", "Diterima", "Ditolak"];
 
-const unauthorized = () =>
-  NextResponse.json({ success: false, message: "Tidak terautentikasi" }, { status: 401 });
-
 // GET - Ambil satu pendaftaran berdasarkan id (hanya admin)
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAdminAuthenticated(request)) return unauthorized();
+  const denied = requireAdmin(request);
+  if (denied) return denied;
   try {
     const { id } = await params;
     const pendaftaran = await prisma.pendaftaran.findUnique({ where: { id } });
@@ -43,7 +41,8 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAdminAuthenticated(request)) return unauthorized();
+  const denied = requireAdmin(request);
+  if (denied) return denied;
   try {
     const { id } = await params;
     const body = await request.json();
@@ -98,7 +97,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAdminAuthenticated(request)) return unauthorized();
+  const denied = requireAdmin(request);
+  if (denied) return denied;
   try {
     const { id } = await params;
     await prisma.pendaftaran.delete({ where: { id } });

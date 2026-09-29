@@ -27,9 +27,7 @@ yarn-error.log*
 # local env files
 .env.*
 .env
-
-# uploaded images
-/public/uploads/
+!.env.example
 
 # vercel
 .vercel
@@ -42,3 +40,6 @@ next-env.d.ts
 bun.lockb
 bun.lock
 # package-lock.json - Keep this file for Docker builds
+
+# python cache (skill scripts)
+__pycache__/

@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   FaPlus,
   FaEdit,
   FaTrash,
   FaImage,
-  FaSignOutAlt,
   FaTimes,
   FaImages,
 } from "react-icons/fa";
+import { AdminShell } from "@/components/admin/AdminShell";
 
 interface GaleriItem {
   id: string;
@@ -28,7 +27,6 @@ const categories = [
 ];
 
 export default function AdminGaleriPage() {
-  const router = useRouter();
   const [galeriList, setGaleriList] = useState<GaleriItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -86,6 +84,8 @@ export default function AdminGaleriPage() {
         setShowModal(false);
         resetForm();
         fetchGaleri();
+      } else {
+        alert(data.message || "Gagal menyimpan foto");
       }
     } catch (error) {
       alert("Gagal menyimpan foto");
@@ -146,8 +146,8 @@ export default function AdminGaleriPage() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Ukuran file maksimal 5MB!");
+    if (file.size > 3 * 1024 * 1024) {
+      alert("Ukuran file maksimal 3MB!");
       return;
     }
 
@@ -155,7 +155,6 @@ export default function AdminGaleriPage() {
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewUrl(reader.result as string);
-      setFormData((prev) => ({ ...prev, image: reader.result as string }));
     };
     reader.readAsDataURL(file);
 
@@ -164,7 +163,7 @@ export default function AdminGaleriPage() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("category", "galeri"); // Kategori untuk folder upload
+      formData.append("category", "galeri"); // Kategori file di tabel media
 
       console.log("Uploading to /api/upload...");
 
@@ -185,69 +184,28 @@ export default function AdminGaleriPage() {
       } else {
         console.error("Upload failed:", data.message);
         alert(data.message || "Gagal upload gambar");
-        // Jika upload gagal, tetap pakai preview lokal
+        setPreviewUrl("");
       }
     } catch (error) {
       console.error("Upload error:", error);
       alert("Gagal upload gambar");
-      // Jika upload error, tetap pakai preview lokal
+      setPreviewUrl("");
     } finally {
       setUploading(false);
     }
   };
 
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/admin/login");
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
+      <AdminShell title="Kelola Galeri">
+        <div className="flex min-h-[50vh] items-center justify-center text-ink-soft">Memuat data...</div>
+      </AdminShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <FaImages className="text-purple-600 text-2xl" />
-            <h1 className="text-2xl font-bold text-gray-800">
-              Admin Dashboard - Galeri
-            </h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <a
-              href="/admin"
-              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
-            >
-              🏠 Dashboard
-            </a>
-            <a
-              href="/admin/berita"
-              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
-            >
-              📰 Kelola Berita
-            </a>
-            <button
-              onClick={handleLogout}
-              className="flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              <FaSignOutAlt />
-              <span>Logout</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
+    <AdminShell title="Kelola Galeri">
+      <div>
         {/* Add Button */}
         <div className="mb-6">
           <button
@@ -389,7 +347,7 @@ export default function AdminGaleriPage() {
                         {uploading ? "Mengupload..." : "📤 Klik untuk pilih foto dari komputer"}
                       </span>
                       <p className="text-xs text-gray-500 mt-1">
-                        JPG, PNG, GIF, WebP (Max 5MB)
+                        JPG, PNG, GIF, WebP (Max 3MB)
                       </p>
                     </div>
                     <input
@@ -450,6 +408,6 @@ export default function AdminGaleriPage() {
           </div>
         </div>
       )}
-    </div>
+    </AdminShell>
   );
 }
