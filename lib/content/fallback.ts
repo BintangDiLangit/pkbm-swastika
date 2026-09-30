@@ -1,57 +1,35 @@
-import type { LandingFaq, LandingTestimonial } from "./landing";
+import type { LandingFaq, LandingGalleryItem } from "./landing";
 
 export const FALLBACK_HERO = {
   title: "PKBM Swastika - Pendidikan untuk Semua",
-  subtitle: "Kesempatan belajar tanpa batas usia dan latar belakang",
+  subtitle: "Kejar Paket A, B, dan C di Kabupaten Malang dengan jadwal belajar fleksibel",
   image: "/images/gedung.jpg",
 };
 
 
+// Foto dokumentasi asli di public/images, dipakai selama galeri di /admin masih kosong.
+export const FALLBACK_GALLERY: LandingGalleryItem[] = [
+  { id: "kelas", title: "Kegiatan belajar di kelas", image: "/images/kelas.jpeg" },
+  { id: "jamu", title: "Praktik membuat jamu", image: "/images/jamu.jpeg" },
+  { id: "juara", title: "Raihan medali tingkat nasional", image: "/images/juara.jpg" },
+  { id: "diskusi", title: "Diskusi kelompok bersama tutor", image: "/images/diskusi.jpg" },
+  { id: "pondok", title: "Pondok Ramadhan", image: "/images/pondok.jpg" },
+  { id: "salad", title: "Praktik membuat salad buah", image: "/images/salad2.jpg" },
+  { id: "upk", title: "Pelaksanaan ujian", image: "/images/upk.jpg" },
+  { id: "senam", title: "Senam bersama", image: "/images/senam.JPG" },
+  { id: "ujian", title: "Foto bersama warga belajar", image: "/images/ujian.jpg" },
+  { id: "workshop", title: "Workshop perangkat pembelajaran", image: "/images/workshop.jpg" },
+  { id: "visit", title: "Kunjungan tamu", image: "/images/visit.jpg" },
+  { id: "coba", title: "Kegiatan bersama tutor", image: "/images/coba.jpg" },
+  { id: "rapat", title: "Rapat koordinasi", image: "/images/rapat.jpg" },
+  { id: "upk2", title: "Suasana ujian", image: "/images/upk2.jpg" },
+];
+
 // ---------------------------------------------------------------------------
-// Konten statis / placeholder untuk homepage.
+// Konten statis untuk homepage.
 // Data dari database (dikelola via /admin) selalu diprioritaskan; daftar di
 // bawah hanya dipakai sebagai fallback agar section tidak hilang saat DB kosong.
 // ---------------------------------------------------------------------------
-
-// TODO: ganti dengan testimoni asli dari alumni/orang tua/mitra
-export const FALLBACK_TESTIMONIALS: LandingTestimonial[] = [
-  {
-    id: "placeholder-1",
-    name: "[Nama Alumni]",
-    role: "Alumni Paket C",
-    quote:
-      "Jadwal belajarnya fleksibel sehingga saya bisa tetap bekerja. Dengan ijazah Paket C, saya akhirnya bisa melanjutkan kuliah.",
-    avatar: null,
-    rating: 5,
-  },
-  {
-    id: "placeholder-2",
-    name: "[Nama Orang Tua]",
-    role: "Orang Tua Peserta Didik",
-    quote:
-      "Anak saya jadi lebih percaya diri. Para tutor sabar dan selalu mengabari perkembangan belajarnya.",
-    avatar: null,
-    rating: 5,
-  },
-  {
-    id: "placeholder-3",
-    name: "[Nama Mitra]",
-    role: "Mitra/Instansi",
-    quote:
-      "Lulusan PKBM Swastika yang bergabung dengan kami punya etos kerja yang baik dan semangat belajar yang tinggi.",
-    avatar: null,
-    rating: 5,
-  },
-  {
-    id: "placeholder-4",
-    name: "[Nama Alumni]",
-    role: "Alumni Paket B",
-    quote:
-      "Tidak ada kata terlambat untuk belajar. Di sini saya diterima tanpa dihakimi dan dibimbing sampai lulus.",
-    avatar: null,
-    rating: 5,
-  },
-];
 
 // Jawaban disusun dari info di halaman /tentang dan /program.
 export const FALLBACK_FAQS: LandingFaq[] = [
@@ -71,23 +49,23 @@ export const FALLBACK_FAQS: LandingFaq[] = [
   },
   {
     id: "faq-3",
-    question: "Berapa biayanya? Apakah bisa dicicil atau ada beasiswa?",
+    question: "Berapa biaya belajarnya?",
     answer:
-      "Biaya belajar terjangkau dan bisa dicicil. Kami juga menyediakan subsidi dan beasiswa bagi peserta dari keluarga yang membutuhkan. Hubungi kami untuk konsultasi gratis tentang rincian biaya.",
+      "Biaya belajar di PKBM Swastika terjangkau. Rincian biaya untuk setiap program disampaikan langsung oleh admin saat konsultasi lewat WhatsApp.",
     category: "Biaya",
   },
   {
     id: "faq-4",
     question: "Berapa lama waktu belajarnya?",
     answer:
-      "Program Paket A, B, dan C umumnya ditempuh dalam 2–3 tahun, tergantung jenjang dan riwayat pendidikan terakhir. Kursus keterampilan berlangsung sekitar 3–6 bulan.",
+      "Tergantung kelas terakhir yang pernah diselesaikan. Paket A mencakup kelas 1–6, Paket B kelas 7–9, dan Paket C kelas 10–12. Peserta yang pernah sekolah melanjutkan dari kelas berikutnya sesuai ijazah/rapor terakhir, jadi cukup menempuh kelas yang tersisa. Kelas awal dipastikan saat verifikasi berkas. Kursus keterampilan berlangsung sekitar 3–6 bulan.",
     category: "Program",
   },
   {
     id: "faq-5",
     question: "Apakah bisa belajar sambil bekerja?",
     answer:
-      "Bisa. Jadwal kami fleksibel — tersedia kelas pagi, sore, dan akhir pekan — sehingga cocok untuk kamu yang bekerja atau mengurus keluarga.",
+      "Bisa. Belajar 3x seminggu: 1x tatap muka bersama tutor, 1x tugas/praktik, dan 1x tugas atau belajar mandiri. Kelas diadakan sore dan malam hari (Paket A pukul 16.00–19.00), sehingga cocok untuk kamu yang bekerja atau mengurus keluarga.",
     category: "Jadwal",
   },
   {

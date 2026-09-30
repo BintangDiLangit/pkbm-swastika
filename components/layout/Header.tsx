@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
-import { GraduationCap, Mail, Menu, Phone, X } from "lucide-react";
+import { Mail, Menu, MessageCircle, X } from "lucide-react";
+import { Logo } from "../ui/Logo";
 import { EASE } from "@/lib/motion";
-import { fullAddress, primaryEmail, primaryPhone, siteConfig, telLink } from "@/lib/site";
+import { formatWhatsapp, fullAddress, primaryEmail, siteConfig, whatsappLink } from "@/lib/site";
 
 
 export default function Header() {
@@ -52,9 +53,7 @@ export default function Header() {
       >
         <nav className="container-premium flex items-center justify-between">
           <Link href="/" className="group flex items-center gap-3" aria-label="PKBM Swastika beranda">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-gold bg-navy/40 text-gold transition-transform duration-500 group-hover:scale-105">
-              <GraduationCap className="h-6 w-6" aria-hidden />
-            </span>
+            <Logo priority className="transition-transform duration-500 group-hover:scale-105" />
             <span className="leading-tight">
               <span className="block font-heading text-lg font-bold tracking-wide text-white">PKBM Swastika</span>
               <span className="block text-[10px] font-medium uppercase tracking-[0.25em] text-gold">
@@ -141,8 +140,13 @@ export default function Header() {
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">Hubungi Kami</p>
                 <p className="text-white/70">{fullAddress}</p>
-                <a href={telLink(primaryPhone)} className="flex items-center gap-3 text-white hover:text-gold">
-                  <Phone className="h-4 w-4 text-gold" /> {primaryPhone}
+                <a
+                  href={whatsappLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-white hover:text-gold"
+                >
+                  <MessageCircle className="h-4 w-4 text-gold" /> {formatWhatsapp()}
                 </a>
                 <a href={`mailto:${primaryEmail}`} className="flex items-center gap-3 text-white hover:text-gold">
                   <Mail className="h-4 w-4 text-gold" /> {primaryEmail}

@@ -20,8 +20,8 @@ import { EASE, VIEWPORT, fadeUp, staggerContainer } from "@/lib/motion";
 const badges: { icon: LucideIcon; title: string; description: string }[] = [
   { icon: Award, title: "Ijazah Resmi", description: "Setara SD, SMP, SMA dari Kemendikbudristek" },
   { icon: ShieldCheck, title: "Terakreditasi", description: "Lembaga resmi terakreditasi BAN PNF" },
-  { icon: Clock, title: "Jadwal Fleksibel", description: "Kelas pagi, sore, atau akhir pekan" },
-  { icon: HandCoins, title: "Biaya Terjangkau", description: "Tersedia subsidi & pembayaran cicil" },
+  { icon: Clock, title: "Jadwal Fleksibel", description: "3x seminggu, sore & malam hari" },
+  { icon: HandCoins, title: "Biaya Terjangkau", description: "Terjangkau untuk semua kalangan" },
   { icon: Users, title: "Tanpa Batas Usia", description: "Belajar bersama tanpa diskriminasi" },
   { icon: GraduationCap, title: "Keterampilan", description: "Pelatihan kerja & wirausaha" },
 ];
@@ -32,7 +32,7 @@ export function WhyUsSection({ whatsapp }: { whatsapp: string }) {
   )}`;
 
   return (
-    <section id="why-us" className="section-padding overflow-hidden bg-white">
+    <section id="why-us" className="section-padding overflow-hidden bg-slate-50/60">
       <div className="container-premium grid items-center gap-12 md:grid-cols-2 lg:gap-20">
         {/* kolase foto */}
         <motion.div

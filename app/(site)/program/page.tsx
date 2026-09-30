@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { ArrowRight, BookOpen, Check, Clock, Laptop, Palette, UtensilsCrossed, type LucideIcon } from "lucide-react";
+import { ArrowRight, BookOpen, Check, ClipboardCheck, Clock, Laptop, Palette, UtensilsCrossed, type LucideIcon } from "lucide-react";
 import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { GradientHeading } from "@/components/ui/GradientHeading";
 import { Button } from "@/components/ui/Button";
+import { CLASS_TIMES, WEEKLY_SUMMARY } from "@/lib/content/program";
 
 export const metadata = {
   title: "Program Pendidikan PKBM SWASTIKA - Paket A, B, C & Kursus Keterampilan",
@@ -26,7 +27,13 @@ type Program = {
   materiTitle: string;
   materi: string[];
   jadwal: string[];
+  syarat: string[];
 };
+
+// Berkas umum yang diminta formulir pendaftaran (lihat lib/content/pendaftaran.ts)
+const SYARAT_UMUM = "Fotocopy KK dan KTP, pasfoto 3x4";
+const PERTEMUAN = `Pertemuan: ${WEEKLY_SUMMARY}`;
+const waktu = (program: string) => `Waktu: ${CLASS_TIMES.find((c) => c.program === program)?.time}`;
 
 const programs: Program[] = [
   {
@@ -45,7 +52,17 @@ const programs: Program[] = [
       "Pendidikan Kewarganegaraan",
       "Bahasa Inggris",
     ],
-    jadwal: ["Durasi: 2-3 tahun", "Pertemuan: 3x seminggu", "Waktu: Sore hari (16.00-19.00)", "Fleksibel menyesuaikan peserta"],
+    jadwal: [
+      "Lama belajar: kelas 1–6, mulai dari kelas sesuai rapor terakhir",
+      PERTEMUAN,
+      waktu("Paket A"),
+      "Fleksibel menyesuaikan peserta",
+    ],
+    syarat: [
+      "Terbuka bagi yang belum pernah sekolah atau putus sekolah SD/MI",
+      "Rapor SD/MI terakhir bila pernah sekolah",
+      SYARAT_UMUM,
+    ],
   },
   {
     code: "B",
@@ -64,7 +81,12 @@ const programs: Program[] = [
       "Pendidikan Agama & PKn",
       "Seni Budaya & TIK",
     ],
-    jadwal: ["Durasi: 2-3 tahun", "Pertemuan: 3-4x seminggu", "Waktu: Sore/Malam hari", "Ujian Nasional: Setiap tahun"],
+    jadwal: [
+      "Lama belajar: kelas 7–9, mulai dari kelas sesuai rapor terakhir",
+      PERTEMUAN,
+      waktu("Paket B"),
+    ],
+    syarat: ["Ijazah SD/MI/Paket A", "Rapor SMP/MTs terakhir bila pernah sekolah", SYARAT_UMUM],
   },
   {
     code: "C",
@@ -80,12 +102,12 @@ const programs: Program[] = [
       "Umum: Bahasa Indonesia, Bahasa Inggris, PKn, Agama",
     ],
     jadwal: [
-      "Durasi: 2-3 tahun",
-      "Pertemuan: 4x seminggu",
-      "Waktu: Sore/Malam hari",
+      "Lama belajar: kelas 10–12, mulai dari kelas sesuai rapor terakhir",
+      PERTEMUAN,
+      waktu("Paket C"),
       "Persiapan UTBK-SNBT",
-      "Ujian Nasional: Setiap tahun",
     ],
+    syarat: ["Ijazah SMP/MTs/Paket B", "Rapor SMA/SMK/MA terakhir bila pernah sekolah", SYARAT_UMUM],
   },
 ];
 
@@ -109,6 +131,21 @@ export default function ProgramPage() {
 
       {/* Paket A, B, C: foto dan teks bergantian kiri-kanan */}
       <section className="section-padding overflow-hidden bg-white">
+        <Reveal className="container-premium mb-20 md:mb-28">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gold/5 p-7 md:p-9">
+            <h2 className="flex items-center gap-2 font-heading text-xl font-bold text-navy">
+              <Clock className="h-5 w-5 text-gold-dark" aria-hidden />
+              Berapa lama belajarnya?
+            </h2>
+            <p className="mt-3 leading-relaxed text-slate-600">
+              Lama belajar tidak sama untuk setiap peserta. Kamu cukup menempuh kelas yang belum pernah diselesaikan:
+              peserta yang pernah sekolah melanjutkan dari kelas berikutnya sesuai ijazah/rapor terakhir, sedangkan
+              yang belum pernah sekolah mulai dari awal jenjang. Contohnya, yang berhenti sekolah setelah kelas 11
+              SMA melanjutkan di Paket C kelas 12. Kelas awal dipastikan saat verifikasi berkas pendaftaran.
+            </p>
+          </div>
+        </Reveal>
+
         <div className="container-premium space-y-24 md:space-y-32">
           {programs.map((p, i) => {
             const reversed = i % 2 === 1;
@@ -163,6 +200,21 @@ export default function ProgramPage() {
                         ))}
                       </ul>
                     </div>
+                  </Reveal>
+
+                  <Reveal delay={0.35} className="mt-6 rounded-2xl border border-slate-100 bg-slate-50/70 p-6">
+                    <h3 className="flex items-center gap-2 font-heading font-semibold text-navy">
+                      <ClipboardCheck className="h-5 w-5 text-gold-dark" aria-hidden />
+                      Syarat Masuk
+                    </h3>
+                    <ul className="mt-4 space-y-2 text-sm text-slate-600">
+                      {p.syarat.map((s) => (
+                        <li key={s} className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" aria-hidden />
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
                   </Reveal>
 
                   <Reveal delay={0.4} className="mt-8">

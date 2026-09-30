@@ -98,7 +98,7 @@ export function HeroSection({ title, subtitle, image }: Props) {
       </motion.div>
 
       <motion.a
-        href="#berita"
+        href="#program"
         aria-label="Gulir ke konten"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

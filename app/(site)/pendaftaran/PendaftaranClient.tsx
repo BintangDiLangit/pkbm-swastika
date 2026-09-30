@@ -4,6 +4,8 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FaCheckCircle, FaFileAlt, FaUserCheck, FaWhatsapp, FaEnvelope, FaSpinner, FaCloudUploadAlt, FaFilePdf, FaTimes } from "react-icons/fa";
 import { PageHero } from "@/components/ui/PageHero";
+import { RegistrationSteps } from "@/components/landing/RegistrationSteps";
+import { BERKAS_FIELDS, type BerkasKey } from "@/lib/content/pendaftaran";
 import { primaryEmail, whatsappLink } from "@/lib/site";
 import { HttpError, postJson } from "@/lib/http";
 
@@ -18,16 +20,6 @@ const FIELD_LIMITS = {
   pekerjaan: { max: 100 },
   motivasi: { max: 1000 },
 };
-
-// Daftar berkas yang wajib diunggah
-const BERKAS_FIELDS = [
-  { key: "fotoKk", label: "Fotocopy Kartu Keluarga (KK)" },
-  { key: "fotoKtp", label: "Fotocopy KTP" },
-  { key: "pasFoto", label: "Pasfoto 3x4" },
-  { key: "fotoIjazah", label: "Fotocopy Ijazah / Raport" },
-] as const;
-
-type BerkasKey = (typeof BERKAS_FIELDS)[number]["key"];
 
 // Ukuran maksimal & tipe file yang diterima untuk upload berkas
 // Berkas disimpan sebagai base64 di database, jadi dibatasi agar payload tidak terlalu besar
@@ -413,7 +405,8 @@ export default function PendaftaranClient() {
         description="Daftar sekarang dan bergabunglah dengan program pendidikan nonformal PKBM SWASTIKA."
         image="/images/upk.jpg"
       />
-    <section className="section-padding bg-slate-50/60">
+      <RegistrationSteps cta={{ href: "#formulir", label: "Isi Formulir" }} />
+    <section id="formulir" className="section-padding scroll-mt-24 bg-slate-50/60">
       <div className="container-premium">
         {/* Registration Form */}
         <div className="max-w-5xl mx-auto">

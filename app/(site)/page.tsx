@@ -1,14 +1,19 @@
 import { getLandingData } from "@/lib/content/landing";
-import { FALLBACK_FAQS, FALLBACK_HERO, FALLBACK_TESTIMONIALS } from "@/lib/content/fallback";
+import { FALLBACK_FAQS, FALLBACK_GALLERY, FALLBACK_HERO } from "@/lib/content/fallback";
 import { siteConfig } from "@/lib/site";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { ActivitiesSection } from "@/components/landing/ActivitiesSection";
-import { WhyUsSection } from "@/components/landing/WhyUsSection";
 import { ProgramsSection } from "@/components/landing/ProgramsSection";
+import { FeeScheduleSection } from "@/components/landing/FeeScheduleSection";
+import { WhyUsSection } from "@/components/landing/WhyUsSection";
+import { LegalitySection } from "@/components/landing/LegalitySection";
 import { StatsSection } from "@/components/landing/StatsSection";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { AlumniDestinationsSection } from "@/components/landing/AlumniDestinationsSection";
+import { RegistrationSteps } from "@/components/landing/RegistrationSteps";
 import { FaqSection } from "@/components/landing/FaqSection";
+import { ActivitiesSection } from "@/components/landing/ActivitiesSection";
+import { GallerySection } from "@/components/landing/GallerySection";
+import { ContactSection } from "@/components/landing/ContactSection";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
 export const revalidate = 60;
@@ -22,21 +27,28 @@ export default async function HomePage() {
 
   const whatsapp = data.settings.contact_whatsapp || siteConfig.contact.whatsapp;
 
-  // Data dari DB (/admin) diprioritaskan; fallback placeholder di lib/content/fallback.ts
-  const testimonials = data.testimonials.length ? data.testimonials : FALLBACK_TESTIMONIALS;
+  // Data dari DB (/admin) diprioritaskan; fallback di lib/content/fallback.ts.
+  // Testimoni sengaja tanpa fallback: section disembunyikan sampai ada testimoni asli.
   const faqs = data.faqs.length ? data.faqs : FALLBACK_FAQS;
+  const gallery = data.gallery.length ? data.gallery : FALLBACK_GALLERY;
 
-  // urutan section mengikuti desain Aldenmoor (project sekolah)
+  // Urutan: pembuka → program → biaya & jadwal → keunggulan & legalitas →
+  // cerita alumni → cara daftar → FAQ → berita → galeri → kontak
   return (
     <SmoothScroll>
       <HeroSection title={heroTitle} subtitle={heroSubtitle} image={heroImage} />
-      <ActivitiesSection activities={data.activities} />
-      <WhyUsSection whatsapp={whatsapp} />
       <ProgramsSection programs={data.programs} />
+      <FeeScheduleSection whatsapp={whatsapp} />
+      <WhyUsSection whatsapp={whatsapp} />
+      <LegalitySection />
       <StatsSection stats={data.stats} />
-      <TestimonialsSection testimonials={testimonials} />
+      <TestimonialsSection testimonials={data.testimonials} />
       <AlumniDestinationsSection destinations={data.destinations} />
+      <RegistrationSteps cta={{ href: "/pendaftaran", label: "Daftar Sekarang" }} whatsapp={whatsapp} />
       <FaqSection faqs={faqs} whatsapp={whatsapp} />
+      <ActivitiesSection activities={data.activities} />
+      <GallerySection items={gallery} />
+      <ContactSection whatsapp={whatsapp} />
 
       {/* JSON-LD FAQ */}
       {faqs.length > 0 && (

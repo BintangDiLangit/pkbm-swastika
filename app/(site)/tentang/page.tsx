@@ -4,6 +4,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { GradientHeading } from "@/components/ui/GradientHeading";
+import { npsnVerifyUrl, siteConfig } from "@/lib/site";
 
 export const metadata = {
   title: "Tentang PKBM SWASTIKA - Profil, Visi, Misi & Struktur Organisasi",
@@ -219,9 +220,13 @@ export default function TentangPage() {
                 </div>
               </div>
               <ul className="mt-6 space-y-3 text-slate-600">
-                <li>SK Pendirian: 421.9/XXX/2018</li>
-                <li>NPSN: P2967637</li>
-                <li>Izin Operasional Dinas Pendidikan Kabupaten Malang</li>
+                <li>
+                  NPSN: {siteConfig.legal.npsn}{" "}
+                  <a href={npsnVerifyUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gold-dark hover:underline">
+                    (cek di Data Referensi Kemendikbud)
+                  </a>
+                </li>
+                <li>{siteConfig.legal.permit}</li>
               </ul>
             </Reveal>
           </div>

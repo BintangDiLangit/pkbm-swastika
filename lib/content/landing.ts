@@ -22,6 +22,7 @@ const statSelect = { id: true, label: true, value: true, caption: true, icon: tr
 const testimonialSelect = { id: true, name: true, role: true, quote: true, avatar: true, rating: true } as const;
 const faqSelect = { id: true, question: true, answer: true, category: true } as const;
 const destinationSelect = { id: true, name: true, type: true, logo: true } as const;
+const galleryTake = 24; // beranda hanya cuplikan; galeri lengkap di /galeri
 
 export type LandingProgram = {
   id: string; code: string; title: string; subtitle: string | null; description: string;
@@ -36,6 +37,7 @@ export type LandingActivity = {
   id: string; title: string; excerpt: string | null; category: string | null; image: string | null; date: string | null;
 };
 export type LandingDestination = { id: string; name: string; type: string; logo: string | null };
+export type LandingGalleryItem = { id: string; title: string; image: string };
 export type SiteSettings = Record<string, string>;
 
 export type LandingData = {
@@ -45,6 +47,7 @@ export type LandingData = {
   faqs: LandingFaq[];
   activities: LandingActivity[];
   destinations: LandingDestination[];
+  gallery: LandingGalleryItem[];
   settings: SiteSettings;
 };
 
@@ -52,7 +55,7 @@ const formatDate = (d: Date) =>
   new Date(d).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 
 export async function getLandingData(): Promise<LandingData> {
-  const [programs, stats, testimonials, faqs, berita, destinations, settingsRaw] = await Promise.all([
+  const [programs, stats, testimonials, faqs, berita, destinations, gallery, settingsRaw] = await Promise.all([
     safe(() => prisma.program.findMany({ ...activeOrdered, select: programSelect }), []),
     safe(() => prisma.stat.findMany({ ...activeOrdered, select: statSelect }), []),
     safe(() => prisma.testimonial.findMany({ ...activeOrdered, select: testimonialSelect }), []),
@@ -67,6 +70,15 @@ export async function getLandingData(): Promise<LandingData> {
       []
     ),
     safe(() => prisma.alumniDestination.findMany({ ...activeOrdered, select: destinationSelect }), []),
+    safe(
+      () =>
+        prisma.galeri.findMany({
+          take: galleryTake,
+          orderBy: { createdAt: "desc" },
+          select: { id: true, title: true, image: true },
+        }),
+      []
+    ),
     safe(() => prisma.siteSetting.findMany({ select: { key: true, value: true } }), []),
   ]);
 
@@ -77,6 +89,7 @@ export async function getLandingData(): Promise<LandingData> {
     faqs,
     activities: berita.map(({ createdAt, ...b }) => ({ ...b, date: b.date ?? formatDate(createdAt) })),
     destinations,
+    gallery,
     settings: Object.fromEntries(settingsRaw.map((s) => [s.key, s.value])),
   };
 }

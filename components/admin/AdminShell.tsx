@@ -18,6 +18,7 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 import type { ReactNode } from "react";
+import { Logo } from "../ui/Logo";
 
 const nav = [
   { label: "Dashboard", href: "/admin", icon: FaHome },
@@ -54,7 +55,7 @@ export function AdminShell({
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-soft-200 bg-white lg:flex lg:flex-col">
         <div className="border-b border-soft-200 p-5">
           <Link href="/admin" className="flex items-center gap-2 font-bold text-ink">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-700 text-white">PK</span>
+            <Logo size="sm" tone="dark" />
             <span>Admin Panel</span>
           </Link>
         </div>

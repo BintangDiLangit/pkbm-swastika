@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Clock, GraduationCap, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle } from "lucide-react";
+import { Logo } from "../ui/Logo";
 import { SocialLinks } from "./SocialLinks";
 import { Button } from "../ui/Button";
 import { Reveal } from "../ui/Reveal";
@@ -8,9 +9,7 @@ import {
   fullAddress,
   hoursSummary,
   primaryEmail,
-  primaryPhone,
   siteConfig,
-  telLink,
   whatsappLink,
 } from "@/lib/site";
 
@@ -42,9 +41,7 @@ export default function Footer() {
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <Reveal>
             <div className="flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-gold text-gold">
-                <GraduationCap className="h-6 w-6" aria-hidden />
-              </span>
+              <Logo />
               <span className="font-heading text-lg font-bold leading-tight">PKBM Swastika</span>
             </div>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/60">
@@ -59,12 +56,6 @@ export default function Footer() {
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" aria-hidden />
                 {fullAddress}
-              </li>
-              <li>
-                <a href={telLink(primaryPhone)} className="flex gap-3 transition-colors hover:text-gold">
-                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" aria-hidden />
-                  {primaryPhone}
-                </a>
               </li>
               <li>
                 <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="flex gap-3 transition-colors hover:text-gold">

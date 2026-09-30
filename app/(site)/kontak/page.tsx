@@ -1,19 +1,19 @@
-import { Clock, Mail, MapPin, MessageCircle, Navigation, Phone, type LucideIcon } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, Navigation, type LucideIcon } from "lucide-react";
 import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { GradientHeading } from "@/components/ui/GradientHeading";
 import { Button } from "@/components/ui/Button";
 import { SocialLinks } from "@/components/layout/SocialLinks";
-import { formatWhatsapp, siteConfig, telLink, whatsappLink } from "@/lib/site";
+import { formatWhatsapp, siteConfig, whatsappLink } from "@/lib/site";
 
 export const metadata = {
-  title: "Kontak PKBM SWASTIKA - Alamat, Telepon & WhatsApp di Malang",
-  description: "Hubungi PKBM SWASTIKA di Malang. Alamat: Perum Argo Griyatama Regency B5. Telepon: (0341) 123-4567. WhatsApp: +62 851-0475-5189. Informasi lengkap kontak dan lokasi.",
-  keywords: "kontak PKBM SWASTIKA, alamat PKBM Malang, telepon PKBM SWASTIKA, WhatsApp PKBM, lokasi PKBM Malang, hubungi PKBM",
+  title: "Kontak PKBM SWASTIKA - Alamat, WhatsApp & Email di Malang",
+  description: "Hubungi PKBM SWASTIKA di Malang. Alamat: Perum Argo Griyatama Regency B5, Karang Ploso. WhatsApp: +62 851-0475-5189. Informasi lengkap kontak dan lokasi.",
+  keywords: "kontak PKBM SWASTIKA, alamat PKBM Malang, WhatsApp PKBM SWASTIKA, lokasi PKBM Malang, hubungi PKBM",
   openGraph: {
-    title: "Kontak PKBM SWASTIKA - Alamat & Telepon di Malang",
-    description: "Informasi lengkap kontak PKBM SWASTIKA: alamat, telepon, WhatsApp, email, dan lokasi di Malang.",
+    title: "Kontak PKBM SWASTIKA - Alamat & WhatsApp di Malang",
+    description: "Informasi lengkap kontak PKBM SWASTIKA: alamat, WhatsApp, email, dan lokasi di Malang.",
     type: "website",
   },
 };
@@ -36,11 +36,6 @@ const contacts: ContactCard[] = [
       { text: contact.address.district },
       { text: `${contact.address.city}, ${contact.address.region} ${contact.address.postalCode}` },
     ],
-  },
-  {
-    icon: Phone,
-    title: "Telepon",
-    lines: contact.phones.map((p) => ({ text: p, href: telLink(p) })),
   },
   {
     icon: MessageCircle,
@@ -69,7 +64,7 @@ export default function KontakPage() {
       {/* kartu kontak */}
       <section className="section-padding bg-white">
         <div className="container-premium">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {contacts.map((c, i) => (
               <Reveal
                 key={c.title}

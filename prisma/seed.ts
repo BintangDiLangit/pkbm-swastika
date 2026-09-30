@@ -44,9 +44,9 @@ async function main() {
       subtitle: 'Setara SD/MI',
       description:
         'Program pendidikan dasar untuk siapa saja yang belum atau ingin menyelesaikan pendidikan setara Sekolah Dasar.',
-      features: ['Durasi 2-3 tahun', 'Ijazah resmi setara SD/MI', 'Jadwal fleksibel sore/malam'],
+      features: ['Tidak perlu ijazah sebelumnya', 'Ijazah resmi setara SD/MI', 'Mulai dari kelas sesuai rapor terakhir'],
       image: '/images/kelas.jpeg',
-      duration: '2-3 tahun',
+      duration: '3x seminggu',
       order: 1,
     },
     {
@@ -55,9 +55,9 @@ async function main() {
       subtitle: 'Setara SMP/MTs',
       description:
         'Lanjutkan pendidikan menengah pertama dan buka pintu untuk jenjang yang lebih tinggi.',
-      features: ['Durasi 2-3 tahun', 'Ijazah resmi setara SMP/MTs', 'Bisa lanjut ke SMA/SMK'],
+      features: ['Syarat: ijazah SD/MI/Paket A', 'Ijazah resmi setara SMP/MTs', 'Bisa lanjut ke SMA/SMK'],
       image: '/images/diskusi.jpg',
-      duration: '2-3 tahun',
+      duration: '3x seminggu',
       badge: 'POPULER',
       order: 2,
     },
@@ -67,9 +67,9 @@ async function main() {
       subtitle: 'Setara SMA/MA',
       description:
         'Persiapkan diri untuk kuliah, dunia kerja, atau membangun usaha dengan ijazah setara SMA.',
-      features: ['Durasi 2-3 tahun', 'Ijazah resmi setara SMA/MA', 'Bisa lanjut kuliah & kerja'],
+      features: ['Syarat: ijazah SMP/MTs/Paket B', 'Ijazah resmi setara SMA/MA', 'Bisa lanjut kuliah & kerja'],
       image: '/images/ujian.jpg',
-      duration: '2-3 tahun',
+      duration: '3x seminggu',
       order: 3,
     },
     {
@@ -113,43 +113,6 @@ async function main() {
   }
   console.log(`✅ ${stats.length} stats seeded`);
 
-  // === Testimonials ===
-  const testimonials = [
-    {
-      name: 'Ibu Sari',
-      role: 'Alumni Paket B, 2022',
-      quote:
-        'Dulu saya berhenti sekolah karena harus bantu keluarga. Di PKBM Swastika, saya bisa lanjut belajar tanpa malu. Sekarang anak saya bangga punya ibu lulusan SMP.',
-      avatar: 'https://ui-avatars.com/api/?name=Ibu+Sari&background=DBEAFE&color=1D4ED8&bold=true',
-      order: 1,
-    },
-    {
-      name: 'Andi Pratama',
-      role: 'Alumni Paket C, 2023',
-      quote:
-        'Berkat ijazah Paket C, saya diterima kerja di pabrik. Jadwal belajarnya fleksibel, jadi saya tetap bisa kerja sambilan saat sekolah.',
-      avatar: 'https://ui-avatars.com/api/?name=Andi+Pratama&background=FEF9C3&color=CA8A04&bold=true',
-      order: 2,
-    },
-    {
-      name: 'Pak Yusuf',
-      role: 'Alumni Paket C, 2021',
-      quote:
-        'Umur saya 45 tahun ketika daftar. Pengajarnya sabar, teman-temannya seperti keluarga. Sekarang saya buka warung sendiri.',
-      avatar: 'https://ui-avatars.com/api/?name=Pak+Yusuf&background=DBEAFE&color=1D4ED8&bold=true',
-      order: 3,
-    },
-  ];
-
-  for (const t of testimonials) {
-    const existing = await prisma.testimonial.findFirst({ where: { name: t.name } });
-    if (existing) {
-      await prisma.testimonial.update({ where: { id: existing.id }, data: t });
-    } else {
-      await prisma.testimonial.create({ data: t });
-    }
-  }
-  console.log(`✅ ${testimonials.length} testimonials seeded`);
 
   // === FAQs ===
   const faqs = [
@@ -163,7 +126,7 @@ async function main() {
     {
       question: 'Berapa biaya belajar di PKBM Swastika?',
       answer:
-        'Biaya sangat terjangkau dan dapat dicicil. Tersedia juga jalur subsidi & beasiswa untuk peserta dari keluarga kurang mampu. Hubungi kami untuk informasi detail.',
+        'Biaya belajar di PKBM Swastika terjangkau. Rincian biaya untuk setiap program disampaikan langsung oleh admin saat konsultasi lewat WhatsApp.',
       category: 'biaya',
       order: 2,
     },
@@ -177,7 +140,7 @@ async function main() {
     {
       question: 'Bagaimana jadwal belajarnya? Apakah fleksibel?',
       answer:
-        'Sangat fleksibel. Tersedia kelas pagi, sore, dan akhir pekan. Cocok untuk yang sambil bekerja, mengurus keluarga, atau memiliki kesibukan lain.',
+        'Belajar 3x seminggu: 1x tatap muka bersama tutor, 1x tugas/praktik, dan 1x tugas atau belajar mandiri. Kelas diadakan sore dan malam hari (Paket A pukul 16.00–19.00). Cocok untuk yang sambil bekerja, mengurus keluarga, atau memiliki kesibukan lain.',
       category: 'jadwal',
       order: 4,
     },
@@ -205,7 +168,7 @@ async function main() {
     {
       question: 'Berapa lama waktu belajarnya?',
       answer:
-        'Program Paket A, B, dan C umumnya ditempuh dalam 2–3 tahun, tergantung jenjang dan riwayat pendidikan terakhir. Kursus keterampilan berlangsung sekitar 3–6 bulan.',
+        'Tergantung kelas terakhir yang pernah diselesaikan. Paket A mencakup kelas 1–6, Paket B kelas 7–9, dan Paket C kelas 10–12. Peserta yang pernah sekolah melanjutkan dari kelas berikutnya sesuai ijazah/rapor terakhir, jadi cukup menempuh kelas yang tersisa. Kelas awal dipastikan saat verifikasi berkas. Kursus keterampilan berlangsung sekitar 3–6 bulan.',
       category: 'program',
       order: 7,
     },
@@ -307,54 +270,12 @@ async function main() {
   }
   console.log(`✅ ${quickLinks.length} quick links seeded`);
 
-  // === Sample berita (kegiatan & informasi) — only if empty ===
-  const beritaCount = await prisma.berita.count();
-  if (beritaCount === 0) {
-    const sampleBerita = [
-      {
-        title: 'Pendaftaran Tahun Ajaran Baru Telah Dibuka',
-        excerpt: 'Daftarkan diri Anda untuk Paket A, B, atau C. Jadwal fleksibel, biaya terjangkau.',
-        content:
-          'PKBM Swastika membuka pendaftaran peserta didik baru untuk semua jenjang. Tersedia jadwal pagi, sore, dan akhir pekan. Hubungi kami untuk informasi lengkap.',
-        category: 'Pengumuman',
-        author: 'Admin PKBM',
-        image: '/images/gedung.jpg',
-        date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-      },
-      {
-        title: 'Pelatihan Keterampilan Tata Boga Sukses Digelar',
-        excerpt: 'Puluhan warga belajar mengikuti pelatihan tata boga selama dua minggu.',
-        content:
-          'Kegiatan ini bertujuan membekali warga dengan keterampilan praktis yang bisa langsung diterapkan untuk membuka usaha kuliner rumahan.',
-        category: 'Kegiatan',
-        author: 'Admin PKBM',
-        image: '/images/workshop.jpg',
-        date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-      },
-      {
-        title: 'Alumni Paket C Diterima di Universitas Brawijaya',
-        excerpt: 'Prestasi membanggakan dari salah satu alumni angkatan 2023.',
-        content:
-          'Kami mengucapkan selamat kepada Saudara Andi yang berhasil lolos seleksi mandiri Universitas Brawijaya jurusan Manajemen.',
-        category: 'Prestasi',
-        author: 'Admin PKBM',
-        image: '/images/juara.jpg',
-        date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-      },
-    ];
-    for (const b of sampleBerita) {
-      await prisma.berita.create({ data: b });
-    }
-    console.log(`✅ ${sampleBerita.length} berita seeded`);
-  }
-
   // === Site Settings ===
   const settings = [
     { key: 'hero_title', value: 'PKBM Swastika - Pendidikan untuk Semua' },
-    { key: 'hero_subtitle', value: 'Kesempatan belajar tanpa batas usia dan latar belakang' },
+    { key: 'hero_subtitle', value: 'Kejar Paket A, B, dan C di Kabupaten Malang dengan jadwal belajar fleksibel' },
     { key: 'hero_image', value: '/images/gedung.jpg' },
     { key: 'contact_address', value: 'Perum Argo Griyatama Regency B5, Boro, Tawangargo, Kec. Karang Ploso, Kabupaten Malang, Jawa Timur 65152' },
-    { key: 'contact_phone', value: '(0341) 123-4567' },
     { key: 'contact_whatsapp', value: '6285104755189' },
     { key: 'contact_email', value: 'info@pkbmswastika.com' },
     { key: 'contact_maps', value: 'https://maps.google.com/?q=Perum+Argo+Griyatama+Regency+Karang+Ploso+Malang' },

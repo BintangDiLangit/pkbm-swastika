@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaLock, FaUser } from "react-icons/fa";
+import { Logo } from "@/components/ui/Logo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -43,8 +44,8 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FaLock className="text-blue-600 text-3xl" />
+          <div className="mb-4 flex justify-center">
+            <Logo size="lg" tone="dark" priority />
           </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Admin Login</h1>
           <p className="text-gray-600">Masuk ke Dashboard Admin</p>

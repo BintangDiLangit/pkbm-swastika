@@ -21,8 +21,7 @@ export const siteConfig = {
       postalCode: "65152",
       country: "ID",
     },
-    // TODO: nomor telepon kantor masih placeholder — ganti dengan nomor asli
-    phones: ["(0341) 123-4567", "(0341) 123-4568"],
+    // Belum ada telepon kantor; kontak utama lewat WhatsApp
     whatsapp: "6285104755189",
     emails: ["info@pkbmswastika.com", "pendaftaran@pkbmswastika.com"],
     mapsUrl: "https://maps.google.com/?q=Perum+Argo+Griyayama+Regency+B5+Boro+Tawangargo+Karang+Ploso+Malang",
@@ -31,6 +30,14 @@ export const siteConfig = {
       { days: "Sabtu", time: "08:00 - 13:00 WIB" },
       { days: "Minggu & Libur Nasional", time: "Tutup" },
     ],
+  },
+
+  // Bukti legalitas yang sudah terverifikasi (tampil di beranda & /tentang)
+  legal: {
+    accreditation: "B",
+    accreditor: "BAN PAUD & PNF",
+    npsn: "P2967637",
+    permit: "Izin Operasional Dinas Pendidikan Kabupaten Malang",
   },
 
   social: [
@@ -57,8 +64,7 @@ const c = siteConfig.contact;
 /** Alamat lengkap satu baris. */
 export const fullAddress = `${c.address.street}, ${c.address.district}, ${c.address.city}, ${c.address.region} ${c.address.postalCode}`;
 
-/** Nomor telepon utama & email utama. */
-export const primaryPhone = c.phones[0];
+/** Email utama. */
 export const primaryEmail = c.emails[0];
 
 /** "6285104755189" → "+62 851-0475-5189" */
@@ -73,16 +79,14 @@ export function whatsappLink(message?: string, number: string = c.whatsapp) {
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
 
-/** Link tel: dari nomor berformat bebas. */
-export function telLink(phone: string) {
-  return `tel:${phone.replace(/\D/g, "")}`;
-}
-
 /** Ringkasan jam buka satu baris untuk footer. */
 export const hoursSummary = c.hours
   .filter((h) => h.time !== "Tutup")
   .map((h) => `${h.days} ${h.time}`)
   .join(", ");
+
+/** Halaman data referensi Kemendikbud untuk NPSN lembaga. */
+export const npsnVerifyUrl = `https://referensi.data.kemdikbud.go.id/tabs.php?npsn=${siteConfig.legal.npsn}`;
 
 /** Data terstruktur schema.org untuk <head>. */
 export function organizationJsonLd() {

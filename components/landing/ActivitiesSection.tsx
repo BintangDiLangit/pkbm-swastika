@@ -45,7 +45,7 @@ function NewsCard({ item, index }: { item: LandingActivity; index: number }) {
           </p>
         )}
         <h3 className="mb-3 text-xl font-bold leading-snug text-navy transition-colors duration-300 group-hover:text-gold-dark">
-          <Link href="/berita" className="after:absolute after:inset-0">
+          <Link href={`/berita/${item.id}`} className="after:absolute after:inset-0">
             {item.title}
           </Link>
         </h3>
@@ -63,7 +63,7 @@ export function ActivitiesSection({ activities }: { activities: LandingActivity[
   if (!activities.length) return null;
 
   return (
-    <section id="berita" className="section-padding bg-slate-50/60">
+    <section id="berita" className="section-padding bg-white">
       <div className="container-premium">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <Reveal>
