@@ -277,7 +277,7 @@ async function main() {
     { key: 'hero_image', value: '/images/gedung.jpg' },
     { key: 'contact_address', value: 'Perum Argo Griyatama Regency B5, Boro, Tawangargo, Kec. Karang Ploso, Kabupaten Malang, Jawa Timur 65152' },
     { key: 'contact_whatsapp', value: '6285104755189' },
-    { key: 'contact_email', value: 'info@pkbmswastika.com' },
+    { key: 'contact_email', value: 'pkbmswastika@gmail.com' },
     { key: 'contact_maps', value: 'https://maps.google.com/?q=Perum+Argo+Griyatama+Regency+Karang+Ploso+Malang' },
   ];
   for (const s of settings) {

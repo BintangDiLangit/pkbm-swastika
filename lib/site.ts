@@ -8,7 +8,7 @@ export const siteConfig = {
   tagline: "Pendidikan untuk Semua",
   description:
     "PKBM SWASTIKA adalah Pusat Kegiatan Belajar Masyarakat yang menyelenggarakan pendidikan nonformal setara SD (Paket A), SMP (Paket B), dan SMA (Paket C) di Malang",
-  url: "https://pkbmswastika.com",
+  url: "https://pkbmswastika.sch.id",
   logo: "/images/logo.png",
 
   contact: {
@@ -23,12 +23,11 @@ export const siteConfig = {
     },
     // Belum ada telepon kantor; kontak utama lewat WhatsApp
     whatsapp: "6285104755189",
-    emails: ["info@pkbmswastika.com", "pendaftaran@pkbmswastika.com"],
+    emails: ["pkbmswastika@gmail.com"],
     mapsUrl: "https://maps.google.com/?q=Perum+Argo+Griyayama+Regency+B5+Boro+Tawangargo+Karang+Ploso+Malang",
     hours: [
-      { days: "Senin - Jumat", time: "08:00 - 16:00 WIB" },
-      { days: "Sabtu", time: "08:00 - 13:00 WIB" },
-      { days: "Minggu & Libur Nasional", time: "Tutup" },
+      { days: "Senin - Jumat", time: "07:00 - 11:30 WIB" },
+      { days: "Sabtu - Minggu", time: "07:00 - 13:00 WIB" },
     ],
   },
 
@@ -80,10 +79,7 @@ export function whatsappLink(message?: string, number: string = c.whatsapp) {
 }
 
 /** Ringkasan jam buka satu baris untuk footer. */
-export const hoursSummary = c.hours
-  .filter((h) => h.time !== "Tutup")
-  .map((h) => `${h.days} ${h.time}`)
-  .join(", ");
+export const hoursSummary = c.hours.map((h) => `${h.days} ${h.time}`).join(", ");
 
 /** Halaman data referensi Kemendikbud untuk NPSN lembaga. */
 export const npsnVerifyUrl = `https://referensi.data.kemdikbud.go.id/tabs.php?npsn=${siteConfig.legal.npsn}`;

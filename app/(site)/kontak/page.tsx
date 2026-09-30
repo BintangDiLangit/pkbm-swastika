@@ -133,7 +133,7 @@ export default function KontakPage() {
                 {contact.hours.map((j) => (
                   <li key={j.days} className="flex items-center justify-between gap-4 border-b border-white/10 pb-4 last:border-0">
                     <span className="text-white/70">{j.days}</span>
-                    <span className={`font-heading font-semibold ${j.time === "Tutup" ? "text-gold" : "text-white"}`}>{j.time}</span>
+                    <span className="font-heading font-semibold text-white">{j.time}</span>
                   </li>
                 ))}
               </ul>
