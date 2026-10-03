@@ -7,11 +7,7 @@ const FIELDS: { key: string; label: string; placeholder?: string; textarea?: boo
   { key: "hero_title", label: "Judul Hero", placeholder: "PKBM Swastika - Pendidikan untuk Semua" },
   { key: "hero_subtitle", label: "Subjudul Hero", placeholder: "Kesempatan belajar tanpa batas usia dan latar belakang", textarea: true },
   { key: "hero_image", label: "Gambar Hero (path / URL)", placeholder: "/images/gedung.jpg" },
-  { key: "contact_address", label: "Alamat Kantor", textarea: true },
-  { key: "contact_phone", label: "Telepon" },
-  { key: "contact_whatsapp", label: "WhatsApp (62xxx tanpa +)" },
-  { key: "contact_email", label: "Email" },
-  { key: "contact_maps", label: "Link Google Maps" },
+  { key: "contact_whatsapp", label: "WhatsApp Beranda (62xxx tanpa +)" },
 ];
 
 export default function AdminSettingsPage() {
@@ -57,7 +53,8 @@ export default function AdminSettingsPage() {
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-ink">Pengaturan Umum</h2>
           <p className="mt-1 text-sm text-ink-muted">
-            Ubah teks hero, info kontak, dan link yang tampil di seluruh website.
+            Ubah teks dan gambar hero serta nomor WhatsApp di beranda. Alamat, email, jam
+            operasional, dan media sosial diatur developer di <code>lib/site.ts</code>.
           </p>
         </div>
 
