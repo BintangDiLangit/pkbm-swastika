@@ -2,8 +2,9 @@ import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 import { siteConfig } from '@/lib/site'
 
-// Dibuat ulang tiap jam supaya berita baru ikut masuk sitemap.
-export const revalidate = 3600
+// Dibuat saat diminta (bukan saat build, karena DB belum tersedia di tahap build)
+// supaya berita baru langsung ikut masuk sitemap.
+export const dynamic = 'force-dynamic'
 
 async function beritaEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
   try {
@@ -18,7 +19,7 @@ async function beritaEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }))
   } catch (e) {
-    // DB tidak tersedia (mis. saat build): sitemap tetap berisi halaman statis.
+    // DB bermasalah: sitemap tetap berisi halaman statis.
     console.error('[sitemap] gagal ambil berita:', e instanceof Error ? e.message : e)
     return []
   }
