@@ -57,6 +57,10 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  // Verifikasi Google Search Console (properti https://pkbmswastika.sch.id/). Jangan dihapus.
+  verification: {
+    google: "fjrQVTXN289dXQeJtOMwJto5cIFfF-J8L01Z9XqzA4I",
+  },
 };
 
 export default function RootLayout({
