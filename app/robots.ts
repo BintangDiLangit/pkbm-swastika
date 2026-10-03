@@ -5,8 +5,9 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
-      disallow: '/private/',
+      // Foto unggahan disajikan lewat /api/media/, jadi tetap boleh dirayapi.
+      allow: ['/', '/api/media/'],
+      disallow: ['/admin', '/api/'],
     },
     sitemap: `${siteConfig.url}/sitemap.xml`,
   }
