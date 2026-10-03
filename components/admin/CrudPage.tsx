@@ -125,7 +125,7 @@ export function CrudPage<T extends { id: string }>({
 
       <div className="overflow-hidden rounded-2xl border border-soft-200 bg-white shadow-soft">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full [overflow-wrap:anywhere]">
             <thead className="bg-soft-50 text-left text-xs font-bold uppercase tracking-wider text-ink-soft">
               <tr>
                 {columns.map((c) => (

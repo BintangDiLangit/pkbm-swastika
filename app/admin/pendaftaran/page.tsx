@@ -58,6 +58,21 @@ const STATUS_STYLE: Record<string, string> = {
   Ditolak: "bg-red-100 text-red-700",
 };
 
+// Chrome memblokir navigasi top-level ke data: URL (hasilnya about:blank#blocked),
+// jadi berkas base64 dikonversi ke blob: URL sebelum dibuka di tab baru.
+function openBerkas(e: React.MouseEvent<HTMLAnchorElement>, url: string) {
+  if (!url.startsWith("data:")) return;
+  e.preventDefault();
+  const [meta, data] = url.split(",", 2);
+  const mime = meta.slice(5).split(";")[0] || "application/octet-stream";
+  const bytes = meta.includes(";base64")
+    ? Uint8Array.from(atob(data), (c) => c.charCodeAt(0))
+    : new TextEncoder().encode(decodeURIComponent(data));
+  const blobUrl = URL.createObjectURL(new Blob([bytes], { type: mime }));
+  window.open(blobUrl, "_blank", "noopener");
+  setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+}
+
 const BERKAS_FIELDS = [
   { key: "fotoKk", label: "Fotocopy Kartu Keluarga (KK)" },
   { key: "fotoKtp", label: "Fotocopy KTP" },
@@ -239,7 +254,7 @@ export default function AdminPendaftaranPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-left text-sm [overflow-wrap:anywhere]">
               <thead className="border-b border-soft-200 bg-soft-50 text-xs uppercase tracking-wide text-ink-soft">
                 <tr>
                   <th className="px-4 py-3 font-semibold">Nama</th>
@@ -254,13 +269,13 @@ export default function AdminPendaftaranPage() {
                 {filtered.map((p) => (
                   <tr key={p.id} className="border-b border-soft-100 last:border-0 hover:bg-soft-50">
                     <td className="px-4 py-3 font-semibold text-ink">{p.nama}</td>
-                    <td className="px-4 py-3 text-ink-muted">
+                    <td className="whitespace-nowrap px-4 py-3 text-ink-muted">
                       <div>{p.email}</div>
                       <div className="text-xs text-ink-soft">{p.telepon}</div>
                     </td>
-                    <td className="px-4 py-3 text-ink-muted">{PAKET_LABEL[p.paket] || p.paket}</td>
-                    <td className="px-4 py-3 text-ink-muted">{formatTanggal(p.createdAt)}</td>
-                    <td className="px-4 py-3">
+                    <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{PAKET_LABEL[p.paket] || p.paket}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{formatTanggal(p.createdAt)}</td>
+                    <td className="whitespace-nowrap px-4 py-3">
                       <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${STATUS_STYLE[p.status] || "bg-soft-100 text-ink-muted"}`}>
                         {p.status}
                       </span>
@@ -298,7 +313,7 @@ export default function AdminPendaftaranPage() {
             {/* Header */}
             <div className="flex items-start justify-between border-b border-soft-200 p-6">
               <div>
-                <h2 className="text-xl font-bold text-ink">{selected.nama}</h2>
+                <h2 className="text-xl font-bold text-ink [overflow-wrap:anywhere]">{selected.nama}</h2>
                 <p className="text-sm text-ink-soft">
                   Mendaftar {formatTanggal(selected.createdAt, true)}
                 </p>
@@ -372,6 +387,7 @@ export default function AdminPendaftaranPage() {
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={(e) => openBerkas(e, url)}
                             className="flex items-center gap-3 rounded-xl bg-soft-50 p-2 transition hover:bg-primary-50"
                           >
                             {isPdf ? (
@@ -429,7 +445,7 @@ function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="text-xs font-semibold uppercase tracking-wide text-ink-soft">{label}</dt>
-      <dd className="mt-0.5 text-sm text-ink whitespace-pre-wrap break-words">{value}</dd>
+      <dd className="mt-0.5 text-sm text-ink whitespace-pre-wrap [overflow-wrap:anywhere]">{value}</dd>
     </div>
   );
 }

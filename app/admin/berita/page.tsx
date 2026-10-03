@@ -224,7 +224,7 @@ export default function AdminBeritaPage() {
         {/* Berita List */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full [overflow-wrap:anywhere]">
               <thead className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
                 <tr>
                   <th className="px-6 py-4 text-left">Judul</th>
@@ -252,13 +252,13 @@ export default function AdminBeritaPage() {
                           {berita.title}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="whitespace-nowrap px-6 py-4">
                         <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
                           {berita.category}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-gray-600">{berita.author}</td>
-                      <td className="px-6 py-4 text-gray-600">{berita.date}</td>
+                      <td className="whitespace-nowrap px-6 py-4 text-gray-600">{berita.date}</td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-center space-x-2">
                           <button
